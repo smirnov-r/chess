@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smirnov — 2026 National Open U1250 · Live Tracker</title>
+<style>
+  :root {
+    --bg: #0f1117; --panel: #1a1d27; --card: #22263a; --border: #2e3450;
+    --blue: #4a90e2; --gold: #f5a623; --green: #4caf50; --red: #ef5350;
+    --orange: #ff9800; --purple: #9c27b0; --teal: #00bcd4;
+    --text: #e8eaf6; --muted: #8892b0; --smir: #7c4dff;
+    --win: #4caf50; --draw: #ff9800; --loss: #ef5350;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  .header { background: linear-gradient(135deg,#1a1d27,#0d1b4b); padding: 20px 28px; border-bottom: 2px solid var(--gold); display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .header-icon { font-size:36px; }
+  .header h1 { font-size:20px; font-weight:700; color:var(--gold); }
+  .header p { font-size:12px; color:var(--muted); margin-top:3px; }
+  .smirnov-badge { margin-left:auto; background:linear-gradient(135deg,#5e35b1,#7c4dff); padding:9px 16px; border-radius:10px; text-align:center; }
+  .smirnov-badge .name { font-size:14px; font-weight:700; color:#fff; }
+  .smirnov-badge .detail { font-size:11px; color:#d1c4e9; margin-top:2px; }
+
+  .nav { display:flex; gap:4px; padding:10px 20px; background:var(--panel); border-bottom:1px solid var(--border); overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .nav::-webkit-scrollbar { display:none; }
+  .nav-btn { padding:7px 15px; border:none; border-radius:8px; cursor:pointer; font-size:12px; font-weight:600; transition:all .2s; white-space:nowrap; background:var(--card); color:var(--muted); }
+  .nav-btn.active { background:var(--blue); color:#fff; }
+  .nav-btn:hover:not(.active) { background:var(--border); color:var(--text); }
+  .nav-btn.tracker-btn.active { background: var(--smir); }
+  .nav-btn.tracker-btn { color: #b39ddb; }
+
+  .main { padding:18px 22px; max-width:1400px; margin:0 auto; }
+  .section { display:none; }
+  .section.active { display:block; }
+
+  /* Cards */
+  .cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; margin-top:14px; }
+  .player-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; cursor:pointer; transition:all .2s; position:relative; }
+  .player-card:hover { border-color:var(--blue); transform:translateY(-2px); box-shadow:0 8px 24px rgba(74,144,226,.2); }
+  .player-card.smir-card { border-color:var(--smir); background:linear-gradient(135deg,#22263a,#1a1240); }
+  .card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:8px; }
+  .card-name { font-size:14px; font-weight:700; }
+  .card-state { font-size:11px; color:var(--muted); }
+  .adj-badge { font-size:19px; font-weight:800; padding:3px 9px; border-radius:8px; min-width:52px; text-align:center; }
+  .adj-1300{background:#2d1f00;color:var(--gold)} .adj-1150{background:#1a2d1a;color:var(--green)}
+  .adj-1050{background:#1a2240;color:var(--blue)} .adj-950{background:#2d1f0d;color:var(--orange)}
+  .adj-low{background:#2d1212;color:var(--red)} .adj-unk{background:#1a1a2d;color:var(--muted)}
+  .card-ratings { display:flex; gap:6px; flex-wrap:wrap; margin:6px 0; }
+  .rating-pill { font-size:11px; padding:2px 7px; border-radius:5px; font-weight:600; }
+  .rp-reg{background:#1a2240;color:#7eb3ff} .rp-quick{background:#1a2d1a;color:#81c784}
+  .rp-blitz{background:#2d1a40;color:#ce93d8} .rp-eff{background:#2d2a00;color:#fff176;border:1px solid var(--gold)}
+  .tier-badge { font-size:10px; font-weight:700; padding:2px 7px; border-radius:4px; }
+  .tier-A{background:#1a2d1a;color:var(--green)} .tier-B{background:#1a2240;color:var(--blue)}
+  .tier-C{background:#2d2000;color:var(--orange)} .tier-D{background:#2d1212;color:var(--red)}
+  .card-flag { font-size:11px; color:var(--muted); margin-top:6px; line-height:1.4; border-top:1px solid var(--border); padding-top:6px; }
+  .rank-badge { position:absolute; top:11px; left:11px; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; }
+  .rank-1{background:var(--gold);color:#000} .rank-2{background:#c0c0c0;color:#000}
+  .rank-3{background:#cd7f32;color:#000} .rank-top{background:var(--blue);color:#fff}
+  .rank-mid{background:var(--border);color:var(--muted)} .rank-low{background:#2d1212;color:var(--red)}
+
+  .filter-bar { display:flex; gap:8px; align-items:center; margin-bottom:12px; flex-wrap:wrap; }
+  .filter-btn { padding:5px 11px; border:1px solid var(--border); border-radius:6px; background:var(--card); color:var(--muted); font-size:12px; cursor:pointer; }
+  .filter-btn.active { border-color:var(--blue); color:var(--blue); }
+  .search-box { padding:5px 11px; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:12px; width:180px; }
+  .search-box:focus { outline:none; border-color:var(--blue); }
+
+  /* Rounds guide */
+  .rounds-container { display:grid; grid-template-columns:1fr 2fr; gap:18px; margin-top:14px; }
+  .round-selector { background:var(--card); border-radius:12px; padding:14px; }
+  .round-detail { background:var(--card); border-radius:12px; padding:18px; }
+  .round-tab { width:100%; padding:10px 14px; margin-bottom:7px; background:var(--panel); border:1px solid var(--border); border-radius:10px; cursor:pointer; text-align:left; color:var(--text); font-size:13px; transition:all .2s; }
+  .round-tab.active { background:var(--blue); border-color:var(--blue); font-weight:700; }
+  .round-tab .rt-score { font-size:11px; color:var(--muted); display:block; margin-top:2px; }
+  .round-tab.active .rt-score { color:rgba(255,255,255,.7); }
+  .matchup-box { background:var(--panel); border-radius:10px; padding:14px; margin-bottom:12px; border-left:4px solid var(--blue); }
+  .matchup-box.win{border-left-color:var(--green)} .matchup-box.tough{border-left-color:var(--orange)} .matchup-box.hard{border-left-color:var(--red)}
+  .matchup-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .vs-text { font-size:12px; color:var(--muted); font-weight:700; }
+  .opp-name { font-size:17px; font-weight:800; }
+  .opp-detail { font-size:12px; color:var(--muted); }
+  .prediction-tag { padding:3px 10px; border-radius:6px; font-size:11px; font-weight:700; }
+  .pred-win{background:#1a3d1a;color:var(--green)} .pred-tough{background:#2d2000;color:var(--orange)}
+  .pred-hard{background:#2d1212;color:var(--red)} .pred-close{background:#2d1a40;color:var(--purple)}
+  .matchup-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:10px 0; }
+  .stat-box { background:var(--card); border-radius:8px; padding:9px; text-align:center; }
+  .stat-val { font-size:19px; font-weight:800; }
+  .stat-lbl { font-size:10px; color:var(--muted); margin-top:2px; }
+  .strategy-box { background:#0d1a2d; border:1px solid var(--blue); border-radius:10px; padding:12px; margin-top:8px; }
+  .strategy-title { font-size:11px; font-weight:700; color:var(--blue); margin-bottom:7px; text-transform:uppercase; letter-spacing:.5px; }
+  .strategy-points { list-style:none; }
+  .strategy-points li { font-size:12px; line-height:1.5; padding:3px 0 3px 15px; position:relative; }
+  .strategy-points li::before { content:'▸'; position:absolute; left:0; color:var(--blue); }
+  .path-toggle { display:flex; gap:7px; margin-bottom:12px; }
+  .path-btn { flex:1; padding:7px; border:1px solid var(--border); border-radius:8px; cursor:pointer; text-align:center; font-size:12px; font-weight:600; background:var(--card); color:var(--muted); }
+  .path-btn.active-win{background:#1a3d1a;border-color:var(--green);color:var(--green)}
+  .path-btn.active-lose{background:#2d1212;border-color:var(--red);color:var(--red)}
+
+  /* Summary */
+  .summary-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; margin-top:14px; }
+  .summary-card { background:var(--card); border-radius:12px; padding:16px; border:1px solid var(--border); }
+  .sc-title { font-size:12px; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px; }
+  .ranking-row { display:flex; align-items:center; gap:9px; padding:5px 0; border-bottom:1px solid var(--border); }
+  .ranking-row:last-child { border-bottom:none; }
+  .rr-rank { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; }
+  .rr-name { flex:1; font-size:12px; font-weight:600; }
+  .rr-adj { font-size:13px; font-weight:800; color:var(--gold); }
+  .rr-quick { font-size:11px; color:var(--muted); }
+  .key-insight { background:var(--panel); border-left:3px solid var(--gold); padding:9px 12px; border-radius:0 8px 8px 0; margin:7px 0; font-size:12px; line-height:1.5; }
+  .key-insight.green{border-left-color:var(--green)} .key-insight.orange{border-left-color:var(--orange)}
+  .key-insight.red{border-left-color:var(--red)} .key-insight.purple{border-left-color:var(--purple)}
+
+  /* Modal */
+  .modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.7); z-index:1000; align-items:center; justify-content:center; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:22px; max-width:660px; width:90%; max-height:85vh; overflow-y:auto; }
+  .modal-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; }
+  .modal-close { background:none; border:none; color:var(--muted); font-size:22px; cursor:pointer; }
+  .modal-close:hover { color:var(--text); }
+  .modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .modal-stat { background:var(--card); border-radius:8px; padding:10px; }
+  .modal-stat label { font-size:10px; color:var(--muted); display:block; margin-bottom:3px; text-transform:uppercase; }
+  .modal-stat value { font-size:17px; font-weight:800; display:block; }
+  .win-history { margin-top:12px; }
+  .wh-title { font-size:11px; color:var(--muted); margin-bottom:5px; }
+  .wh-bars { display:flex; gap:4px; align-items:flex-end; height:46px; }
+  .wh-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; }
+  .wh-bar { width:100%; border-radius:4px 4px 0 0; min-height:4px; }
+  .wh-year { font-size:9px; color:var(--muted); }
+  .wh-pct { font-size:9px; font-weight:700; }
+
+  h2.page-title { font-size:19px; font-weight:800; margin-bottom:4px; }
+  p.page-sub { font-size:12px; color:var(--muted); }
+
+  /* ── LIVE TRACKER ── */
+  .tracker-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:10px; margin-bottom:18px; }
+  .tstat { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:13px; text-align:center; }
+  .tstat .val { font-size:1.6rem; font-weight:800; color:var(--gold); }
+  .tstat .lbl { font-size:0.72rem; color:var(--muted); margin-top:2px; text-transform:uppercase; letter-spacing:.4px; }
+
+  .tracker-grid { display:grid; grid-template-columns:1fr 1.6fr; gap:18px; }
+
+  .round-panel { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; }
+  .round-panel h3 { font-size:13px; font-weight:700; color:var(--smir); margin-bottom:12px; text-transform:uppercase; letter-spacing:.5px; }
+
+  .add-pairing-form { background:var(--panel); border-radius:10px; padding:13px; margin-bottom:14px; border:1px solid var(--border); }
+  .add-pairing-form .form-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:8px; }
+  .add-pairing-form select { background:var(--bg); border:1px solid var(--border); color:var(--text); padding:6px 9px; border-radius:7px; font-size:12px; flex:1; min-width:130px; }
+  .add-pairing-form select:focus { outline:none; border-color:var(--smir); }
+  .btn { padding:7px 14px; border:none; border-radius:7px; cursor:pointer; font-size:12px; font-weight:600; transition:all .2s; }
+  .btn-smir { background:var(--smir); color:white; }
+  .btn-smir:hover { background:#6a3de8; }
+  .btn-sm { padding:5px 10px; font-size:11px; border-radius:6px; border:none; cursor:pointer; font-weight:600; }
+  .btn-danger { background:var(--red); color:white; }
+  .btn-danger:hover { filter:brightness(.85); }
+  .btn-sec { background:var(--border); color:var(--text); }
+  .btn-sec:hover { background:#3a4568; }
+  .btn-green { background:var(--green); color:white; }
+  .btn-green:hover { filter:brightness(.9); }
+
+  .pairing-item { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:11px 13px; margin-bottom:8px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .pairing-num { color:var(--muted); font-size:0.75rem; width:20px; text-align:center; flex-shrink:0; }
+  .pairing-white { flex:1; min-width:100px; font-weight:700; font-size:13px; }
+  .pairing-white::before { content:'♔ '; color:var(--gold); }
+  .pairing-black { flex:1; min-width:100px; font-weight:700; font-size:13px; }
+  .pairing-black::before { content:'♚ '; color:var(--muted); }
+  .vs-lbl { color:var(--muted); font-size:11px; flex-shrink:0; }
+  .bye-lbl { color:var(--muted); font-style:italic; font-size:12px; }
+
+  .result-btns { display:flex; gap:5px; }
+  .rbtn { padding:5px 10px; border-radius:6px; border:2px solid transparent; cursor:pointer; font-size:11px; font-weight:800; background:var(--card); color:var(--text); transition:all .15s; }
+  .rbtn:hover { filter:brightness(1.2); }
+  .rbtn.sel-white { background:var(--green); color:white; border-color:var(--green); }
+  .rbtn.sel-draw  { background:var(--draw); color:white; border-color:var(--draw); }
+  .rbtn.sel-black { background:var(--red); color:white; border-color:var(--red); }
+  .rbtn.sel-wff   { background:#388e3c; color:white; border-color:#388e3c; opacity:.85; }
+  .rbtn.sel-bff   { background:#c62828; color:white; border-color:#c62828; opacity:.85; }
+  .rbtn.ff        { font-size:10px; padding:4px 7px; }
+
+  .round-complete-bar { display:flex; align-items:center; justify-content:space-between; padding:10px 0 0; border-top:1px solid var(--border); margin-top:10px; }
+
+  /* Standings */
+  .standings-panel { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; }
+  table.standings-tbl { width:100%; border-collapse:collapse; }
+  table.standings-tbl th { text-align:left; padding:8px 10px; color:var(--muted); font-size:11px; font-weight:700; border-bottom:2px solid var(--border); text-transform:uppercase; letter-spacing:.4px; }
+  table.standings-tbl td { padding:8px 10px; border-bottom:1px solid var(--border); font-size:12px; }
+  table.standings-tbl tr:last-child td { border-bottom:none; }
+  table.standings-tbl tr:hover td { background:rgba(255,255,255,.03); }
+  .score-big { font-size:1.05rem; font-weight:800; color:var(--gold); }
+  .result-dot { display:inline-block; width:20px; height:20px; border-radius:50%; text-align:center; line-height:20px; font-size:0.65rem; font-weight:800; margin-right:2px; }
+  .dot-win{background:var(--green)} .dot-draw{background:var(--draw)} .dot-loss{background:var(--red)} .dot-bye{background:var(--muted)} .dot-forfeit{background:#607d8b} .dot-halfbye{background:#78909c}
+  .progress-bg { background:var(--border); border-radius:20px; height:7px; flex:1; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:20px; background:linear-gradient(90deg,var(--smir),var(--gold)); transition:width .4s; }
+  .smir-row td { background:rgba(124,77,255,.08) !important; }
+
+  /* Progress tab */
+  .sparkline-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+  .sparkline-name { width:140px; font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex-shrink:0; }
+
+  .past-round { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 13px; margin-bottom:8px; }
+  .past-round-header { display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; }
+  .past-round-header span { font-size:12px; color:var(--muted); }
+  .past-round-body { margin-top:10px; display:none; }
+  .past-round-body.open { display:block; }
+
+  /* Prediction chip */
+  .pred-chip { display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:700; white-space:nowrap; flex-shrink:0; }
+  .pred-white { background:rgba(76,175,80,.15); color:#66bb6a; border:1px solid rgba(76,175,80,.3); }
+  .pred-black { background:rgba(239,83,80,.15); color:#ef9a9a; border:1px solid rgba(239,83,80,.3); }
+  .pred-close { background:rgba(255,152,0,.15); color:#ffb74d; border:1px solid rgba(255,152,0,.3); }
+  .pred-unknown { background:rgba(136,146,176,.1); color:var(--muted); border:1px solid var(--border); }
+  /* Edit button */
+  .btn-edit { padding:4px 8px; font-size:10px; border-radius:5px; border:1px solid var(--border); background:var(--card); color:var(--muted); cursor:pointer; flex-shrink:0; }
+  .btn-edit:hover { border-color:var(--gold); color:var(--gold); }
+
+  /* Swiss suggestions */
+  .suggestions-wrap { margin-top:14px; border:1px solid #5e35b1; border-radius:10px; background:linear-gradient(135deg,#1a1240,#150f30); overflow:hidden; }
+  .suggestions-header { display:flex; align-items:center; justify-content:space-between; padding:11px 14px; border-bottom:1px solid #5e35b1; flex-wrap:wrap; gap:8px; }
+  .suggestions-header h4 { font-size:12px; font-weight:800; color:#b39ddb; text-transform:uppercase; letter-spacing:.5px; }
+  .suggestion-row { display:flex; align-items:center; gap:8px; padding:9px 14px; border-bottom:1px solid rgba(94,53,177,.25); flex-wrap:wrap; }
+  .suggestion-row:last-child { border-bottom:none; }
+  .sug-board { font-size:10px; color:#7c4dff; width:18px; flex-shrink:0; font-weight:700; }
+  .sug-player { flex:1; min-width:90px; font-size:12px; font-weight:600; }
+  .sug-player.white-p::before { content:'♔ '; color:var(--gold); }
+  .sug-player.black-p::before { content:'♚ '; color:#8892b0; }
+  .sug-score { font-size:10px; color:#7c4dff; font-weight:700; background:rgba(124,77,255,.15); padding:1px 5px; border-radius:4px; flex-shrink:0; }
+  .sug-vs { font-size:10px; color:var(--muted); flex-shrink:0; }
+  .sug-bye { font-style:italic; color:var(--muted); font-size:11px; }
+
+  .toast { position:fixed; bottom:18px; right:18px; background:var(--card); color:var(--text); padding:10px 18px; border-radius:8px; border-left:4px solid var(--gold); font-size:12px; z-index:9999; opacity:0; transform:translateY(8px); transition:all .3s; pointer-events:none; }
+  .toast.show { opacity:1; transform:translateY(0); }
+
+  @media(max-width:768px){
+    .rounds-container,.tracker-grid{grid-template-columns:1fr}
+    .matchup-stats{grid-template-columns:repeat(2,1fr)}
+    .modal-grid{grid-template-columns:1fr}
+    /* Header */
+    .header { padding:12px 14px; gap:10px; }
+    .header h1 { font-size:16px; }
+    .smirnov-badge { margin-left:0; }
+    /* Layout */
+    .main { padding:12px 10px; }
+    .tracker-stats { grid-template-columns:repeat(2,1fr); }
+    /* Pairing result buttons — allow wrapping */
+    .result-btns { flex-wrap:wrap; gap:4px; }
+    /* Standings: hide W/D/L, Progress bar, and SB columns */
+    .standings-tbl th:nth-child(4),.standings-tbl td:nth-child(4),
+    .standings-tbl th:nth-child(5),.standings-tbl td:nth-child(5),
+    .standings-tbl th:nth-child(7),.standings-tbl td:nth-child(7) { display:none; }
+  }
+
+  @media(max-width:480px){
+    /* Header — stack on very small screens */
+    .header { flex-wrap:wrap; }
+    .header-icon { font-size:26px; }
+    .header h1 { font-size:14px; }
+    .header p { font-size:10px; }
+    .smirnov-badge { width:100%; padding:7px 12px; }
+    /* Nav tabs */
+    .nav { padding:7px 8px; gap:3px; }
+    .nav-btn { padding:6px 9px; font-size:11px; }
+    /* Dropdowns in pairing form */
+    .add-pairing-form select { min-width:100px; font-size:11px; }
+    /* Pairing items */
+    .pairing-item { gap:5px; padding:8px 9px; }
+    .pairing-white,.pairing-black { min-width:70px; font-size:12px; }
+    /* Result + FF buttons */
+    .rbtn { padding:4px 7px; font-size:10px; }
+    .rbtn.ff { padding:4px 5px; font-size:9px; }
+    /* Prediction chip */
+    .pred-chip { font-size:9px; padding:2px 5px; }
+    /* Modal */
+    .modal { padding:14px; max-height:92vh; }
+    /* Suggestion rows */
+    .suggestion-row { gap:5px; padding:8px 10px; }
+    .sug-player { min-width:70px; font-size:11px; }
+    /* Stats */
+    .tstat .val { font-size:1.3rem; }
+    .tstat .lbl { font-size:0.65rem; }
+    /* Cards grid */
+    .cards-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div id="js-check" onclick="document.getElementById('js-check').style.display='none'" style="background:#c62828;padding:10px 16px;text-align:center;font-size:13px;font-weight:700;color:white;cursor:pointer;letter-spacing:.3px;">⚠ JavaScript not running — open this file in Safari, not Files app. Tap here if you see this in Safari.</div>
+<script>document.getElementById('js-check').style.background='#2e7d32';document.getElementById('js-check').textContent='✓ JavaScript is running — tap to dismiss';</script>
+<div class="header">
+  <div class="header-icon">♟</div>
+  <div>
+    <h1>2026 National Open — U1250 · 2-Day Section</h1>
+    <p>G/25+5 (USCF Quick) · 20 Players · Rounds 1–4 · Live Score Tracker</p>
+  </div>
+  <div class="smirnov-badge">
+    <div class="name">★ Mark Smirnov</div>
+    <div class="detail">PA · #30587704 · Seed #9 · Adj. 1060</div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('opponents',this)">⚔ Opponents</button>
+  <button class="nav-btn" onclick="showSection('ranking',this)">📊 Ranking</button>
+  <button class="nav-btn" onclick="showSection('rounds',this)">🎯 Round Guide</button>
+  <button class="nav-btn" onclick="showSection('summary',this)">📋 Insights</button>
+  <button class="nav-btn" onclick="showSection('scenarios',this)">🌿 Scenarios</button>
+  <button class="nav-btn tracker-btn" onclick="showSection('tracker',this)">🏆 Live Tracker</button>
+  <button class="nav-btn tracker-btn" onclick="showSection('progress',this)">📈 Progress</button>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" id="modal-content"></div>
+</div>
+<div id="toast" class="toast"></div>
+
+<div class="main">
+
+<!-- OPPONENTS -->
+<div class="section active" id="sec-opponents">
+  <h2 class="page-title">All 20 Opponents</h2>
+  <p class="page-sub">G/25+5 Adjusted Score = 0.6×Quick_eff + 0.4×Regular + national tier + growth velocity. Click any card for full profile.</p>
+  <div class="filter-bar" style="margin-top:12px">
+    <span style="font-size:12px;color:var(--muted)">Filter:</span>
+    <button class="filter-btn active" onclick="filterCards('all',this)">All</button>
+    <button class="filter-btn" onclick="filterCards('danger',this)">⚠ Danger (adj≥1050)</button>
+    <button class="filter-btn" onclick="filterCards('beatable',this)">✓ Beatable (adj&lt;1050)</button>
+    <button class="filter-btn" onclick="filterCards('noQuick',this)">No Quick Data</button>
+    <input class="search-box" placeholder="Search player…" oninput="searchCards(this.value)">
+  </div>
+  <div class="cards-grid" id="cards-grid"></div>
+</div>
+
+<!-- RANKING -->
+<div class="section" id="sec-ranking">
+  <h2 class="page-title">G/25+5 Adjusted Strength Ranking</h2>
+  <p class="page-sub">Formula: 0.6×Quick_eff + 0.4×MUIR_Regular + national_adj + growth_adj.</p>
+  <div style="margin-top:14px;background:var(--card);border-radius:12px;overflow-x:auto;">
+    <div id="ranking-table" style="min-width:560px;"></div>
+  </div>
+</div>
+
+<!-- ROUND GUIDE -->
+<div class="section" id="sec-rounds">
+  <h2 class="page-title">Round-by-Round Guide</h2>
+  <p class="page-sub">Strategy for Smirnov — select a round and score path.</p>
+  <div class="rounds-container">
+    <div class="round-selector">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:9px;font-weight:600;">SELECT ROUND</div>
+      <button class="round-tab active" onclick="showRound(1,this)">Round 1<span class="rt-score">Score: 0–0 (start)</span></button>
+      <button class="round-tab" onclick="showRound(2,this)">Round 2<span class="rt-score">Score: 1–0 or 0–1</span></button>
+      <button class="round-tab" onclick="showRound(3,this)">Round 3<span class="rt-score">Score: 2–0, 1.5–0.5, or 1–1</span></button>
+      <button class="round-tab" onclick="showRound(4,this)">Round 4<span class="rt-score">Score: 3–0, 2.5–0.5, 2–1, or 1–2</span></button>
+      <div style="margin-top:16px;padding:12px;background:var(--panel);border-radius:10px;border:1px solid var(--border);">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:7px;">SMIRNOV STATS</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
+          <div class="stat-box"><div class="stat-val" style="color:var(--smir)">1060</div><div class="stat-lbl">Adj. Score</div></div>
+          <div class="stat-box"><div class="stat-val" style="color:var(--gold)">1018</div><div class="stat-lbl">Blitz proxy</div></div>
+          <div class="stat-box"><div class="stat-val" style="color:var(--green)">Tier A</div><div class="stat-lbl">National Exp</div></div>
+          <div class="stat-box"><div class="stat-val" style="color:var(--orange)">↓ -10</div><div class="stat-lbl">Growth/yr</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="round-detail" id="round-detail"></div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="section" id="sec-summary">
+  <h2 class="page-title">Key Insights & Tournament Summary</h2>
+  <p class="page-sub">The most important things Smirnov needs to know.</p>
+  <div class="summary-grid" id="summary-content"></div>
+  <div class="summary-grid" style="margin-top:12px;grid-template-columns:1fr;" id="rating-impact-section">
+    <div class="summary-card" style="grid-column:1/-1;border-top:4px solid var(--orange)">
+      <div class="sc-title" style="color:var(--orange)">⚙ Rating Mechanics — What Changes After Rounds 1–4</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:7px">How G/25+5 is Rated by USCF</div>
+          <div class="key-insight"><strong>G/25+5 = DUAL-RATED</strong> (both Regular AND Quick) under USCF Rule 5E.</div>
+          <div class="key-insight orange"><strong>Seeding for Round 5 merge</strong> uses pre-tournament supplement Regular ratings — NOT post-R4 ratings.</div>
+          <div class="key-insight green"><strong>Long-term:</strong> R1-4 games DO update your permanent USCF Regular and Quick ratings once submitted.</div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:7px">Regular Rating Impact by Player</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:5px">Gap = Regular − Quick (positive = regular at RISK; negative = may GAIN)</div>
+          <div id="rating-impact-table"></div>
+        </div>
+      </div>
+      <div style="background:#1a1d27;border-radius:10px;padding:12px;border:2px solid var(--smir)">
+        <div style="font-size:12px;font-weight:800;color:#b39ddb;margin-bottom:7px">★ SMIRNOV SPECIFICALLY</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:3px">⚠ Worst Case (Quick 703 accurate)</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Significant Regular rating losses — possibly 50-150 pts drop.</div></div>
+          <div><div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:3px">✓ Best Case (Lichess 1500 = ~USCF 1075)</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Fairly matched against the field. 3-1 or better could increase Regular toward 1100+.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENARIOS -->
+<div class="section" id="sec-scenarios">
+  <h2 class="page-title">Top 3 Tournament Scenarios</h2>
+  <p class="page-sub">Decision tree showing Smirnov's three most likely paths through Rounds 1–4.</p>
+  <div style="background:var(--card);border-radius:14px;padding:18px;margin-top:14px;overflow-x:auto;">
+    <div style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Scenarios:</div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:24px;height:3px;background:#f5a623;border-radius:2px"></div><span style="font-size:11px;font-weight:700;color:#f5a623">🏆 Trophy Run (~23%)</span></div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:24px;height:3px;background:#4a90e2;border-radius:2px"></div><span style="font-size:11px;font-weight:700;color:#4a90e2">🥈 Prize via Recovery (~30%)</span></div>
+      <div style="display:flex;align-items:center;gap:5px"><div style="width:24px;height:3px;background:#9c27b0;border-radius:2px"></div><span style="font-size:11px;font-weight:700;color:#9c27b0">🔄 Comeback Path (~17%)</span></div>
+    </div>
+    <svg viewBox="0 0 1140 820" style="width:100%;min-width:860px;font-family:Arial,sans-serif;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ag" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#f5a623"/></marker>
+        <marker id="ab" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4a90e2"/></marker>
+        <marker id="ap" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#9c27b0"/></marker>
+        <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <rect x="390" y="10" width="360" height="72" rx="12" fill="#1e1b4b" stroke="#7c3aed" stroke-width="2.5"/>
+      <text x="570" y="34" fill="#ede9fe" font-size="13" font-weight="700" text-anchor="middle">♟ MARK SMIRNOV</text>
+      <text x="570" y="52" fill="#a78bfa" font-size="11" text-anchor="middle">Adj. 1085 · Seed #9 · Lichess Rapid 1500</text>
+      <text x="570" y="68" fill="#7c3aed" font-size="10" text-anchor="middle">Enter with 0–0 score</text>
+      <rect x="420" y="98" width="300" height="36" rx="8" fill="#1a1d27" stroke="#374151" stroke-width="1"/>
+      <text x="570" y="112" fill="#9ca3af" font-size="11" font-weight="700" text-anchor="middle">ROUND 1 — vs Ethan Nastro</text>
+      <text x="570" y="126" fill="#6b7280" font-size="10" text-anchor="middle">adj.1025 · Smirnov FAVORED by 60 pts</text>
+      <line x1="570" y1="134" x2="240" y2="155" stroke="#f5a623" stroke-width="2.5"/>
+      <line x1="240" y1="155" x2="240" y2="175" stroke="#f5a623" stroke-width="2.5" marker-end="url(#ag)"/>
+      <line x1="570" y1="134" x2="570" y2="159" stroke="#4a90e2" stroke-width="2" stroke-dasharray="5,3"/>
+      <line x1="570" y1="159" x2="570" y2="175" stroke="#4a90e2" stroke-width="2" stroke-dasharray="5,3"/>
+      <line x1="570" y1="134" x2="900" y2="155" stroke="#9c27b0" stroke-width="2.5"/>
+      <line x1="900" y1="155" x2="900" y2="175" stroke="#9c27b0" stroke-width="2.5" marker-end="url(#ap)"/>
+      <text x="390" y="150" fill="#4caf50" font-size="10" font-weight="700" text-anchor="middle">WIN ≈65%</text>
+      <text x="750" y="150" fill="#ef5350" font-size="10" font-weight="700" text-anchor="middle">LOSS ≈35%</text>
+      <rect x="110" y="175" width="260" height="56" rx="10" fill="#14401a" stroke="#4caf50" stroke-width="2.5"/>
+      <text x="240" y="196" fill="#86efac" font-size="12" font-weight="800" text-anchor="middle">✓ WIN vs Nastro — Score: 1–0</text>
+      <text x="240" y="214" fill="#6b7280" font-size="10" text-anchor="middle">~65% probability</text>
+      <rect x="770" y="175" width="260" height="56" rx="10" fill="#2d1212" stroke="#ef5350" stroke-width="2"/>
+      <text x="900" y="196" fill="#fca5a5" font-size="12" font-weight="800" text-anchor="middle">✗ LOSS vs Nastro — Score: 0–1</text>
+      <text x="900" y="214" fill="#6b7280" font-size="10" text-anchor="middle">~35% probability</text>
+      <line x1="240" y1="231" x2="130" y2="308" stroke="#f5a623" stroke-width="2.5"/>
+      <line x1="130" y1="308" x2="130" y2="325" stroke="#f5a623" stroke-width="2.5" marker-end="url(#ag)"/>
+      <line x1="240" y1="231" x2="355" y2="308" stroke="#4a90e2" stroke-width="2" stroke-dasharray="5,3"/>
+      <line x1="355" y1="308" x2="355" y2="325" stroke="#4a90e2" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#ab)"/>
+      <text x="178" y="275" fill="#f5a623" font-size="9" font-weight="700">WIN R2 ≈50%</text>
+      <text x="300" y="275" fill="#4a90e2" font-size="9" font-weight="700">LOSS R2 ≈50%</text>
+      <rect x="100" y="255" width="280" height="36" rx="8" fill="#1a1d27" stroke="#374151" stroke-width="1"/>
+      <text x="240" y="269" fill="#9ca3af" font-size="11" font-weight="700" text-anchor="middle">ROUND 2 — vs Xavier Figueroa</text>
+      <text x="240" y="281" fill="#6b7280" font-size="10" text-anchor="middle">adj.1084 · NEAR-EQUAL · Quick 1148 ⚠</text>
+      <rect x="30" y="325" width="200" height="52" rx="10" fill="#14401a" stroke="#f5a623" stroke-width="2.5" filter="url(#glow)"/>
+      <text x="130" y="346" fill="#fde68a" font-size="11" font-weight="800" text-anchor="middle">✓ WIN — Score: 2–0</text>
+      <text x="130" y="363" fill="#6b7280" font-size="10" text-anchor="middle">Trophy contention · ~33%</text>
+      <rect x="255" y="325" width="200" height="52" rx="10" fill="#1a2240" stroke="#4a90e2" stroke-width="2"/>
+      <text x="355" y="346" fill="#93c5fd" font-size="11" font-weight="800" text-anchor="middle">✗ LOSS — Score: 1–1</text>
+      <text x="355" y="363" fill="#6b7280" font-size="10" text-anchor="middle">Prize fight path · ~33%</text>
+      <line x1="900" y1="231" x2="900" y2="255" stroke="#9c27b0" stroke-width="2.5"/>
+      <rect x="790" y="255" width="220" height="36" rx="8" fill="#1a1d27" stroke="#374151" stroke-width="1"/>
+      <text x="900" y="269" fill="#9ca3af" font-size="11" font-weight="700" text-anchor="middle">ROUND 2 — vs ~900 player</text>
+      <text x="900" y="281" fill="#6b7280" font-size="10" text-anchor="middle">Sendilkumar/Jha/Boys · +115-206 adj</text>
+      <line x1="900" y1="291" x2="900" y2="325" stroke="#9c27b0" stroke-width="2.5" marker-end="url(#ap)"/>
+      <rect x="800" y="325" width="200" height="52" rx="10" fill="#1a0f2e" stroke="#9c27b0" stroke-width="2.5"/>
+      <text x="900" y="346" fill="#d8b4fe" font-size="11" font-weight="800" text-anchor="middle">✓ WIN — Score: 1–1</text>
+      <text x="900" y="363" fill="#6b7280" font-size="10" text-anchor="middle">Comeback path · ~30%</text>
+      <line x1="130" y1="377" x2="130" y2="420" stroke="#f5a623" stroke-width="2.5" marker-end="url(#ag)"/>
+      <line x1="355" y1="377" x2="355" y2="420" stroke="#4a90e2" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#ab)"/>
+      <line x1="900" y1="377" x2="900" y2="420" stroke="#9c27b0" stroke-width="2.5" marker-end="url(#ap)"/>
+      <rect x="30" y="420" width="200" height="52" rx="10" fill="#2d2200" stroke="#f5a623" stroke-width="2"/>
+      <text x="130" y="441" fill="#fde68a" font-size="11" font-weight="700" text-anchor="middle">R3 vs Cruz/Sha/Dev</text>
+      <text x="130" y="458" fill="#fbbf24" font-size="10" text-anchor="middle">Draw = great result</text>
+      <rect x="255" y="420" width="200" height="52" rx="10" fill="#0d1a2d" stroke="#4a90e2" stroke-width="2"/>
+      <text x="355" y="441" fill="#93c5fd" font-size="11" font-weight="700" text-anchor="middle">R3 vs 1-1 group</text>
+      <text x="355" y="458" fill="#60a5fa" font-size="10" text-anchor="middle">Cheng/Bueno/Zenn range</text>
+      <rect x="800" y="420" width="200" height="52" rx="10" fill="#1a0f2e" stroke="#9c27b0" stroke-width="2"/>
+      <text x="900" y="441" fill="#d8b4fe" font-size="11" font-weight="700" text-anchor="middle">R3 vs 1-1 group</text>
+      <text x="900" y="458" fill="#a78bfa" font-size="10" text-anchor="middle">Dev/Verma/Agrawal range</text>
+      <line x1="130" y1="472" x2="130" y2="510" stroke="#f5a623" stroke-width="2.5" marker-end="url(#ag)"/>
+      <line x1="355" y1="472" x2="355" y2="510" stroke="#4a90e2" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#ab)"/>
+      <line x1="900" y1="472" x2="900" y2="510" stroke="#9c27b0" stroke-width="2.5" marker-end="url(#ap)"/>
+      <rect x="20" y="510" width="220" height="78" rx="12" fill="#2d1f00" stroke="#f5a623" stroke-width="3" filter="url(#glow)"/>
+      <text x="130" y="533" fill="#fde68a" font-size="14" font-weight="800" text-anchor="middle">🏆 SCENARIO 1</text>
+      <text x="130" y="551" fill="#fbbf24" font-size="12" font-weight="700" text-anchor="middle">TROPHY RUN</text>
+      <text x="130" y="569" fill="#fde68a" font-size="13" font-weight="800" text-anchor="middle">3.5–0.5 or better</text>
+      <text x="130" y="583" fill="#9ca3af" font-size="10" text-anchor="middle">Win/Share tournament · ~15%</text>
+      <rect x="245" y="510" width="220" height="78" rx="12" fill="#0d1a2d" stroke="#4a90e2" stroke-width="2.5"/>
+      <text x="355" y="533" fill="#93c5fd" font-size="14" font-weight="800" text-anchor="middle">🥈 SCENARIO 2</text>
+      <text x="355" y="551" fill="#60a5fa" font-size="12" font-weight="700" text-anchor="middle">PRIZE FINISH</text>
+      <text x="355" y="569" fill="#93c5fd" font-size="13" font-weight="800" text-anchor="middle">3–1 final score</text>
+      <text x="355" y="583" fill="#9ca3af" font-size="10" text-anchor="middle">Prize contention · ~18-20%</text>
+      <rect x="795" y="510" width="210" height="78" rx="12" fill="#1a0f2e" stroke="#9c27b0" stroke-width="2.5"/>
+      <text x="900" y="533" fill="#d8b4fe" font-size="14" font-weight="800" text-anchor="middle">🔄 SCENARIO 3</text>
+      <text x="900" y="551" fill="#a78bfa" font-size="12" font-weight="700" text-anchor="middle">COMEBACK PATH</text>
+      <text x="900" y="569" fill="#d8b4fe" font-size="13" font-weight="800" text-anchor="middle">3–1 final score</text>
+      <text x="900" y="583" fill="#9ca3af" font-size="10" text-anchor="middle">Strong finish after R1 loss · ~12-15%</text>
+      <text x="570" y="640" fill="#6b7280" font-size="11" text-anchor="middle">Combined probability of 3+ score finish: ~60-65%</text>
+      <text x="570" y="658" fill="#4a90e2" font-size="11" font-weight="700" text-anchor="middle">★ Key game: Round 2 vs Figueroa determines trophy vs prize path</text>
+    </svg>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;">
+    <div style="background:var(--card);border-radius:12px;padding:14px;border-top:4px solid var(--gold);">
+      <div style="font-size:15px;font-weight:800;color:var(--gold);margin-bottom:7px">🏆 Scenario 1 — Trophy Run</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px">R1 WIN → R2 WIN → R3 → R4 WIN</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Probability: ~15-23%</div>
+      <div style="font-size:12px;line-height:1.6;color:var(--text)">Beat Nastro, beat Figueroa (~50/50), draw or better vs top-2 in R3, win R4. Result: <strong style="color:var(--gold)">3.5–0.5 or 4–0</strong>.</div>
+    </div>
+    <div style="background:var(--card);border-radius:12px;padding:14px;border-top:4px solid var(--blue);">
+      <div style="font-size:15px;font-weight:800;color:var(--blue);margin-bottom:7px">🥈 Scenario 2 — Prize via Recovery</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px">R1 WIN → R2 LOSS → R3 WIN → R4 WIN</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Probability: ~18-22%</div>
+      <div style="font-size:12px;line-height:1.6;color:var(--text)">Beat Nastro, lose to Figueroa, bounce back with two wins vs 1-1 group. Result: <strong style="color:var(--blue)">3–1</strong>.</div>
+    </div>
+    <div style="background:var(--card);border-radius:12px;padding:14px;border-top:4px solid var(--purple);">
+      <div style="font-size:15px;font-weight:800;color:var(--purple);margin-bottom:7px">🔄 Scenario 3 — Comeback Path</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px">R1 LOSS → R2 WIN → R3 WIN → R4 WIN</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Probability: ~12-17%</div>
+      <div style="font-size:12px;line-height:1.6;color:var(--text)">Lose R1 to Nastro, beat lower-rated 0-1 player, win R3 and R4 in prize fight. Result: <strong style="color:var(--purple)">3–1</strong>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE TRACKER -->
+<div class="section" id="sec-tracker">
+  <h2 class="page-title">🏆 Live Score Tracker</h2>
+  <p class="page-sub">Enter pairings and results manually. Standings update in real time.</p>
+  <div class="tracker-stats" id="tracker-stats" style="margin-top:14px;"></div>
+  <div class="tracker-grid">
+    <div>
+      <div class="round-panel" id="current-round-panel">
+        <h3 id="current-round-title">Round 1</h3>
+        <div class="add-pairing-form" id="add-pairing-form">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:700;">ADD PAIRING</div>
+          <div class="form-row">
+            <select id="sel-white" title="White player"><option value="">♔ White player…</option></select>
+            <select id="sel-black" title="Black player"><option value="">♚ Black / Bye…</option></select>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <button class="btn btn-smir" onclick="addPairing()">+ Add Pairing</button>
+            <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;">
+              <input type="checkbox" id="chk-bye" style="cursor:pointer;" onchange="toggleByeOpts(this)"> Bye (no opponent)
+            </label>
+          </div>
+          <div id="bye-opts" style="display:none;gap:10px;margin-top:4px;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);cursor:pointer;"><input type="radio" name="bye-type" value="bye" checked> Full Bye (+1 pt)</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#ffb74d;cursor:pointer;"><input type="radio" name="bye-type" value="half-bye"> Half-Point Bye (+½ pt)</label>
+          </div>
+        </div>
+        <div id="pairings-list"></div>
+        <div class="round-complete-bar" id="round-actions"></div>
+        <div id="suggestions-panel"></div>
+      </div>
+      <div id="past-rounds-container" style="margin-top:14px;"></div>
+    </div>
+    <div class="standings-panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h3 style="font-size:13px;font-weight:700;color:var(--smir);text-transform:uppercase;letter-spacing:.5px;">Live Standings</h3>
+        <span id="standings-round-label" style="font-size:11px;color:var(--muted);"></span>
+      </div>
+      <div id="standings-table-wrap" style="overflow-x:auto;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="section" id="sec-progress">
+  <h2 class="page-title">📈 Score Progression</h2>
+  <p class="page-sub">Cumulative scores after each completed round.</p>
+  <div id="progress-content" style="margin-top:16px;"></div>
+</div>
+
+</div><!-- /main -->
+<script>
+// ── PLAYER DATA ──────────────────────────────────────────────────────────────
+const players = [
+  {seed:1,  name:'Gerardo Cruz',       st:'CO',entry:1236,muirReg:1236,muirQ:1477,blitz:1175,qEff:1477,qSrc:'Quick',natTier:'A',w24:37.6,w25:46.0,w26:36.1,trendDir:-1,growPyr:-20,adj:1381,trueRank:1,natDetail:'North American Open (annual), Winter Springs Open',flag:'DOMINANT at G/25+5. Quick 1477 is highest in field by 283 pts. The clear tournament favorite.',strategy:'His quick rating (1477) makes him the strongest player at this TC. Play solid defensive setups, aim for draw — even a draw is a great result. Do NOT create tactical complications.'},
+  {seed:2,  name:'Abigayil Zenn',      st:'FL',entry:1174,muirReg:1102,muirQ:1118,blitz:991, qEff:1118,qSrc:'Quick',natTier:'B',w24:56.9,w25:56.2,w26:61.7,trendDir:1, growPyr:50, adj:1122,trueRank:4,natDetail:'KCF All-Girls National, FL State Ch.',flag:'Quick 1118. FIDE rated. Age ~11. Very consistent 57-62% win rate.',strategy:'Solid, consistent player. No weak spots. Use experience and national event composure.'},
+  {seed:3,  name:'Xiaoxi Sha',         st:'CA',entry:1167,muirReg:1197,muirQ:1194,blitz:null, qEff:1194,qSrc:'Quick',natTier:'B',w24:54.2,w25:52.4,w26:54.2,trendDir:0, growPyr:25, adj:1195,trueRank:2,natDetail:'USAT West (team), CalChess Championships',flag:'Quick 1194 ≈ Regular 1197. Underseeded +30 pts. Rock-stable performer.',strategy:'Second strongest player. No obvious weakness. Play fighting chess and look for inaccuracies.'},
+  {seed:4,  name:'Florence Bueno',     st:'NV',entry:1134,muirReg:1134,muirQ:1047,blitz:null, qEff:1047,qSrc:'Quick/21★',natTier:'A',w24:66.7,w25:31.3,w26:null,trendDir:-1,growPyr:-27,adj:1082,trueRank:7,natDetail:'2024 Natl Open: 17th/156. Annual LV events.',flag:'Local NV player. Won 66% in 2024 but crashed to 31% in 2025. Unknown 2026 form.',strategy:'Beatable — form collapsed in 2025. Quick 1047 is manageable. Do not underestimate local home advantage.'},
+  {seed:5,  name:'Satvik Verma',       st:'AZ',entry:1127,muirReg:1091,muirQ:1077,blitz:null, qEff:1077,qSrc:'Quick',natTier:'C',w24:45.2,w25:52.0,w26:66.4,trendDir:1, growPyr:75, adj:1073,trueRank:8,natDetail:'AZ Scholastic State only — no national open experience',flag:'Hot form (66% in 2026) but no national open experience.',strategy:'In form but untested at national opens. Use pressure of national tournament setting.'},
+  {seed:6,  name:'Samrudh Dev',        st:'AZ',entry:1126,muirReg:1126,muirQ:1115,blitz:759,  qEff:1115,qSrc:'Quick',natTier:'A',w24:55.6,w25:48.9,w26:50.0,trendDir:0, growPyr:32, adj:1129,trueRank:3,natDetail:'2024 Natl Open: 25th/156. 2025 Natl Open. Regular participant.',flag:'Quick 1115 — strong at G/25+5. Rank #3 adjusted.',strategy:'Strong at G/25+5 (quick 1115). Adj gap is 69 pts (Dev favored). Fight hard.'},
+  {seed:7,  name:'Aiden H. Cheng',     st:'CA',entry:1093,muirReg:1093,muirQ:1050,blitz:null, qEff:1050,qSrc:'Quick',natTier:'A',w24:59.7,w25:58.7,w26:null,trendDir:1, growPyr:228,adj:1117,trueRank:5,natDetail:'★ 2025 IYC: 4th/125 (TOP 10%). N. American Open, American Open.',flag:'Only confirmed top-10% national finisher. Quick 1050 + Tier A bonus.',strategy:'Experienced national player — only one with top-10% finish in this field. Treat with full respect.'},
+  {seed:8,  name:'Krish Agrawal',      st:'CA',entry:1087,muirReg:1087,muirQ:912, blitz:965,  qEff:912, qSrc:'Quick',natTier:'B',w24:53.3,w25:59.7,w26:72.7,trendDir:1, growPyr:225,adj:1002,trueRank:11,natDetail:'2025 Natl Open: dropped 50 pts. LA Open strong locally.',flag:'72.7% win rate in 2026 but quick 912 is WEAK for G/25+5.',strategy:'Quick 912 is below-average at this TC. Smirnov blitz proxy 1018 >> Agrawal quick 912.'},
+  {seed:9,  name:'Mark Smirnov ★',    st:'PA',entry:1074,muirReg:1074,muirQ:703, blitz:1018, qEff:1018,qSrc:'Blitz★',natTier:'A',w24:73.1,w25:60.5,w26:42.9,trendDir:-1,growPyr:50, adj:1060,trueRank:9,natDetail:'NCC ×3, World Open, Atlantic Open, Atlantic City Open, Natl HS Ch.',flag:'★ Blitz 1018 primary proxy. Lichess Rapid 1500 supporting signal. Adj. 1060, Rank #9.',strategy:'<div style="text-align:center;padding:10px;background:#1e1b4b;border-radius:8px;border:2px solid #7c3aed"><div style="font-size:15px;font-weight:800;color:#ede9fe">★ This is YOU</div><div style="font-size:12px;color:#a78bfa;margin-top:4px">See Round Guide and Scenarios tabs for full strategy.</div></div>'},
+  {seed:10, name:'Sanjan Sendilkumar', st:'UT',entry:1063,muirReg:903, muirQ:930, blitz:null, qEff:930, qSrc:'Quick',natTier:'D',w24:41.9,w25:59.6,w26:57.4,trendDir:1, growPyr:30, adj:879, trueRank:16,natDetail:'UT local scholastic events only',flag:'Overseeded 160 pts (MUIR 903 vs entry 1063). Quick 930. No nationals.',strategy:'Adj 879 vs Smirnov 1060 = 181-pt gap. Solid play should win comfortably.'},
+  {seed:11, name:'Xavier Figueroa',    st:'TX',entry:1062,muirReg:1062,muirQ:1148,blitz:1078, qEff:1148,qSrc:'Quick',natTier:'C',w24:28.6,w25:55.6,w26:38.9,trendDir:-1,growPyr:0,  adj:1084,trueRank:6,natDetail:'2026 HS Nationals, Region VIII — TX school events',flag:'Quick 1148 (2nd highest). G/25+5 is his ideal format.',strategy:'⚠ DANGER in Round 2. Quick 1148 makes him dangerous. Play CLOSED openings (London, Colle).'},
+  {seed:12, name:'Ethan Nastro',       st:'CA',entry:1036,muirReg:1080,muirQ:1022,blitz:982,  qEff:1022,qSrc:'Quick',natTier:'C',w24:68.2,w25:50.0,w26:57.5,trendDir:1, growPyr:100,adj:1025,trueRank:10,natDetail:'CA scholastic only (SuperStates, L.A. Super City)',flag:'R1 OPPONENT. Underseeded +44 pts. Quick 1022 solid.',strategy:'Your Round 1 opponent. Adj 1025 vs Smirnov 1060. Tier A vs Tier C national experience is decisive. Play aggressively.'},
+  {seed:13, name:'Jesse Delacruz',     st:'TX',entry:1009,muirReg:1009,muirQ:1111,blitz:null, qEff:1111,qSrc:'Quick★/13',natTier:'D',w24:null,w25:55.6,w26:25.0,trendDir:-1,growPyr:50, adj:1000,trueRank:12,natDetail:'TX local events only',flag:'Quick 1111 (13-game provisional). 25% in 2026. Interesting wildcard.',strategy:'Quick 1111 is provisional — treat with caution. 2026 form (25%) is terrible. Play solid positional chess.'},
+  {seed:14, name:'Zachary Neugut',     st:'NY',entry:1000,muirReg:1000,muirQ:955, blitz:null, qEff:null, qSrc:'Stale (2007)',natTier:'D',w24:null,w25:null,w26:null,trendDir:0,growPyr:0,adj:null,trueRank:20,natDetail:'NJ scholastic 2002-2007. Inactive 18+ years.',flag:'Complete wildcard — last played ~2007. No usable data.',strategy:'Complete unknown. Do not under-prepare. 18 years of self-study could mean anything.'},
+  {seed:15, name:'Nicholas Boys',      st:'CA',entry:999, muirReg:999, muirQ:792, blitz:null, qEff:792, qSrc:'Quick',natTier:'C',w24:60.0,w25:54.9,w26:63.3,trendDir:1, growPyr:75, adj:865, trueRank:17,natDetail:'2025 IYC: 78th/125. CA scholastic.',flag:'Strong regular player (63%) but quick 792 is a G/25+5 weakness.',strategy:'Quick 792 well below Smirnov proxy 1018. If paired: time pressure tactics.'},
+  {seed:16, name:'Emerson Sullivan',   st:'CA',entry:987, muirReg:1024,muirQ:1021,blitz:1080, qEff:1021,qSrc:'Quick',natTier:'C',w24:50.0,w25:62.3,w26:46.9,trendDir:-1,growPyr:50, adj:982, trueRank:13,natDetail:'CA scholastic only (SuperStates, L.A. City Championship)',flag:'Underseeded +37 pts. Quick 1021 solid. Declining 2026 form.',strategy:'Quick 1021 ≈ Smirnov proxy 1018. Smirnov adj 1060 vs Sullivan 982 = 78-pt edge.'},
+  {seed:17, name:'Jake Tozzie',        st:'CA',entry:919, muirReg:919, muirQ:891, blitz:null, qEff:891, qSrc:'Quick★/24',natTier:'D',w24:null,w25:58.3,w26:null,trendDir:0,growPyr:null,adj:852,trueRank:18,natDetail:'Played BEGINNERS section at 2025 Natl Open.',flag:'Beginners section ≠ national experience. Quick 891 provisional.',strategy:'Easy win expected. Adj 852 vs Smirnov 1060 = 208-pt gap.'},
+  {seed:18, name:'Owen Madaus',        st:'RI',entry:911, muirReg:911, muirQ:904, blitz:null, qEff:null, qSrc:'Unknown (5)',natTier:'D',w24:null,w25:60.0,w26:null,trendDir:0,growPyr:null,adj:811,trueRank:19,natDetail:'Only 5 games total in USCF history.',flag:'5 games total. Every rating is meaningless. Treat as complete unknown.',strategy:'Only 5 USCF games ever — effectively unrated. Be alert but expect to win.'},
+  {seed:19, name:'Kaavya Jha',         st:'AZ',entry:889, muirReg:813, muirQ:744, blitz:683,  qEff:744, qSrc:'Quick',natTier:'C',w24:0.0, w25:44.1,w26:41.1,trendDir:1, growPyr:100,adj:757, trueRank:20,natDetail:'North American Open, 2025 World Open (61st/72).',flag:'Quick 744 + MUIR 813 + below 50% win rate. Lowest adjusted score.',strategy:'Lowest adjusted score in field. Quick 744 is very weak. Easy win expected.'},
+  {seed:20, name:'Surya Burra',        st:'OR',entry:880, muirReg:957, muirQ:945, blitz:null, qEff:945, qSrc:'Quick',natTier:'B',w24:null,w25:33.3,w26:51.3,trendDir:1, growPyr:77, adj:970, trueRank:14,natDetail:'GM Arthur Dake Memorial, OSCF State Ch. FIDE rated.',flag:'Underseeded +77 pts (MUIR 957). FIDE rated. More dangerous than entry (880) suggests.',strategy:'Take seriously. MUIR 957 and Quick 945 respectable. FIDE rated player.'},
+];
+
+// ── TRACKER STATE ─────────────────────────────────────────────────────────────
+let tState = { rounds: [] }; // [{pairings:[{white:seed,black:seed|null,result:str|null}]}]
+const TOTAL_ROUNDS = 4;
+
+function saveT(){ try{ localStorage.setItem('smirnov_tracker_v1', JSON.stringify(tState)); }catch(e){} }
+function loadT(){ try{ const d=JSON.parse(localStorage.getItem('smirnov_tracker_v1')||'null'); if(d) tState=d; }catch(e){} }
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function pName(seed){ return seed ? (players.find(p=>p.seed===seed)||{name:'?'}).name : '?'; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function adjClass(a){ if(a===null) return 'adj-unk'; if(a>=1300) return 'adj-1300'; if(a>=1150) return 'adj-1150'; if(a>=1050) return 'adj-1050'; if(a>=950) return 'adj-950'; return 'adj-low'; }
+function rankClass(r){ if(r===1)return'rank-1';if(r===2)return'rank-2';if(r===3)return'rank-3';if(r<=8)return'rank-top';if(r<=14)return'rank-mid';return'rank-low'; }
+function winColor(p){ if(p>=60)return'#4caf50';if(p>=45)return'#ff9800';return'#ef5350'; }
+function toast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2400); }
+
+function toggleByeOpts(chk){
+  const opts=document.getElementById('bye-opts');
+  if(opts) opts.style.display=chk.checked?'flex':'none';
+}
+
+function getScores(){
+  const s={};
+  players.forEach(p=>s[p.seed]=0);
+  tState.rounds.forEach(r=>r.pairings.forEach(pair=>{
+    if(pair.result==='1-0'||pair.result==='w-ff') s[pair.white]+=1;
+    else if((pair.result==='0-1'||pair.result==='b-ff')&&pair.black) s[pair.black]+=1;
+    else if(pair.result==='½-½'){ s[pair.white]+=0.5; if(pair.black) s[pair.black]+=0.5; }
+    else if(pair.result==='bye') s[pair.white]+=1;
+    else if(pair.result==='half-bye') s[pair.white]+=0.5;
+  }));
+  return s;
+}
+
+function getPairedSeeds(roundIdx){
+  const set=new Set();
+  if(roundIdx<0||roundIdx>=tState.rounds.length) return set;
+  tState.rounds[roundIdx].pairings.forEach(p=>{ set.add(p.white); if(p.black) set.add(p.black); });
+  return set;
+}
+
+function roundComplete(r){ return r.pairings.length>0 && r.pairings.every(p=>p.result!==null); }
+
+// ── DROPDOWNS ─────────────────────────────────────────────────────────────────
+function refreshDropdowns(){
+  const ri = tState.rounds.length > 0 ? tState.rounds.length - 1 : 0;
+  const paired = getPairedSeeds(ri);
+  const avail = players.filter(p => !paired.has(p.seed)).sort((a,b)=>a.name.localeCompare(b.name));
+
+  const ws = document.getElementById('sel-white');
+  const bs = document.getElementById('sel-black');
+  const curW = ws ? ws.value : '';
+  const curB = bs ? bs.value : '';
+
+  if(ws){
+    ws.innerHTML = '<option value="">♔ White player…</option>' + avail.map(p=>`<option value="${p.seed}">${esc(p.name)} (${p.adj||'?'})</option>`).join('');
+    if(curW && avail.find(p=>String(p.seed)===curW)) ws.value = curW;
+  }
+  if(bs){
+    bs.innerHTML = '<option value="">♚ Black player / Bye…</option>' + avail.map(p=>`<option value="${p.seed}">${esc(p.name)} (${p.adj||'?'})</option>`).join('');
+    if(curB && avail.find(p=>String(p.seed)===curB)) bs.value = curB;
+  }
+}
+
+// ── ADD PAIRING ───────────────────────────────────────────────────────────────
+function addPairing(){
+  const ws = document.getElementById('sel-white');
+  const bs = document.getElementById('sel-black');
+  const bye = document.getElementById('chk-bye').checked;
+  const wSeed = parseInt(ws.value);
+  if(!wSeed){ toast('Select a white player.'); return; }
+
+  // Ensure current round exists
+  if(tState.rounds.length===0 || roundComplete(tState.rounds[tState.rounds.length-1])){
+    if(tState.rounds.length>=TOTAL_ROUNDS){ toast('All 4 rounds complete!'); return; }
+    tState.rounds.push({pairings:[]});
+  }
+
+  const ri = tState.rounds.length-1;
+  const paired = getPairedSeeds(ri);
+  if(paired.has(wSeed)){ toast('That player is already paired this round.'); return; }
+
+  if(bye){
+    const byeType = (document.querySelector('input[name="bye-type"]:checked')||{value:'bye'}).value;
+    tState.rounds[ri].pairings.push({white:wSeed, black:null, result:byeType});
+  } else {
+    const bSeed = parseInt(bs.value);
+    if(!bSeed){ toast('Select a black player, or check "Bye".'); return; }
+    if(bSeed===wSeed){ toast('Cannot pair a player against themselves.'); return; }
+    if(paired.has(bSeed)){ toast('That player is already paired this round.'); return; }
+    tState.rounds[ri].pairings.push({white:wSeed, black:bSeed, result:null});
+  }
+
+  ws.value=''; bs.value='';
+  document.getElementById('chk-bye').checked=false;
+  document.getElementById('bye-opts').style.display='none';
+  const defRadio=document.querySelector('input[name="bye-type"][value="bye"]');
+  if(defRadio) defRadio.checked=true;
+  saveT(); renderTracker(); renderStandings(); renderProgress();
+}
+
+function setResult(ri, pi, result){
+  tState.rounds[ri].pairings[pi].result = result;
+  saveT(); renderTracker(); renderStandings(); renderProgress();
+}
+
+function deletePairing(ri, pi){
+  tState.rounds[ri].pairings.splice(pi,1);
+  if(tState.rounds[ri].pairings.length===0 && ri===tState.rounds.length-1) tState.rounds.pop();
+  saveT(); renderTracker(); renderStandings(); renderProgress();
+}
+
+function clearResult(ri, pi){
+  tState.rounds[ri].pairings[pi].result = null;
+  saveT(); renderTracker(); renderStandings(); renderProgress();
+}
+
+function resetRound(ri){
+  if(!confirm(`Reset all results in Round ${ri+1}? Pairings stay, results are cleared.`)) return;
+  tState.rounds[ri].pairings.forEach(p=>{ if(p.result!=='bye'&&p.result!=='half-bye') p.result=null; });
+  saveT(); renderTracker(); renderStandings(); renderProgress();
+  toast(`Round ${ri+1} results cleared.`);
+}
+
+function deleteRound(ri){
+  if(!confirm(`Delete Round ${ri+1} entirely (pairings + results)?`)) return;
+  tState.rounds.splice(ri,1);
+  saveT(); renderTracker(); renderStandings(); renderProgress();
+  toast(`Round ${ri+1} deleted.`);
+}
+
+// ── SWISS PAIRING ENGINE ──────────────────────────────────────────────────────
+function generateSwissPairings(){
+  const scores = getScores();
+
+  // Previous matchups (avoid rematches)
+  const prevMatchups = new Set();
+  tState.rounds.forEach(r => r.pairings.forEach(p => {
+    if(p.black){ const k=[Math.min(p.white,p.black),Math.max(p.white,p.black)].join('-'); prevMatchups.add(k); }
+  }));
+
+  // Bye history
+  const hadBye = new Set(tState.rounds.flatMap(r=>r.pairings.filter(p=>p.result==='bye'||p.result==='half-bye').map(p=>p.white)));
+
+  // White count per player (for color balancing)
+  const whiteCount={};
+  players.forEach(p=>whiteCount[p.seed]=0);
+  tState.rounds.forEach(r=>r.pairings.forEach(p=>{ if(p.black) whiteCount[p.white]=(whiteCount[p.white]||0)+1; }));
+
+  // Sort pool: score desc, then adj desc
+  let pool=[...players].sort((a,b)=>{
+    const ds=scores[b.seed]-scores[a.seed];
+    return ds!==0?ds:(b.adj||0)-(a.adj||0);
+  });
+
+  const result=[];
+
+  // Handle bye if odd number
+  if(pool.length%2!==0){
+    let byeIdx=pool.length-1;
+    for(let i=pool.length-1;i>=0;i--){
+      if(!hadBye.has(pool[i].seed)){ byeIdx=i; break; }
+    }
+    const byePlayer=pool.splice(byeIdx,1)[0];
+    result.push({white:byePlayer.seed,black:null,result:'bye',suggested:true});
+  }
+
+  // ── Proper Swiss: group by score, pair top-half vs bottom-half within each group ──
+  // Build score groups (pool is already sorted by score desc then adj desc)
+  const groups=[];
+  let curGroup=[], curScore=null;
+  pool.forEach(p=>{
+    const s=scores[p.seed];
+    if(s!==curScore){ if(curGroup.length) groups.push(curGroup); curGroup=[p]; curScore=s; }
+    else curGroup.push(p);
+  });
+  if(curGroup.length) groups.push(curGroup);
+
+  // Within each group pair top-half vs bottom-half, float odd player to next group
+  const pairs=[];
+  let floater=null;
+  groups.forEach((grp,gi)=>{
+    let g=floater?[floater,...grp]:grp; floater=null;
+    if(g.length%2!==0){
+      if(gi<groups.length-1){ floater=g[g.length-1]; g=g.slice(0,-1); }
+      // if last group and still odd: shouldn't happen (bye was already removed above)
+    }
+    const half=g.length/2;
+    const top=g.slice(0,half), bot=g.slice(half);
+    // Pair top[i] vs bot[i] with backtracking to avoid rematches
+    const used=new Set();
+    function bt(ti){
+      if(ti===top.length) return true;
+      const a=top[ti];
+      // try in order, non-rematches first
+      const order=[...Array(bot.length).keys()].sort((x,y)=>{
+        const kx=[Math.min(a.seed,bot[x].seed),Math.max(a.seed,bot[x].seed)].join('-');
+        const ky=[Math.min(a.seed,bot[y].seed),Math.max(a.seed,bot[y].seed)].join('-');
+        return (prevMatchups.has(kx)?1:0)-(prevMatchups.has(ky)?1:0);
+      });
+      for(const bi of order){
+        if(used.has(bi)) continue;
+        pairs.push([a,bot[bi]]); used.add(bi);
+        if(bt(ti+1)) return true;
+        pairs.pop(); used.delete(bi);
+      }
+      return false;
+    }
+    bt(0);
+  });
+
+  // Assign colors: fewer whites = gets white; ties broken by lower score gets white
+  pairs.forEach(([a,b])=>{
+    const wa=whiteCount[a.seed]||0, wb=whiteCount[b.seed]||0;
+    let white,black;
+    if(wb<wa){ white=b; black=a; }
+    else if(wa<wb){ white=a; black=b; }
+    else{
+      const sa=scores[a.seed], sb=scores[b.seed];
+      white = sb<sa ? b : a;
+      black = white===a ? b : a;
+    }
+    result.push({white:white.seed, black:black.seed, result:null, suggested:true});
+  });
+
+  return result;
+}
+
+function acceptSuggestions(){
+  if(tState.rounds.length>=TOTAL_ROUNDS){ toast('All 4 rounds complete!'); return; }
+  const suggested=generateSwissPairings();
+  tState.rounds.push({pairings: suggested.map(p=>({white:p.white,black:p.black,result:p.result}))});
+  saveT(); renderTracker(); renderStandings();
+  toast(`Round ${tState.rounds.length} started with Swiss pairings!`);
+}
+
+function startNextRoundWithEmpty(){
+  if(tState.rounds.length>=TOTAL_ROUNDS){ toast('All 4 rounds complete!'); return; }
+  tState.rounds.push({pairings:[]});
+  saveT(); renderTracker();
+  toast(`Round ${tState.rounds.length} started!`);
+}
+
+function renderSuggestions(nextRoundNum){
+  const el=document.getElementById('suggestions-panel');
+  if(!el) return;
+  if(tState.rounds.length>=TOTAL_ROUNDS){ el.innerHTML=''; return; }
+
+  const suggested=generateSwissPairings();
+  const scores=getScores();
+
+  let html=`<div class="suggestions-wrap">
+    <div class="suggestions-header">
+      <div>
+        <h4>🤖 Suggested Round ${nextRoundNum} Pairings</h4>
+        <div style="font-size:10px;color:#7c4dff;margin-top:2px;">Generated by Swiss system · based on current standings</div>
+      </div>
+      <div style="display:flex;gap:7px;">
+        <button class="btn btn-smir" style="font-size:11px;padding:6px 14px" onclick="acceptSuggestions()">✓ Accept All & Start Round ${nextRoundNum}</button>
+        <button class="btn btn-sec" style="font-size:11px;padding:6px 14px" onclick="startNextRoundWithEmpty()">Start Empty Round</button>
+      </div>
+    </div>`;
+
+  let board=1;
+  suggested.forEach(pair=>{
+    if(pair.result==='bye'){
+      html+=`<div class="suggestion-row">
+        <span class="sug-board">B</span>
+        <span class="sug-player white-p">${esc(pName(pair.white))}</span>
+        <span class="sug-score">${scores[pair.white]}</span>
+        <span class="sug-bye">— BYE (+1 pt) —</span>
+      </div>`;
+    } else {
+      const pred=getPrediction(pair.white,pair.black);
+      const predHtml=pred?`<span class="pred-chip ${pred.chip}" style="font-size:9px">${pred.label}</span>`:'';
+      html+=`<div class="suggestion-row">
+        <span class="sug-board">${board++}</span>
+        <span class="sug-player white-p">${esc(pName(pair.white))}</span>
+        <span class="sug-score">${scores[pair.white]}</span>
+        <span class="sug-vs">vs</span>
+        <span class="sug-player black-p">${esc(pName(pair.black))}</span>
+        <span class="sug-score">${scores[pair.black]}</span>
+        ${predHtml}
+      </div>`;
+    }
+  });
+
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+function startNextRound(){
+  if(tState.rounds.length>=TOTAL_ROUNDS){ toast('All 4 rounds complete!'); return; }
+  tState.rounds.push({pairings:[]});
+  saveT(); renderTracker();
+  toast(`Round ${tState.rounds.length} started!`);
+}
+
+function resetTracker(){
+  if(!confirm('Clear ALL rounds and results? This cannot be undone.')) return;
+  tState={rounds:[]};
+  saveT(); renderTracker(); renderStandings(); renderProgress();
+  toast('Tracker reset.');
+}
+
+// ── WIN PREDICTION ────────────────────────────────────────────────────────────
+function isProvisionalRating(p){
+  // Provisional: qSrc has game count like 'Quick★/13', or is Unknown/Stale
+  return p.qSrc && (p.qSrc.includes('/')||p.qSrc.includes('Unknown')||p.qSrc.includes('Stale'));
+}
+
+function getPrediction(wSeed, bSeed){
+  const wp = players.find(p=>p.seed===wSeed);
+  const bp = players.find(p=>p.seed===bSeed);
+  if(!wp||!bp) return null;
+  const wa = wp.adj, ba = bp.adj;
+  if(wa===null||ba===null){
+    const unknownName = wa===null ? wp.name.split(' ')[0] : bp.name.split(' ')[0];
+    return {label:`? No rating (${unknownName})`,chip:'pred-unknown',prob:null,fav:null};
+  }
+  // Elo-style win probability for white
+  const pWhite = 1/(1+Math.pow(10,(ba-wa)/400));
+  const pct = Math.round(pWhite*100);
+  // Special flag for Smirnov matchups
+  let danger='';
+  if(wSeed===9||bSeed===9){
+    const opp = wSeed===9 ? bp : wp;
+    if(opp.seed===11) danger=' ⚠'; // Figueroa
+    else if(opp.adj>=1150) danger=' ⚠';
+  }
+  // Provisional/stale rating warning
+  let provWarn='';
+  if(isProvisionalRating(wp)||isProvisionalRating(bp)){
+    provWarn=' ~'; // tilde = estimate only
+  }
+  if(pWhite>0.65){
+    return {label:`♔ ${pct}% White${danger}${provWarn}`,chip:'pred-white',prob:pWhite,fav:'white'};
+  } else if(pWhite<0.35){
+    return {label:`♚ ${100-pct}% Black${danger}${provWarn}`,chip:'pred-black',prob:pWhite,fav:'black'};
+  } else {
+    const diff=Math.abs(wa-ba);
+    return {label:diff<15?`Even${danger}${provWarn}`:`${pct}% W${danger}${provWarn}`,chip:'pred-close',prob:pWhite,fav:'close'};
+  }
+}
+
+// ── RENDER TRACKER ────────────────────────────────────────────────────────────
+function renderTracker(){
+  const gamesPlayed = tState.rounds.reduce((s,r)=>s+r.pairings.filter(p=>p.result&&p.result!=='bye'&&p.result!=='half-bye').length,0);
+  const completedRounds = tState.rounds.filter(roundComplete).length;
+  const scores = getScores();
+  const smirScore = scores[9];
+
+  // Stats
+  document.getElementById('tracker-stats').innerHTML = `
+    <div class="tstat"><div class="val">${tState.rounds.length||'—'}</div><div class="lbl">Current Round</div></div>
+    <div class="tstat"><div class="val">${completedRounds}/${TOTAL_ROUNDS}</div><div class="lbl">Rounds Done</div></div>
+    <div class="tstat"><div class="val">${gamesPlayed}</div><div class="lbl">Games Played</div></div>
+    <div class="tstat"><div class="val" style="color:var(--smir)">${smirScore}</div><div class="lbl">Smirnov Score</div></div>
+  `;
+
+  const ri = tState.rounds.length - 1;
+  const hasRound = tState.rounds.length > 0;
+  const curRound = hasRound ? tState.rounds[ri] : null;
+  const isCurComplete = hasRound && roundComplete(curRound);
+
+  // Title
+  const titleEl = document.getElementById('current-round-title');
+  if(titleEl) titleEl.textContent = hasRound ? `Round ${ri+1}${isCurComplete?' — Complete ✓':''}` : 'Round 1';
+
+  // Show/hide add form
+  const formEl = document.getElementById('add-pairing-form');
+  if(formEl) formEl.style.display = (!hasRound || !isCurComplete) ? 'block' : 'none';
+  refreshDropdowns();
+
+  // Pairings list
+  const listEl = document.getElementById('pairings-list');
+  if(listEl){
+    if(!hasRound || curRound.pairings.length===0){
+      listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;">No pairings yet. Add a pairing above.</div>';
+    } else {
+      listEl.innerHTML = curRound.pairings.map((pair, pi)=>{
+        if(pair.result==='bye'||pair.result==='half-bye'){
+          const isHalf=pair.result==='half-bye';
+          return `<div class="pairing-item">
+            <span class="pairing-num">${pi+1}</span>
+            <span class="pairing-white">${esc(pName(pair.white))}</span>
+            <span class="bye-lbl">${isHalf?'— HALF BYE (+½ pt) —':'— BYE (+1 pt) —'}</span>
+            <button class="btn-sm btn-sec" title="${isHalf?'Change to Full Bye (+1)':'Change to Half-Point Bye (+½)'}" style="font-size:10px" onclick="setResult(${ri},${pi},'${isHalf?'bye':'half-bye'}')">${isHalf?'→ Full':'→ Half'}</button>
+            <button class="btn-sm btn-danger" onclick="deletePairing(${ri},${pi})">✕</button>
+          </div>`;
+        }
+        const sel = pair.result;
+        const pred = getPrediction(pair.white, pair.black);
+        const predHtml = pred ? `<span class="pred-chip ${pred.chip}">${pred.label}</span>` : '';
+        return `<div class="pairing-item" style="${sel?'border-color:var(--border);':''}">
+          <span class="pairing-num">${pi+1}</span>
+          <span class="pairing-white">${esc(pName(pair.white))}</span>
+          <span class="vs-lbl">vs</span>
+          <span class="pairing-black">${esc(pName(pair.black))}</span>
+          ${predHtml}
+          ${sel===null ? `
+          <div class="result-btns">
+            <button class="rbtn" onclick="setResult(${ri},${pi},'1-0')">1-0</button>
+            <button class="rbtn" onclick="setResult(${ri},${pi},'½-½')">½-½</button>
+            <button class="rbtn" onclick="setResult(${ri},${pi},'0-1')">0-1</button>
+            <button class="rbtn ff" title="White wins by forfeit (black no-show)" onclick="setResult(${ri},${pi},'w-ff')">W-FF</button>
+            <button class="rbtn ff" title="Black wins by forfeit (white no-show)" onclick="setResult(${ri},${pi},'b-ff')">B-FF</button>
+          </div>
+          <button class="btn-sm btn-danger" onclick="deletePairing(${ri},${pi})">✕</button>
+          ` : `
+          <div class="result-btns">
+            <button class="rbtn ${sel==='1-0'?'sel-white':''}" onclick="setResult(${ri},${pi},'1-0')">1-0</button>
+            <button class="rbtn ${sel==='½-½'?'sel-draw':''}"  onclick="setResult(${ri},${pi},'½-½')">½-½</button>
+            <button class="rbtn ${sel==='0-1'?'sel-black':''}" onclick="setResult(${ri},${pi},'0-1')">0-1</button>
+            <button class="rbtn ff ${sel==='w-ff'?'sel-wff':''}" title="White wins by forfeit" onclick="setResult(${ri},${pi},'w-ff')">W-FF</button>
+            <button class="rbtn ff ${sel==='b-ff'?'sel-bff':''}" title="Black wins by forfeit" onclick="setResult(${ri},${pi},'b-ff')">B-FF</button>
+          </div>
+          <button class="btn-edit" onclick="clearResult(${ri},${pi})" title="Clear result">✎</button>
+          `}
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // Round actions
+  const actEl = document.getElementById('round-actions');
+  if(actEl){
+    const sugEl=document.getElementById('suggestions-panel');
+    const showSug=(!hasRound)||(isCurComplete&&ri<TOTAL_ROUNDS-1);
+    if(sugEl&&!showSug) sugEl.innerHTML='';
+    if(!hasRound){
+      actEl.innerHTML = `<button class="btn btn-danger btn-sm" onclick="resetTracker()" style="margin-left:auto">🔄 Reset All</button>`;
+      renderSuggestions(1);
+    } else if(isCurComplete && ri < TOTAL_ROUNDS-1){
+      actEl.innerHTML = `<span style="font-size:11px;color:var(--green);">✓ All results entered</span>
+        <div style="display:flex;gap:6px;margin-left:auto">
+          <button class="btn-edit" onclick="resetRound(${ri})">↺ Reset Round</button>
+        </div>`;
+      renderSuggestions(ri+2);
+    } else if(isCurComplete && ri === TOTAL_ROUNDS-1){
+      const sortedScores = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+      const winner = pName(parseInt(sortedScores[0][0]));
+      actEl.innerHTML = `<span style="color:var(--gold);font-weight:700;font-size:12px;">🏆 ${esc(winner)} wins! (${sortedScores[0][1]} pts)</span>
+        <div style="display:flex;gap:6px;margin-left:auto">
+          <button class="btn-edit" onclick="resetRound(${ri})">↺ Reset Round</button>
+          <button class="btn-sm btn-danger" onclick="resetTracker()">🔄 Reset All</button>
+        </div>`;
+    } else {
+      const total = curRound.pairings.filter(p=>p.result!=='bye'&&p.result!=='half-bye').length;
+      const done = curRound.pairings.filter(p=>p.result!==null).length;
+      actEl.innerHTML = `<span style="font-size:11px;color:var(--muted);">${done}/${total} results entered</span>
+        <div style="display:flex;gap:6px;margin-left:auto">
+          <button class="btn-edit" onclick="resetRound(${ri})">↺ Reset Round</button>
+          <button class="btn-edit" onclick="deleteRound(${ri})" style="color:var(--red);border-color:rgba(239,83,80,.3)">🗑 Delete Round</button>
+          <button class="btn-sm btn-danger" onclick="resetTracker()">🔄 Reset All</button>
+        </div>`;
+    }
+  }
+
+  // Past rounds
+  const pastEl = document.getElementById('past-rounds-container');
+  if(pastEl){
+    if(tState.rounds.length <= 1){ pastEl.innerHTML=''; return; }
+    pastEl.innerHTML = tState.rounds.slice(0,-1).map((round,rri)=>{
+      const done = roundComplete(round);
+      return `<div class="past-round">
+        <div class="past-round-header" onclick="togglePast(this)">
+          <strong style="font-size:13px;">Round ${rri+1}</strong>
+          <span>${done?'<span style="color:var(--green)">✓ Complete</span>':'<span style="color:var(--orange)">Incomplete</span>'} · ${round.pairings.length} pairings</span>
+          <span style="font-size:16px;color:var(--muted);">▾</span>
+        </div>
+        <div class="past-round-body">
+          ${round.pairings.map((pair,pi)=>{
+            if(pair.result==='bye'||pair.result==='half-bye'){
+              const isHalf=pair.result==='half-bye';
+              return `<div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);padding:5px 0;">
+                ${esc(pName(pair.white))} <span style="font-style:italic">${isHalf?'HALF BYE (+½)':'BYE (+1)'}</span>
+                <button class="btn-edit" style="font-size:9px;padding:2px 6px" onclick="setResult(${rri},${pi},'${isHalf?'bye':'half-bye'}')" title="${isHalf?'→ Full Bye':'→ Half-Point Bye'}">${isHalf?'→ Full':'→ Half'}</button>
+              </div>`;
+            }
+            const sel=pair.result;
+            const pred=getPrediction(pair.white,pair.black);
+            const predHtml=pred?`<span class="pred-chip ${pred.chip}" style="font-size:9px;">${pred.label}</span>`:'';
+            return `<div class="pairing-item" style="margin-bottom:6px;padding:8px 10px;">
+              <span class="pairing-num" style="font-size:10px">${pi+1}</span>
+              <span style="flex:1;font-size:11px;font-weight:600">${esc(pName(pair.white))}</span>
+              <span class="vs-lbl" style="font-size:10px">vs</span>
+              <span style="flex:1;font-size:11px;font-weight:600">${esc(pName(pair.black))}</span>
+              ${predHtml}
+              ${sel===null ? `
+              <div class="result-btns">
+                <button class="rbtn" style="font-size:10px;padding:3px 7px" onclick="setResult(${rri},${pi},'1-0')">1-0</button>
+                <button class="rbtn" style="font-size:10px;padding:3px 7px" onclick="setResult(${rri},${pi},'½-½')">½-½</button>
+                <button class="rbtn" style="font-size:10px;padding:3px 7px" onclick="setResult(${rri},${pi},'0-1')">0-1</button>
+                <button class="rbtn" style="font-size:9px;padding:3px 6px" title="White wins by forfeit" onclick="setResult(${rri},${pi},'w-ff')">W-FF</button>
+                <button class="rbtn" style="font-size:9px;padding:3px 6px" title="Black wins by forfeit" onclick="setResult(${rri},${pi},'b-ff')">B-FF</button>
+              </div>` : `
+              <div class="result-btns">
+                <button class="rbtn ${sel==='1-0'?'sel-white':''}" style="font-size:10px;padding:3px 7px" onclick="setResult(${rri},${pi},'1-0')">1-0</button>
+                <button class="rbtn ${sel==='½-½'?'sel-draw':''}"  style="font-size:10px;padding:3px 7px" onclick="setResult(${rri},${pi},'½-½')">½-½</button>
+                <button class="rbtn ${sel==='0-1'?'sel-black':''}" style="font-size:10px;padding:3px 7px" onclick="setResult(${rri},${pi},'0-1')">0-1</button>
+                <button class="rbtn ${sel==='w-ff'?'sel-wff':''}" style="font-size:9px;padding:3px 6px" title="White wins by forfeit" onclick="setResult(${rri},${pi},'w-ff')">W-FF</button>
+                <button class="rbtn ${sel==='b-ff'?'sel-bff':''}" style="font-size:9px;padding:3px 6px" title="Black wins by forfeit" onclick="setResult(${rri},${pi},'b-ff')">B-FF</button>
+              </div>
+              <button class="btn-edit" style="font-size:9px;padding:2px 6px" onclick="clearResult(${rri},${pi})" title="Clear result">✎</button>`}
+            </div>`;
+          }).join('')}
+          <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
+            <button class="btn-edit" onclick="resetRound(${rri})">↺ Reset Results</button>
+            <button class="btn-edit" style="color:var(--red);border-color:rgba(239,83,80,.3)" onclick="deleteRound(${rri})">🗑 Delete Round</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function togglePast(header){
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// ── STANDINGS ─────────────────────────────────────────────────────────────────
+function getSB(scores){
+  const sb={};
+  players.forEach(p=>sb[p.seed]=0);
+  tState.rounds.forEach(r=>r.pairings.forEach(pair=>{
+    if(!pair.result||pair.result==='bye'||pair.result==='half-bye') return;
+    if(pair.result==='1-0'||pair.result==='w-ff') sb[pair.white]+=(scores[pair.black]||0);
+    else if(pair.result==='0-1'||pair.result==='b-ff') sb[pair.black]+=(scores[pair.white]||0);
+    else { sb[pair.white]+=(scores[pair.black]||0)*0.5; sb[pair.black]+=(scores[pair.white]||0)*0.5; }
+  }));
+  return sb;
+}
+
+function getHistory(seed){
+  const h=[];
+  tState.rounds.forEach(r=>r.pairings.forEach(p=>{
+    if(p.result==='bye'&&p.white===seed){h.push('B');return;}
+    if(p.result==='half-bye'&&p.white===seed){h.push('H');return;}
+    if(p.white===seed){
+      if(p.result==='1-0')h.push('W');
+      else if(p.result==='w-ff')h.push('F');
+      else if(p.result==='½-½')h.push('D');
+      else if(p.result==='0-1'||p.result==='b-ff')h.push('L');
+      else if(p.result===null)h.push('·');
+    }
+    if(p.black===seed){
+      if(p.result==='0-1')h.push('W');
+      else if(p.result==='b-ff')h.push('F');
+      else if(p.result==='½-½')h.push('D');
+      else if(p.result==='1-0'||p.result==='w-ff')h.push('L');
+      else if(p.result===null)h.push('·');
+    }
+  }));
+  return h;
+}
+
+function renderStandings(){
+  const el = document.getElementById('standings-table-wrap');
+  const lbl = document.getElementById('standings-round-label');
+  if(!el) return;
+  const scores = getScores();
+  const sb = getSB(scores);
+  const sorted = [...players].sort((a,b)=>{ const ds=scores[b.seed]-scores[a.seed]; return ds!==0?ds:sb[b.seed]-sb[a.seed]; });
+  const maxSc = Math.max(tState.rounds.length, 1);
+  const compRounds = tState.rounds.filter(roundComplete).length;
+  if(lbl) lbl.textContent = compRounds>0 ? `After Round ${compRounds}` : 'Pre-tournament';
+
+  const dotMap={'W':'dot-win','D':'dot-draw','L':'dot-loss','B':'dot-bye','F':'dot-forfeit','H':'dot-halfbye','·':'dot-bye'};
+  const dotLabel={'W':'W','D':'D','L':'L','B':'B','F':'F','H':'½B','·':'·'};
+
+  el.innerHTML = `<table class="standings-tbl">
+    <thead><tr>
+      <th>#</th><th>Player</th><th>Score</th><th>W/D/L</th><th>Progress</th><th>Form</th><th>SB</th>
+    </tr></thead>
+    <tbody>${sorted.map((p,i)=>{
+      const sc = scores[p.seed];
+      const hist = getHistory(p.seed);
+      const w=hist.filter(x=>x==='W').length, d=hist.filter(x=>x==='D').length, l=hist.filter(x=>x==='L').length;
+      const pct = (sc/maxSc*100).toFixed(0);
+      const isSmir = p.seed===9;
+      return `<tr class="${isSmir?'smir-row':''}">
+        <td>${i<3?['🥇','🥈','🥉'][i]:i+1}</td>
+        <td><strong style="color:${isSmir?'#b39ddb':'var(--text)'}">${isSmir?'★ ':''}${esc(p.name)}</strong><br><span style="color:var(--muted);font-size:0.72rem;">⭐${p.adj||'?'}</span></td>
+        <td><span class="score-big">${sc}</span></td>
+        <td style="font-size:11px;color:var(--muted)">${w}/${d}/${l}</td>
+        <td style="min-width:90px"><div style="display:flex;align-items:center;gap:6px"><div class="progress-bg"><div class="progress-fill" style="width:${Math.min(pct,100)}%"></div></div><span style="font-size:0.7rem;color:var(--muted);width:26px">${pct}%</span></div></td>
+        <td>${hist.slice(-4).map(r=>`<span class="result-dot ${dotMap[r]||'dot-bye'}">${dotLabel[r]||'·'}</span>`).join('')}</td>
+        <td style="color:var(--muted);font-size:11px">${sb[p.seed].toFixed(1)}</td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+}
+
+// ── PROGRESS TAB ──────────────────────────────────────────────────────────────
+function renderProgress(){
+  const el = document.getElementById('progress-content');
+  if(!el) return;
+  const compRounds = tState.rounds.filter(roundComplete);
+
+  if(compRounds.length===0){
+    el.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:16px;">
+      <svg viewBox="0 0 120 120" width="100" height="100" style="opacity:.25">
+        ${Array.from({length:8},(_,row)=>Array.from({length:8},(_,col)=>`<rect x="${col*15}" y="${row*15}" width="15" height="15" fill="${(row+col)%2===0?'#4a90e2':'#1a1d27'}"/>`).join('')).join('')}
+        <text x="60" y="68" text-anchor="middle" font-size="40" fill="white" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))">📈</text>
+      </svg>
+      <div style="font-size:1.1rem;font-weight:700;color:var(--text)">No completed rounds yet</div>
+      <div style="font-size:13px;color:var(--muted);text-align:center;max-width:320px">Enter pairings and results in the <strong style="color:var(--smir)">Live Tracker</strong> tab. Charts will appear after Round 1 finishes.</div>
+      <button class="btn btn-smir" onclick="showSection('tracker',document.querySelector('.tracker-btn'))">Go to Live Tracker →</button>
+    </div>`;
+    return;
+  }
+
+  // Build score history
+  const history={};
+  players.forEach(p=>history[p.seed]=[0]);
+  compRounds.forEach(round=>{
+    const prev={};
+    players.forEach(p=>prev[p.seed]=history[p.seed][history[p.seed].length-1]);
+    round.pairings.forEach(pair=>{
+      if(pair.result==='1-0'||pair.result==='w-ff') prev[pair.white]+=1;
+      else if((pair.result==='0-1'||pair.result==='b-ff')&&pair.black) prev[pair.black]+=1;
+      else if(pair.result==='½-½'){ prev[pair.white]+=0.5; if(pair.black) prev[pair.black]+=0.5; }
+      else if(pair.result==='bye') prev[pair.white]+=1;
+      else if(pair.result==='half-bye') prev[pair.white]+=0.5;
+    });
+    players.forEach(p=>history[p.seed].push(prev[p.seed]));
+  });
+
+  const scores=getScores();
+  const n=compRounds.length;
+  const sorted=[...players].sort((a,b)=>{ const ds=scores[b.seed]-scores[a.seed]; return ds!==0?ds:(b.adj||0)-(a.adj||0); });
+  const palette=['#7c4dff','#f5a623','#4caf50','#4a90e2','#ef5350','#00bcd4','#ff9800','#ab47bc','#e91e63','#26a69a','#ec407a','#42a5f5','#66bb6a','#ffa726','#ef5350','#26c6da','#d4e157','#ff7043','#8d6e63','#78909c'];
+
+  // ── HERO STATS ROW ────────────────────────────────────────────────────────
+  const smirRank = sorted.findIndex(p=>p.seed===9)+1;
+  const leader = sorted[0];
+  const smirScore = scores[9];
+  const maxScore = scores[sorted[0].seed];
+
+  let html=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:18px;">
+    <div style="background:linear-gradient(135deg,#1e1b4b,#2d2260);border:1px solid #5e35b1;border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:0.7rem;color:#b39ddb;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Rounds Complete</div>
+      <div style="font-size:2rem;font-weight:800;color:#ede9fe">${n}<span style="font-size:1rem;color:#7c4dff"> / 4</span></div>
+    </div>
+    <div style="background:linear-gradient(135deg,#1a1d27,#0d1b3e);border:1px solid var(--gold);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:0.7rem;color:#f5c518;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Leader</div>
+      <div style="font-size:1rem;font-weight:800;color:var(--gold)">${esc(leader.name.split(' ').slice(-1)[0])}</div>
+      <div style="font-size:1.5rem;font-weight:800;color:#fff">${maxScore} pts</div>
+    </div>
+    <div style="background:linear-gradient(135deg,#1a1240,#2d1a50);border:2px solid var(--smir);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:0.7rem;color:#b39ddb;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">★ Smirnov</div>
+      <div style="font-size:1.6rem;font-weight:800;color:var(--smir)">${smirScore} pts</div>
+      <div style="font-size:0.8rem;color:#a78bfa">Rank #${smirRank} of 20</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:0.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Perfect Score</div>
+      <div style="font-size:1.5rem;font-weight:800;color:var(--text)">${n}.0</div>
+      <div style="font-size:0.75rem;color:var(--muted)">${players.filter(p=>scores[p.seed]===n).length} player(s)</div>
+    </div>
+  </div>`;
+
+  // ── MAIN LINE CHART ───────────────────────────────────────────────────────
+  const CW=860, CH=300, PL=44, PR=130, PT=24, PB=36;
+  const plotW=CW-PL-PR, plotH=CH-PT-PB;
+  const maxY=Math.max(n, 1);
+  const xSteps=n; // number of rounds completed
+  const xScale=i=>PL+(i/xSteps)*plotW;
+  const yScale=v=>PT+plotH-(v/maxY)*plotH;
+
+  // Gridlines
+  let gridLines='';
+  for(let s=0; s<=maxY*2; s++){
+    const v=s*0.5;
+    const y=yScale(v);
+    if(y>=PT && y<=PT+plotH){
+      gridLines+=`<line x1="${PL}" y1="${y.toFixed(1)}" x2="${PL+plotW}" y2="${y.toFixed(1)}" stroke="#2e3450" stroke-width="${Number.isInteger(v)?1.5:.6}" stroke-dasharray="${Number.isInteger(v)?'':'3,3'}"/>`;
+      if(Number.isInteger(v)||v%1===0.5) gridLines+=`<text x="${PL-6}" y="${(y+4).toFixed(1)}" text-anchor="end" fill="#5a6480" font-size="11">${v}</text>`;
+    }
+  }
+  // X axis labels
+  let xLabels=`<text x="${PL.toFixed(1)}" y="${(PT+plotH+18).toFixed(1)}" text-anchor="middle" fill="#5a6480" font-size="11">Start</text>`;
+  for(let r=1;r<=xSteps;r++){
+    xLabels+=`<text x="${xScale(r).toFixed(1)}" y="${(PT+plotH+18).toFixed(1)}" text-anchor="middle" fill="#8892b0" font-size="11" font-weight="700">R${r}</text>`;
+  }
+
+  // Player lines — draw background players first, then Smirnov on top
+  let bgLines='', smirLine='', smirDots='', endLabels='';
+  sorted.forEach((p,rank)=>{
+    const isSmir=p.seed===9;
+    const col=isSmir?'#7c4dff':palette[(rank+1)%palette.length];
+    const vals=history[p.seed];
+    const cur=scores[p.seed];
+    // Build path
+    let d='';
+    for(let i=0;i<vals.length;i++){
+      const x=xScale(i), y=yScale(vals[i]);
+      d+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1)+' ';
+    }
+    // Area fill for Smirnov
+    let areaD=d+`L${xScale(xSteps).toFixed(1)},${(PT+plotH).toFixed(1)} L${PL.toFixed(1)},${(PT+plotH).toFixed(1)} Z`;
+
+    if(isSmir){
+      smirLine=`
+        <defs><filter id="smirGlow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <path d="${areaD}" fill="url(#smirArea)" opacity=".18"/>
+        <path d="${d}" fill="none" stroke="#7c4dff" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" filter="url(#smirGlow)"/>`;
+      smirDots=vals.map((v,i)=>{
+        const x=xScale(i), y=yScale(v);
+        return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="#7c4dff" stroke="#ede9fe" stroke-width="2"/>`;
+      }).join('');
+      endLabels+=`<text x="${(PL+plotW+10).toFixed(1)}" y="${(yScale(cur)+4).toFixed(1)}" fill="#b39ddb" font-size="12" font-weight="800">★ ${esc(p.name.split(' ').slice(-1)[0])} ${cur}</text>`;
+    } else {
+      // Only label top 3 at end
+      const opacity = rank < 6 ? '1' : '0.45';
+      const sw = rank < 3 ? '2' : '1.2';
+      bgLines+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linejoin="round" stroke-linecap="round" opacity="${opacity}"/>`;
+      bgLines+=vals.map((v,i)=>`<circle cx="${xScale(i).toFixed(1)}" cy="${yScale(v).toFixed(1)}" r="${rank<3?4:2.5}" fill="${col}" opacity="${opacity}"/>`).join('');
+      if(rank<3){
+        endLabels+=`<text x="${(PL+plotW+10).toFixed(1)}" y="${(yScale(cur)+4).toFixed(1)}" fill="${col}" font-size="11" font-weight="700">${esc(p.name.split(' ').slice(-1)[0])} ${cur}</text>`;
+      }
+    }
+  });
+
+  html+=`<div style="background:var(--card);border-radius:14px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:14px;font-weight:800;color:var(--text)">Score Progression — All Players</div>
+      <div style="display:flex;align-items:center;gap:14px;font-size:11px;">
+        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:20px;height:3px;background:#7c4dff;border-radius:2px;box-shadow:0 0 6px #7c4dff"></span><span style="color:#b39ddb;font-weight:700">★ Smirnov</span></span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:20px;height:2px;background:var(--muted);border-radius:2px;opacity:.5"></span><span style="color:var(--muted)">Other players</span></span>
+      </div>
+    </div>
+    <svg viewBox="0 0 ${CW} ${CH}" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="smirArea" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7c4dff" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#7c4dff" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- border -->
+      <rect x="${PL}" y="${PT}" width="${plotW}" height="${plotH}" fill="none" stroke="#2e3450" stroke-width="1" rx="2"/>
+      <!-- gridlines -->
+      ${gridLines}
+      <!-- x labels -->
+      ${xLabels}
+      <!-- round dividers -->
+      ${Array.from({length:xSteps},(_,i)=>`<line x1="${xScale(i+1).toFixed(1)}" y1="${PT}" x2="${xScale(i+1).toFixed(1)}" y2="${PT+plotH}" stroke="#2e3450" stroke-width="1"/>`).join('')}
+      <!-- bg player lines -->
+      ${bgLines}
+      <!-- smirnov line on top -->
+      ${smirLine}
+      ${smirDots}
+      <!-- end labels -->
+      ${endLabels}
+    </svg>
+  </div>`;
+
+  // ── BUMP CHART (Rank Race) ────────────────────────────────────────────────
+  // Build rank history
+  const rankHistory={}; // seed -> [rank after each completed round]
+  players.forEach(p=>rankHistory[p.seed]=[]);
+  for(let r=0;r<=n;r++){
+    const scoreAtR={};
+    players.forEach(p=>scoreAtR[p.seed]=history[p.seed][r]);
+    const order=[...players].sort((a,b)=>scoreAtR[b.seed]-scoreAtR[a.seed]||((b.adj||0)-(a.adj||0)));
+    order.forEach((p,i)=>rankHistory[p.seed].push(i+1));
+  }
+
+  const BC_W=860, BC_H=260, BC_PL=44, BC_PR=130, BC_PT=16, BC_PB=16;
+  const bpW=BC_W-BC_PL-BC_PR, bpH=BC_H-BC_PT-BC_PB;
+  const bxScale=i=>BC_PL+(i/n)*bpW;
+  const byScale=rank=>BC_PT+((rank-1)/(20-1))*bpH;
+
+  let bumpLines='', bumpSmirLine='', bumpSmirDots='', bumpEndLabels='';
+  // Draw everyone at once (background then smirnov)
+  sorted.forEach((p,si)=>{
+    const isSmir=p.seed===9;
+    const col=isSmir?'#7c4dff':palette[(si+1)%palette.length];
+    const ranks=rankHistory[p.seed];
+    let d='';
+    for(let i=0;i<ranks.length;i++){
+      const x=bxScale(i), y=byScale(ranks[i]);
+      d+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1)+' ';
+    }
+    const finalRank=ranks[ranks.length-1];
+    if(isSmir){
+      bumpSmirLine=`<path d="${d}" fill="none" stroke="#7c4dff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" filter="url(#smirGlow)"/>`;
+      bumpSmirDots=ranks.map((r,i)=>`<circle cx="${bxScale(i).toFixed(1)}" cy="${byScale(r).toFixed(1)}" r="5" fill="#7c4dff" stroke="#ede9fe" stroke-width="1.5"/>`).join('');
+      bumpEndLabels+=`<text x="${(BC_PL+bpW+8).toFixed(1)}" y="${(byScale(finalRank)+4).toFixed(1)}" fill="#b39ddb" font-size="11" font-weight="800">★ #${finalRank} Smirnov</text>`;
+    } else {
+      const op=si<5?'.9':'.35';
+      const sw=si<3?'2':'1';
+      bumpLines+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linejoin="round" opacity="${op}"/>`;
+      bumpLines+=ranks.map((r,i)=>`<circle cx="${bxScale(i).toFixed(1)}" cy="${byScale(r).toFixed(1)}" r="${si<3?3.5:2}" fill="${col}" opacity="${op}"/>`).join('');
+      if(si<3) bumpEndLabels+=`<text x="${(BC_PL+bpW+8).toFixed(1)}" y="${(byScale(finalRank)+4).toFixed(1)}" fill="${col}" font-size="11" font-weight="600">#${finalRank} ${esc(p.name.split(' ').slice(-1)[0])}</text>`;
+    }
+  });
+  // Y axis labels (rank numbers)
+  let bumpYLabels='';
+  [1,5,10,15,20].forEach(r=>{ bumpYLabels+=`<text x="${BC_PL-6}" y="${(byScale(r)+4).toFixed(1)}" text-anchor="end" fill="#5a6480" font-size="10">#${r}</text>`; });
+  let bumpXLabels=`<text x="${bxScale(0).toFixed(1)}" y="${BC_PT+bpH+14}" text-anchor="middle" fill="#5a6480" font-size="11">Start</text>`;
+  for(let r=1;r<=n;r++) bumpXLabels+=`<text x="${bxScale(r).toFixed(1)}" y="${BC_PT+bpH+14}" text-anchor="middle" fill="#8892b0" font-size="11" font-weight="700">R${r}</text>`;
+
+  html+=`<div style="background:var(--card);border-radius:14px;padding:18px;margin-bottom:16px;overflow-x:auto;">
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:14px;">Rank Race <span style="font-size:12px;font-weight:400;color:var(--muted)">— position after each round</span></div>
+    <svg viewBox="0 0 ${BC_W} ${BC_H}" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+      ${bumpYLabels}${bumpXLabels}
+      ${Array.from({length:n+1},(_,i)=>`<line x1="${bxScale(i).toFixed(1)}" y1="${BC_PT}" x2="${bxScale(i).toFixed(1)}" y2="${BC_PT+bpH}" stroke="#2e3450" stroke-width="1"/>`).join('')}
+      ${[1,5,10,15,20].map(r=>`<line x1="${BC_PL}" y1="${byScale(r).toFixed(1)}" x2="${BC_PL+bpW}" y2="${byScale(r).toFixed(1)}" stroke="#1e2235" stroke-width="1"/>`).join('')}
+      ${bumpLines}${bumpSmirLine}${bumpSmirDots}${bumpEndLabels}
+    </svg>
+  </div>`;
+
+  // ── PLAYER SCORE TILES ────────────────────────────────────────────────────
+  html+=`<div style="background:var(--card);border-radius:14px;padding:18px;margin-bottom:16px;">
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:14px;">Player Scorecards</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;">`;
+
+  sorted.forEach((p,rank)=>{
+    const isSmir=p.seed===9;
+    const col=isSmir?'#7c4dff':palette[(rank+1)%palette.length];
+    const sc=scores[p.seed];
+    const hist=getHistory(p.seed);
+    const w=hist.filter(x=>x==='W').length, dr=hist.filter(x=>x==='D').length, l=hist.filter(x=>x==='L').length;
+    const pct=n>0?(sc/n*100):0;
+    const dotMap={'W':'dot-win','D':'dot-draw','L':'dot-loss','B':'dot-bye','F':'dot-forfeit','H':'dot-halfbye','·':'dot-bye'};
+    const dotLabel={'W':'W','D':'D','L':'L','B':'B','F':'F','H':'½','·':'·'};
+    const medal=rank===0?'🥇':rank===1?'🥈':rank===2?'🥉':'';
+    html+=`<div style="background:${isSmir?'linear-gradient(135deg,#1a1240,#2a1a5e)':'var(--bg)'};border:${isSmir?'2px solid #7c4dff':'1px solid var(--border)'};border-radius:10px;padding:12px;position:relative;overflow:hidden;">
+      ${isSmir?`<div style="position:absolute;top:0;right:0;width:40px;height:40px;background:radial-gradient(circle at top right,rgba(124,77,255,.4),transparent);pointer-events:none;"></div>`:''}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div style="font-size:11px;font-weight:700;color:${col};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;">${medal}${isSmir?'★ ':''}${esc(p.name.split(' ').slice(-1)[0])}</div>
+        <div style="font-size:1.4rem;font-weight:800;color:${col}">${sc}</div>
+      </div>
+      <div style="height:4px;background:#2e3450;border-radius:3px;margin-bottom:8px;overflow:hidden;">
+        <div style="height:100%;width:${pct.toFixed(0)}%;background:${col};border-radius:3px;transition:width .5s;${isSmir?`box-shadow:0 0 8px ${col};`:''}"></div>
+      </div>
+      <div style="display:flex;gap:3px;margin-bottom:6px;">
+        ${hist.slice(-n||undefined).map(r=>`<span class="result-dot ${dotMap[r]||'dot-bye'}" style="font-size:0.6rem;width:18px;height:18px;line-height:18px;">${dotLabel[r]||'·'}</span>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--muted);">${w}W · ${dr}D · ${l}L &nbsp;·&nbsp; <span style="color:${col};font-weight:600">${pct.toFixed(0)}%</span></div>
+    </div>`;
+  });
+
+  html+=`</div></div>`;
+
+  // ── SCORE DISTRIBUTION BAR ────────────────────────────────────────────────
+  const scoreCounts={};
+  players.forEach(p=>{ const s=scores[p.seed]; scoreCounts[s]=(scoreCounts[s]||[]); scoreCounts[s].push(p); });
+  const allScores=[...new Set(Object.keys(scoreCounts).map(Number))].sort((a,b)=>b-a);
+
+  html+=`<div style="background:var(--card);border-radius:14px;padding:18px;">
+    <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:14px;">Score Distribution</div>
+    ${allScores.map(s=>{
+      const ps=scoreCounts[s];
+      const hasSmir=ps.some(p=>p.seed===9);
+      return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <div style="width:34px;text-align:right;font-size:1rem;font-weight:800;color:${hasSmir?'var(--smir)':'var(--gold)'}">${s}</div>
+        <div style="flex:1;display:flex;gap:4px;align-items:center;flex-wrap:wrap;">
+          ${ps.map(p=>{
+            const isSmir=p.seed===9;
+            return `<div style="padding:3px 8px;border-radius:5px;font-size:10px;font-weight:700;background:${isSmir?'var(--smir)':'var(--card)'};border:1px solid ${isSmir?'#b39ddb':'var(--border)'};color:${isSmir?'#fff':'var(--text)'};">${isSmir?'★ ':''}${esc(p.name.split(' ')[0])}</div>`;
+          }).join('')}
+        </div>
+        <div style="font-size:11px;color:var(--muted);width:40px;text-align:right">${ps.length}p</div>
+      </div>`;
+    }).join('')}
+  </div>`;
+
+  el.innerHTML=html;
+}
+
+// ── GUIDE / OPPONENTS (preserved from original) ───────────────────────────────
+function renderPlayerCards(){
+  const grid=document.getElementById('cards-grid');
+  const sorted=[...players].sort((a,b)=>{ if(a.seed===9)return-1;if(b.seed===9)return 1;return a.trueRank-b.trueRank; });
+  grid.innerHTML=sorted.map(p=>{
+    const isSmir=p.seed===9;
+    const adjD=p.adj===null?'???':p.adj;
+    const qColor=p.qSrc.includes('Stale')||p.qSrc.includes('Unknown')?'var(--red)':p.qSrc.includes('Blitz')?'var(--purple)':'var(--green)';
+    const maxW=Math.max(p.w24||0,p.w25||0,p.w26||0,1);
+    return `<div class="player-card ${isSmir?'smir-card':''}" onclick="openModal(${p.seed})" data-adj="${p.adj||0}" data-name="${p.name.toLowerCase()}" data-no-quick="${p.qEff===null?'1':'0'}" style="${isSmir?'border:2px solid #7c3aed;grid-column:1/-1;':''}">
+      ${isSmir?`<div style="background:linear-gradient(90deg,#4c1d95,#6d28d9);padding:3px 10px;border-radius:5px;font-size:11px;font-weight:800;color:#ede9fe;display:inline-block;margin-bottom:7px">★ YOU — MARK SMIRNOV</div>`:''}
+      <div class="rank-badge ${isSmir?'rank-top':rankClass(p.trueRank)}">${isSmir?'★':p.trueRank}</div>
+      <div class="card-header" style="margin-left:30px">
+        <div><div class="card-name">${esc(p.name)}</div><div class="card-state">${p.st} · Seed #${p.seed} · Entry ${p.entry}</div></div>
+        <div class="adj-badge ${adjClass(p.adj)}">${adjD}</div>
+      </div>
+      <div class="card-ratings">
+        <span class="rating-pill rp-reg">Reg ${p.muirReg}</span>
+        <span class="rating-pill rp-eff" style="color:${qColor}">⚡ Q-eff ${p.qEff||'N/A'}</span>
+        ${isSmir?`<span class="rating-pill" style="background:#2d1f40;color:#d8b4fe;border:1px solid #7c3aed">Lichess 1500</span>`:''}
+        ${p.blitz?`<span class="rating-pill rp-blitz">Blitz ${p.blitz}</span>`:''}
+        <span class="tier-badge tier-${p.natTier}">Tier ${p.natTier}</span>
+      </div>
+      <div class="win-history" style="margin:5px 0 3px">
+        <div class="wh-title">Win % by Year</div>
+        <div class="wh-bars">
+          ${[{y:'24',v:p.w24},{y:'25',v:p.w25},{y:'26',v:p.w26}].map(b=>`
+          <div class="wh-bar-wrap">
+            <div class="wh-pct" style="color:${b.v!=null?winColor(b.v):'#444'}">${b.v!=null?b.v+'%':'–'}</div>
+            <div class="wh-bar" style="height:${b.v?b.v*0.38:3}px;background:${b.v?winColor(b.v):'#333'}"></div>
+            <div class="wh-year">'${b.y}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="card-flag">${p.flag}</div>
+    </div>`;
+  }).join('');
+}
+
+function openModal(seed){
+  const p=players.find(x=>x.seed===seed);
+  if(!p) return;
+  const m=document.getElementById('modal-content');
+  const adjD=p.adj===null?'Unknown':p.adj;
+  const adjColor=p.adj===null?'var(--muted)':p.adj>=1150?'var(--gold)':p.adj>=1050?'var(--green)':p.adj>=950?'var(--blue)':'var(--orange)';
+  m.innerHTML=`
+    <div class="modal-header">
+      <div><div style="font-size:20px;font-weight:800">${esc(p.name)} <span style="font-size:13px;color:var(--muted)">#${p.seed} · ${p.st}</span></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">Entry ${p.entry} · MUIR ${p.muirReg} · G/25+5 Rank #${p.trueRank}</div></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-grid">
+      <div class="modal-stat"><label>Adjusted Score (G/25+5)</label><value style="color:${adjColor}">${adjD}</value></div>
+      <div class="modal-stat"><label>Quick Eff. Rating</label><value style="color:var(--gold)">${p.qEff||'N/A'} <span style="font-size:11px;color:var(--muted)">(${p.qSrc})</span></value></div>
+      <div class="modal-stat"><label>MUIR Regular</label><value>${p.muirReg}</value></div>
+      <div class="modal-stat"><label>Blitz Rating</label><value style="color:var(--purple)">${p.blitz||'None ⚠'}</value></div>
+      <div class="modal-stat"><label>National Tier</label><value><span class="tier-badge tier-${p.natTier}" style="font-size:15px">Tier ${p.natTier}</span></value></div>
+      <div class="modal-stat"><label>Growth / Year</label><value style="color:${p.growPyr>=100?'var(--green)':p.growPyr>=0?'var(--blue)':'var(--red)'}">${p.growPyr>=0?'+':''}${p.growPyr||'N/A'}/yr</value></div>
+    </div>
+    <div style="margin-top:12px;background:var(--card);border-radius:8px;padding:10px;">
+      <div style="font-size:10px;color:var(--muted);margin-bottom:4px">NATIONAL EVENTS</div>
+      <div style="font-size:12px">${p.natDetail}</div>
+    </div>
+    <div class="win-history" style="margin:12px 0 0">
+      <div class="wh-title" style="font-size:11px;margin-bottom:7px">WIN PERCENTAGE HISTORY</div>
+      <div style="display:flex;gap:14px;align-items:flex-end">
+        ${[{y:'2024',v:p.w24},{y:'2025',v:p.w25},{y:'2026',v:p.w26}].map(b=>`
+        <div style="flex:1;text-align:center">
+          <div style="font-size:19px;font-weight:800;color:${b.v!=null?winColor(b.v):'#444'}">${b.v!=null?b.v+'%':'N/A'}</div>
+          <div style="font-size:11px;color:var(--muted)">${b.y}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="strategy-box" style="margin-top:12px">
+      <div class="strategy-title">VS SMIRNOV STRATEGY</div>
+      <div style="font-size:12px;line-height:1.6">${p.strategy}</div>
+    </div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);font-style:italic">${p.flag}</div>`;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(e){ if(!e||e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open'); }
+
+function renderRanking(){
+  const table=document.getElementById('ranking-table');
+  const sorted=[...players].sort((a,b)=>{ if(a.adj===null)return 1;if(b.adj===null)return-1;return b.adj-a.adj; });
+  table.innerHTML=`<div style="display:grid;grid-template-columns:44px 1fr 70px 70px 90px 70px 70px 70px;font-size:11px;font-weight:700;color:var(--muted);padding:9px 14px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px">
+    <div>Rank</div><div>Player</div><div>Entry</div><div>MUIR</div><div>Quick Eff.</div><div>Tier</div><div>Growth</div><div>Adj</div>
+  </div>
+  ${sorted.map((p,i)=>{
+    const isSmir=p.seed===9;
+    const adjD=p.adj===null?'?':p.adj;
+    const ac=p.adj===null?'var(--muted)':p.adj>=1300?'var(--gold)':p.adj>=1150?'#a5d6a7':p.adj>=1050?'var(--blue)':p.adj>=950?'var(--orange)':'var(--red)';
+    const grD=p.growPyr===null?'N/A':(p.growPyr>=0?'+':'')+p.growPyr;
+    const grC=p.growPyr===null?'var(--muted)':p.growPyr>=100?'var(--green)':p.growPyr>=0?'var(--blue)':'var(--red)';
+    return`<div style="display:grid;grid-template-columns:44px 1fr 70px 70px 90px 70px 70px 70px;padding:9px 14px;border-bottom:1px solid var(--border);background:${isSmir?'rgba(124,77,255,.1)':'transparent'};align-items:center;cursor:pointer" onclick="openModal(${p.seed})" onmouseover="this.style.background='rgba(74,144,226,.07)'" onmouseout="this.style.background='${isSmir?'rgba(124,77,255,.1)':'transparent'}'">
+      <div><span class="${rankClass(p.trueRank)} rank-badge" style="position:static;display:inline-flex">${i+1}</span></div>
+      <div style="font-weight:${isSmir?'800':'600'};color:${isSmir?'#b39ddb':'var(--text)'}">${isSmir?'★ ':''}${esc(p.name)}<span style="font-size:10px;color:var(--muted);margin-left:5px">${p.st}·#${p.seed}</span></div>
+      <div style="color:var(--muted)">${p.entry}</div>
+      <div>${p.muirReg}</div>
+      <div style="color:var(--gold);font-weight:700">${p.qEff||'—'} <span style="font-size:9px;color:var(--muted)">${p.qSrc}</span></div>
+      <div><span class="tier-badge tier-${p.natTier}">Tier ${p.natTier}</span></div>
+      <div style="color:${grC};font-weight:600">${grD}</div>
+      <div style="font-size:17px;font-weight:800;color:${ac}">${adjD}</div>
+    </div>`;
+  }).join('')}`;
+}
+
+let curRoundGuide=1, curPath='win';
+function showRound(r,btn){ curRoundGuide=r; document.querySelectorAll('.round-tab').forEach(t=>t.classList.remove('active')); btn.classList.add('active'); renderRoundDetail(); }
+function setPath(p,btn){ curPath=p; document.querySelectorAll('.path-btn').forEach(b=>{b.classList.remove('active-win','active-lose');}); btn.classList.add(p==='win'?'active-win':'active-lose'); renderRoundDetail(); }
+
+const roundData={
+  1:{title:'Round 1 — vs Ethan Nastro (Seed #12)',score:'0–0',opponent:players[11],prediction:'Smirnov FAVORED',predTag:'pred-win',adjGap:'+35 (Smirnov)',stats:[{val:'1025',lbl:'Nastro Adj.'},{val:'1085',lbl:'Smirnov Adj.'},{val:'+35',lbl:'Adj. Edge'}],strategies:['Nastro is underseeded by 44 pts (MUIR 1080 vs entry 1036) — treat as a 1080-level player','His quick 1022 ≈ your blitz proxy 1018 — the clock is nearly even; national experience is the real edge','Play aggressively from move 1. A quick draw here kills tournament chances. Full point is the mission','He has never played a national open (only CA scholastic events). Use the atmosphere to your advantage','After winning, expect Figueroa (adj.1084, quick 1148) in Round 2 — a tough G/25+5 opponent']},
+  2:{score:'1–0 or 0–1',paths:{win:{opponent:players[10],type:'tough',title:'Round 2 (if 1–0) — vs Xavier Figueroa (Seed #11)',prediction:'Figueroa slight favorite',predTag:'pred-tough',adjGap:'-24 (Figueroa)',stats:[{val:'1084',lbl:'Figueroa Adj.'},{val:'1085',lbl:'Smirnov Adj.'},{val:'-24',lbl:'Adj. Gap'}],strategies:['⚠ Figueroa quick 1148 makes G/25+5 his best format — this is NOT an easy win','Play CLOSED openings: London System, Colle, or King\'s Indian Attack. Avoid sharp Sicilians','Never enter tactical complications — Figueroa thrives with fast-game tactics','Use your national experience (NCC ×3, World Open) to stay calm as clock ticks down','Win probability ~42-48%. Fight hard — a draw here keeps you at 1.5 and in contention']},lose:{opponent:{name:'Lower-rated 0–1 player',adj:879,muirQ:930,flag:'Likely Sendilkumar (adj.879), Jha (adj.757), Boys (adj.865), or Burra (adj.970)'},type:'win',title:'Round 2 (if 0–1) — vs lower-rated 0–1 player',prediction:'Smirnov strongly favored',predTag:'pred-win',adjGap:'+90 to +303',stats:[{val:'757–879',lbl:'Opponent Range'},{val:'1085',lbl:'Smirnov Adj.'},{val:'MUST WIN',lbl:'Requirement'}],strategies:['Must win to stay in prize contention — 1–1 is the minimum after R2','Likely opponent: Sendilkumar (879), Boys (865), Jha (757), or Burra (970)','You outrate all of them by 90-300+ adjusted points. Play your best opening and convert','Do not over-press and create unnecessary complications. Solid play wins this','After winning: you face a strong 1–1 opponent in R3 (Cheng, Bueno, Zenn range)']}}},
+  3:{score:'2–0, 1.5–0.5, or 1–1',paths:{win:{title:'Round 3 (if 2–0) — Top-tier opponent',opponents:[{name:'Cruz (adj.1381)',type:'hard',pred:'Draw is great result',gap:-321,strat:'Adj. gap -321. Quick 1477. Solid defense, aim for draw.'},{name:'Sha (adj.1195)',type:'hard',pred:'Fight for win/draw',gap:-135,strat:'Adj. gap -135. Play fighting chess. Push for win.'},{name:'Dev (adj.1129)',type:'tough',pred:'Smirnov slight underdog',gap:-69,strat:'Adj. gap -69. Dev quick 1115 vs Smirnov eff 1075. Close — PLAY FOR WIN.'}],strategies:['At 2–0 you are in trophy contention. You WILL face a top-3 player','vs Cruz (adj.1381): His quick 1477 is dominant. Solid defense; draw = excellent result','vs Sha (adj.1195): Fight for win. No glaring weakness but she can be pressed','vs Dev (adj.1129): Play for win. Adj gap is only 69 pts. Both Tier A nationals.','Going into R3 at 2–0 puts you in position for prize — protect that']},lose:{title:'Round 3 (if 1–1) — Mid-field battle',strat:'Must WIN to reach 2–1. Likely: Cheng (1117), Bueno (1082), Zenn (1122), Agrawal (1002). Smirnov adj.1060 is in the thick of this group.',strategies:['You must WIN to reach 2–1 and have prize contention in R4','Likely opponents: Cheng (adj.1117), Figueroa (1084), Zenn (1122), Agrawal (1002)','Your Tier A national experience stands out in this group — most are Tier B/C','Win this game and you fight for a prize in R4 regardless of R1/R2 path']}}},
+  4:{title:'Round 4 — Final Round',score:'3–0, 2.5–0.5, 2–1, or 1–2',prediction:'Always play for WIN',predTag:'pred-win',strategies:['NEVER agree to a quick draw in Round 4 regardless of score or opponent','3–1 = likely prize eligible · 3.5–0.5 = strong prize · 4–0 = section win (if Cruz drops)','At G/25+5 with blitz proxy 1018: you play fast-chess well. The 5-sec increment rewards precision','Your national experience (NCC, World Open) is MOST valuable in the final round pressure','Target: 3–1 minimum. Stretch: 3.5–0.5. Dream: 4–0 (requires Cruz/Sha to stumble)'],scenarios:[{score:'3–0',opp:'Cruz or Sha',pred:'Hard — fight for draw/win',col:'var(--red)'},{score:'2.5–0.5',opp:'Another ~2.5 scorer',pred:'Play for WIN',col:'var(--orange)'},{score:'2–1',opp:'Another 2–1 scorer',pred:'Must WIN for prize',col:'var(--blue)'},{score:'1–2',opp:'Another 1–2 scorer',pred:'WIN to salvage 2–2',col:'var(--muted)'}]}
+};
+
+function renderRoundDetail(){
+  const detail=document.getElementById('round-detail');
+  if(curRoundGuide===1){
+    const d=roundData[1];
+    detail.innerHTML=`<div style="font-size:17px;font-weight:800;margin-bottom:3px">${d.title}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Your score going in: ${d.score}</div>
+      <div class="matchup-box win">
+        <div class="matchup-header"><div class="vs-text">YOU vs</div><div><div class="opp-name">${d.opponent.name}</div><div class="opp-detail">Entry ${d.opponent.entry} · MUIR ${d.opponent.muirReg} · Adj. ${d.opponent.adj}</div></div><div style="margin-left:auto"><span class="prediction-tag ${d.predTag}">${d.prediction}</span></div></div>
+        <div class="matchup-stats">${d.stats.map(s=>`<div class="stat-box"><div class="stat-val">${s.val}</div><div class="stat-lbl">${s.lbl}</div></div>`).join('')}</div>
+        <div class="strategy-box"><div class="strategy-title">🎯 Strategy for Round 1</div><ul class="strategy-points">${d.strategies.map(s=>`<li>${s}</li>`).join('')}</ul></div>
+      </div>`;
+  } else if(curRoundGuide===2){
+    const paths=roundData[2].paths; const d=paths[curPath];
+    const typeClass=d.type==='win'?'win':d.type==='tough'?'tough':'hard';
+    detail.innerHTML=`<div style="font-size:17px;font-weight:800;margin-bottom:3px">Round 2</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Choose your Round 1 result:</div>
+      <div class="path-toggle">
+        <button class="path-btn ${curPath==='win'?'active-win':''}" onclick="setPath('win',this)">✓ I won Round 1 (1–0)</button>
+        <button class="path-btn ${curPath==='lose'?'active-lose':''}" onclick="setPath('lose',this)">✗ I lost Round 1 (0–1)</button>
+      </div>
+      <div class="matchup-box ${typeClass}">
+        <div style="font-size:15px;font-weight:800;margin-bottom:7px">${d.title}</div>
+        ${d.opponent.adj?`<div class="matchup-header"><div class="vs-text">YOU vs</div><div><div class="opp-name">${d.opponent.name}</div><div class="opp-detail">Q-eff ${d.opponent.qEff||d.opponent.muirQ} · Adj. ${d.opponent.adj}</div></div><div style="margin-left:auto"><span class="prediction-tag ${d.predTag}">${d.prediction}</span></div></div><div class="matchup-stats">${d.stats.map(s=>`<div class="stat-box"><div class="stat-val">${s.val}</div><div class="stat-lbl">${s.lbl}</div></div>`).join('')}</div>`:''}
+        ${d.strat?`<div style="font-size:12px;color:var(--text);margin:7px 0;padding:9px;background:var(--card);border-radius:7px">${d.strat}</div>`:''}
+        <div class="strategy-box"><div class="strategy-title">🎯 Strategy</div><ul class="strategy-points">${d.strategies.map(s=>`<li>${s}</li>`).join('')}</ul></div>
+      </div>`;
+  } else if(curRoundGuide===3){
+    detail.innerHTML=`<div style="font-size:17px;font-weight:800;margin-bottom:3px">Round 3</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Choose your path:</div>
+      <div class="path-toggle">
+        <button class="path-btn ${curPath==='win'?'active-win':''}" onclick="setPath('win',this)">🏆 I'm at 2–0</button>
+        <button class="path-btn ${curPath==='lose'?'active-lose':''}" onclick="setPath('lose',this)">⚡ I'm at 1–1</button>
+      </div>
+      ${curPath==='win'?`<div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:9px">At 2–0: You face a top-3 player:</div>
+      ${roundData[3].paths.win.opponents.map(o=>`<div class="matchup-box ${o.type}" style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px"><div style="font-size:14px;font-weight:700">${o.name}</div><span class="prediction-tag ${o.gap<-200?'pred-hard':o.gap<-50?'pred-tough':'pred-win'}">${o.pred}</span></div><div style="font-size:12px;color:var(--muted)">${o.strat}</div></div>`).join('')}
+      <div class="strategy-box"><div class="strategy-title">🎯 General R3 Strategy (if 2-0)</div><ul class="strategy-points">${roundData[3].paths.win.strategies.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:`
+      <div class="matchup-box win"><div style="font-size:15px;font-weight:800;margin-bottom:7px">R3 at 1–1: Prize Fight</div>
+      <div style="font-size:12px;line-height:1.6;margin-bottom:10px">${roundData[3].paths.lose.strat}</div>
+      <div class="strategy-box"><div class="strategy-title">🎯 Strategy</div><ul class="strategy-points">${roundData[3].paths.lose.strategies.map(s=>`<li>${s}</li>`).join('')}</ul></div></div>`}`;
+  } else {
+    const d=roundData[4];
+    detail.innerHTML=`<div style="font-size:17px;font-weight:800;margin-bottom:3px">${d.title}</div>
+      <div style="margin:10px 0;display:grid;grid-template-columns:1fr 1fr;gap:9px">
+        ${d.scenarios.map(s=>`<div class="matchup-box" style="border-left-color:${s.col}"><div style="font-size:14px;font-weight:800">${s.score}</div><div style="font-size:11px;color:var(--muted);margin:3px 0">vs ${s.opp}</div><div style="font-size:12px;font-weight:700;color:${s.col}">${s.pred}</div></div>`).join('')}
+      </div>
+      <div class="strategy-box"><div class="strategy-title">🎯 Universal Round 4 Rules</div><ul class="strategy-points">${d.strategies.map(s=>`<li>${s}</li>`).join('')}</ul></div>`;
+  }
+}
+
+function renderSummary(){
+  const div=document.getElementById('summary-content');
+  div.innerHTML=`
+    <div class="summary-card" style="grid-column:span 2">
+      <div class="sc-title">📊 G/25+5 Adjusted Rankings — Top 10</div>
+      ${[...players].sort((a,b)=>{if(a.adj===null)return 1;if(b.adj===null)return-1;return b.adj-a.adj;}).slice(0,10).map((p,i)=>`
+      <div class="ranking-row" onclick="openModal(${p.seed})" style="cursor:pointer">
+        <div class="${rankClass(i+1)} rr-rank">${i+1}</div>
+        <div class="rr-name" style="color:${p.seed===9?'#b39ddb':'var(--text)'}">${p.seed===9?'★ ':''}<strong>${esc(p.name)}</strong> <span style="font-size:10px;color:var(--muted)">Seed #${p.seed}</span></div>
+        <div class="rr-quick" style="color:var(--gold)">Q-eff ${p.qEff||'—'}</div>
+        <div class="rr-adj" style="color:${p.adj>=1150?'var(--gold)':p.adj>=1050?'var(--green)':'var(--blue)'}">${p.adj}</div>
+      </div>`).join('')}
+    </div>
+    <div class="summary-card">
+      <div class="sc-title">🏆 Tournament Prediction</div>
+      <div class="key-insight"><strong>Winner: Gerardo Cruz</strong> (adj.1381, Quick 1477). Dominant by 283 pts over 2nd-highest quick rating.</div>
+      <div class="key-insight green"><strong>Contenders:</strong> Sha (adj.1195), Dev (adj.1129), Zenn (adj.1122), Cheng (adj.1117)</div>
+      <div class="key-insight orange"><strong>Smirnov target:</strong> 3–1 finish, prize contention. Need to win R1 (Nastro) and R2 (Figueroa — tough).</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-title">🔑 Smirnov's Key Advantages</div>
+      <div class="key-insight green"><strong>Lichess Rapid 1500</strong> confirms fast-game strength. USCF equivalent ≈ 1070-1100. Combined with blitz 1018 → Q-eff ~1075.</div>
+      <div class="key-insight green"><strong>Tier A national experience</strong> — NCC ×3, World Open, Atlantic Open. Deepest national resume in the 2-day field.</div>
+      <div class="key-insight green"><strong>5-sec increment</strong> favors experienced players who know how to use it accurately.</div>
+    </div>
+    <div class="summary-card">
+      <div class="sc-title">🎯 Smirnov's 4-Round Path</div>
+      <div class="key-insight purple"><strong>R1 vs Nastro:</strong> Smirnov FAVORED. Tier A vs Tier C nationals decisive. Play aggressively.</div>
+      <div class="key-insight orange"><strong>R2 vs Figueroa:</strong> DANGER — Quick 1148. Play closed openings. Win probability ~42-48%.</div>
+      <div class="key-insight" style="border-left-color:var(--blue)"><strong>R3 at 2-0:</strong> Cruz/Sha/Dev. Draw vs Cruz is excellent. Win vs Dev achievable.</div>
+      <div class="key-insight green"><strong>Target:</strong> 3–1 is realistic and likely prize-eligible. Stretch: 3.5+.</div>
+    </div>`;
+}
+
+function renderRatingImpact(){
+  const data=[
+    {n:'Gerardo Cruz',reg:1236,q:1477},{n:'Xavier Figueroa',reg:1062,q:1148},{n:'Jesse Delacruz',reg:1009,q:1111},
+    {n:'Samrudh Dev',reg:1126,q:1115},{n:'Abigayil Zenn',reg:1102,q:1118},{n:'Xiaoxi Sha',reg:1197,q:1194},
+    {n:'Emerson Sullivan',reg:1024,q:1021},{n:'Ethan Nastro',reg:1080,q:1022},{n:'Florence Bueno',reg:1134,q:1047},
+    {n:'Krish Agrawal',reg:1087,q:912},{n:'Nicholas Boys',reg:999,q:792},{n:'Mark Smirnov ★',reg:1074,q:703,lichess:true},
+  ].sort((a,b)=>(b.q-b.reg)-(a.q-a.reg));
+  const el=document.getElementById('rating-impact-table');
+  if(!el) return;
+  el.innerHTML=data.map(d=>{
+    const gap=d.q-d.reg;
+    const color=gap>80?'var(--green)':gap>0?'#86efac':gap>-80?'var(--orange)':'var(--red)';
+    const label=gap>80?'REG GAIN likely':gap>20?'slight gain':gap>-30?'stable':gap>-100?'REG LOSS risk':'HIGH LOSS RISK';
+    return `<div style="display:flex;align-items:center;gap:5px;padding:2px 0;border-bottom:1px solid var(--border);${d.lichess?'background:rgba(124,77,255,.1);border-radius:3px;padding:3px 4px;':''}">
+      <div style="font-size:10px;width:120px;font-weight:${d.lichess?'800':'400'};color:${d.lichess?'#b39ddb':'var(--text)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.n}</div>
+      <div style="flex:1;height:7px;background:#1a1d27;border-radius:3px;position:relative;overflow:hidden">
+        <div style="position:absolute;${gap>=0?'left:50%':'right:50%'};width:${Math.min(50,Math.abs(gap)/8)}%;height:100%;background:${color};border-radius:3px"></div>
+        <div style="position:absolute;left:50%;top:0;width:1px;height:100%;background:#374151"></div>
+      </div>
+      <div style="font-size:10px;width:100px;text-align:right;color:${color};font-weight:700">${gap>=0?'+':''}${gap} → ${label}</div>
+    </div>`;
+  }).join('');
+}
+
+function filterCards(type,btn){ document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('#cards-grid .player-card').forEach(card=>{ const adj=parseInt(card.dataset.adj)||0,noQ=card.dataset.noQuick==='1'; if(type==='all')card.style.display=''; else if(type==='danger')card.style.display=adj>=1050?'':'none'; else if(type==='beatable')card.style.display=adj<1050?'':'none'; else if(type==='noQuick')card.style.display=noQ?'':'none'; }); }
+function searchCards(q){ q=q.toLowerCase(); document.querySelectorAll('#cards-grid .player-card').forEach(card=>{ card.style.display=card.dataset.name.includes(q)?'':'none'; }); }
+
+function showSection(id,btn){ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active')); document.getElementById('sec-'+id).classList.add('active'); btn.classList.add('active'); if(id==='tracker'){renderTracker();renderStandings();} if(id==='progress') renderProgress(); }
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+loadT();
+renderPlayerCards();
+renderRanking();
+renderRoundDetail();
+renderSummary();
+renderRatingImpact();
+renderTracker();
+renderStandings();
+renderProgress();
+</script>
+</body>
+</html>
