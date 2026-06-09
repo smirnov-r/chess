@@ -51,9 +51,11 @@
   .rating-pill { font-size:11px; padding:2px 7px; border-radius:5px; font-weight:600; }
   .rp-reg{background:#1a2240;color:#7eb3ff} .rp-quick{background:#1a2d1a;color:#81c784}
   .rp-blitz{background:#2d1a40;color:#ce93d8} .rp-eff{background:#2d2a00;color:#fff176;border:1px solid var(--gold)}
-  .tier-badge { font-size:10px; font-weight:700; padding:2px 7px; border-radius:4px; }
-  .tier-A{background:#1a2d1a;color:var(--green)} .tier-B{background:#1a2240;color:var(--blue)}
-  .tier-C{background:#2d2000;color:var(--orange)} .tier-D{background:#2d1212;color:var(--red)}
+  .tier-badge { font-size:10px; font-weight:800; padding:3px 8px; border-radius:5px; letter-spacing:.3px; }
+  .tier-A{background:#7f1d1d;color:#fca5a5;border:1px solid #991b1b}  /* red  — tough, draw OK */
+  .tier-B{background:#78350f;color:#fde68a;border:1px solid #92400e}  /* amber — competitive */
+  .tier-C{background:#1e3a5f;color:#93c5fd;border:1px solid #1d4ed8}  /* blue  — favorable */
+  .tier-D{background:#14532d;color:#86efac;border:1px solid #166534}  /* green — must win */
   .card-flag { font-size:11px; color:var(--muted); margin-top:6px; line-height:1.4; border-top:1px solid var(--border); padding-top:6px; }
   .rank-badge { position:absolute; top:11px; left:11px; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; }
   .rank-1{background:var(--gold);color:#000} .rank-2{background:#c0c0c0;color:#000}
@@ -306,6 +308,7 @@
   <button class="nav-btn" onclick="showSection('scenarios',this)">🌿 Scenarios</button>
   <button class="nav-btn tracker-btn" onclick="showSection('tracker',this)">🏆 Live Tracker</button>
   <button class="nav-btn tracker-btn" onclick="showSection('progress',this)">📈 Progress</button>
+  <button class="nav-btn" onclick="showSection('field',this)">🏟 R5–7 Field</button>
 </div>
 
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
@@ -318,7 +321,7 @@
 <!-- OPPONENTS -->
 <div class="section active" id="sec-opponents">
   <h2 class="page-title">All 20 Opponents</h2>
-  <p class="page-sub">G/25+5 Adjusted Score = 0.6×Quick_eff + 0.4×Regular + national tier + growth velocity. Click any card for full profile.</p>
+  <p class="page-sub">Adjusted score = Regular (USCF Live) + national tier + form/growth. Click any card for full profile.</p>
   <div class="filter-bar" style="margin-top:12px">
     <span style="font-size:12px;color:var(--muted)">Filter:</span>
     <button class="filter-btn active" onclick="filterCards('all',this)">All</button>
@@ -333,7 +336,7 @@
 <!-- RANKING -->
 <div class="section" id="sec-ranking">
   <h2 class="page-title">G/25+5 Adjusted Strength Ranking</h2>
-  <p class="page-sub">Formula: 0.6×Quick_eff + 0.4×MUIR_Regular + national_adj + growth_adj.</p>
+  <p class="page-sub">Adjusted = weighted rating blend (Regular + Quick + Blitz) + form trend. Strategy Tier: A=Draw OK · B=Play for Win · C/D=Go for Win. R1–R4 = probability of facing Mark each round. Click any row for full profile.</p>
   <div style="margin-top:14px;background:var(--card);border-radius:12px;overflow-x:auto;">
     <div id="ranking-table" style="min-width:560px;"></div>
   </div>
@@ -354,8 +357,8 @@
         <div style="font-size:11px;color:var(--muted);margin-bottom:7px;">SMIRNOV STATS</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
           <div class="stat-box"><div class="stat-val" style="color:var(--smir)">1060</div><div class="stat-lbl">Adj. Score</div></div>
-          <div class="stat-box"><div class="stat-val" style="color:var(--gold)">1018</div><div class="stat-lbl">Blitz proxy</div></div>
-          <div class="stat-box"><div class="stat-val" style="color:var(--green)">Tier A</div><div class="stat-lbl">National Exp</div></div>
+          <div class="stat-box"><div class="stat-val" style="color:var(--gold)">1018</div><div class="stat-lbl">Blitz</div></div>
+          <div class="stat-box"><div class="stat-val" style="color:var(--gold)" id="mark-adj-display">—</div><div class="stat-lbl">Adj. Score</div></div>
           <div class="stat-box"><div class="stat-val" style="color:var(--orange)">↓ -10</div><div class="stat-lbl">Growth/yr</div></div>
         </div>
       </div>
@@ -419,22 +422,22 @@
       <text x="570" y="52" fill="#a78bfa" font-size="11" text-anchor="middle">Adj. 1085 · Seed #9 · Lichess Rapid 1500</text>
       <text x="570" y="68" fill="#7c3aed" font-size="10" text-anchor="middle">Enter with 0–0 score</text>
       <rect x="420" y="98" width="300" height="36" rx="8" fill="#1a1d27" stroke="#374151" stroke-width="1"/>
-      <text x="570" y="112" fill="#9ca3af" font-size="11" font-weight="700" text-anchor="middle">ROUND 1 — vs Ethan Nastro</text>
-      <text x="570" y="126" fill="#6b7280" font-size="10" text-anchor="middle">adj.1025 · Smirnov FAVORED by 60 pts</text>
+      <text x="570" y="112" fill="#9ca3af" font-size="11" font-weight="700" text-anchor="middle">ROUND 1 — vs Jake Tozzie (seed 21)</text>
+      <text x="570" y="126" fill="#6b7280" font-size="10" text-anchor="middle">adj.~802 · Smirnov FAVORED by 258 pts · ~78% win</text>
       <line x1="570" y1="134" x2="240" y2="155" stroke="#f5a623" stroke-width="2.5"/>
       <line x1="240" y1="155" x2="240" y2="175" stroke="#f5a623" stroke-width="2.5" marker-end="url(#ag)"/>
       <line x1="570" y1="134" x2="570" y2="159" stroke="#4a90e2" stroke-width="2" stroke-dasharray="5,3"/>
       <line x1="570" y1="159" x2="570" y2="175" stroke="#4a90e2" stroke-width="2" stroke-dasharray="5,3"/>
       <line x1="570" y1="134" x2="900" y2="155" stroke="#9c27b0" stroke-width="2.5"/>
       <line x1="900" y1="155" x2="900" y2="175" stroke="#9c27b0" stroke-width="2.5" marker-end="url(#ap)"/>
-      <text x="390" y="150" fill="#4caf50" font-size="10" font-weight="700" text-anchor="middle">WIN ≈65%</text>
-      <text x="750" y="150" fill="#ef5350" font-size="10" font-weight="700" text-anchor="middle">LOSS ≈35%</text>
+      <text x="390" y="150" fill="#4caf50" font-size="10" font-weight="700" text-anchor="middle">WIN ≈77%</text>
+      <text x="750" y="150" fill="#ef5350" font-size="10" font-weight="700" text-anchor="middle">LOSS ≈23%</text>
       <rect x="110" y="175" width="260" height="56" rx="10" fill="#14401a" stroke="#4caf50" stroke-width="2.5"/>
-      <text x="240" y="196" fill="#86efac" font-size="12" font-weight="800" text-anchor="middle">✓ WIN vs Nastro — Score: 1–0</text>
-      <text x="240" y="214" fill="#6b7280" font-size="10" text-anchor="middle">~65% probability</text>
+      <text x="240" y="196" fill="#86efac" font-size="12" font-weight="800" text-anchor="middle">✓ WIN vs Tozzie — Score: 1–0</text>
+      <text x="240" y="214" fill="#6b7280" font-size="10" text-anchor="middle">~77% probability (+208 adj gap)</text>
       <rect x="770" y="175" width="260" height="56" rx="10" fill="#2d1212" stroke="#ef5350" stroke-width="2"/>
-      <text x="900" y="196" fill="#fca5a5" font-size="12" font-weight="800" text-anchor="middle">✗ LOSS vs Nastro — Score: 0–1</text>
-      <text x="900" y="214" fill="#6b7280" font-size="10" text-anchor="middle">~35% probability</text>
+      <text x="900" y="196" fill="#fca5a5" font-size="12" font-weight="800" text-anchor="middle">✗ LOSS vs Tozzie — Score: 0–1</text>
+      <text x="900" y="214" fill="#6b7280" font-size="10" text-anchor="middle">~23% probability (upset)</text>
       <line x1="240" y1="231" x2="130" y2="308" stroke="#f5a623" stroke-width="2.5"/>
       <line x1="130" y1="308" x2="130" y2="325" stroke="#f5a623" stroke-width="2.5" marker-end="url(#ag)"/>
       <line x1="240" y1="231" x2="355" y2="308" stroke="#4a90e2" stroke-width="2" stroke-dasharray="5,3"/>
@@ -442,8 +445,8 @@
       <text x="178" y="275" fill="#f5a623" font-size="9" font-weight="700">WIN R2 ≈50%</text>
       <text x="300" y="275" fill="#4a90e2" font-size="9" font-weight="700">LOSS R2 ≈50%</text>
       <rect x="100" y="255" width="280" height="36" rx="8" fill="#1a1d27" stroke="#374151" stroke-width="1"/>
-      <text x="240" y="269" fill="#9ca3af" font-size="11" font-weight="700" text-anchor="middle">ROUND 2 — vs Xavier Figueroa</text>
-      <text x="240" y="281" fill="#6b7280" font-size="10" text-anchor="middle">adj.1084 · NEAR-EQUAL · Quick 1148 ⚠</text>
+      <text x="240" y="269" fill="#9ca3af" font-size="11" font-weight="700" text-anchor="middle">ROUND 2 — vs Agrawal (rank 5 of 12 at 1-0)</text>
+      <text x="240" y="281" fill="#6b7280" font-size="10" text-anchor="middle">Agrawal adj.~952 · Smirnov +108 pts · ~65%</text>
       <rect x="30" y="325" width="200" height="52" rx="10" fill="#14401a" stroke="#f5a623" stroke-width="2.5" filter="url(#glow)"/>
       <text x="130" y="346" fill="#fde68a" font-size="11" font-weight="800" text-anchor="middle">✓ WIN — Score: 2–0</text>
       <text x="130" y="363" fill="#6b7280" font-size="10" text-anchor="middle">Trophy contention · ~33%</text>
@@ -453,7 +456,7 @@
       <line x1="900" y1="231" x2="900" y2="255" stroke="#9c27b0" stroke-width="2.5"/>
       <rect x="790" y="255" width="220" height="36" rx="8" fill="#1a1d27" stroke="#374151" stroke-width="1"/>
       <text x="900" y="269" fill="#9ca3af" font-size="11" font-weight="700" text-anchor="middle">ROUND 2 — vs ~900 player</text>
-      <text x="900" y="281" fill="#6b7280" font-size="10" text-anchor="middle">Sendilkumar/Jha/Boys · +115-206 adj</text>
+      <text x="900" y="281" fill="#6b7280" font-size="10" text-anchor="middle">Nastro/Jha/Boys/Sullivan · +97-212 adj</text>
       <line x1="900" y1="291" x2="900" y2="325" stroke="#9c27b0" stroke-width="2.5" marker-end="url(#ap)"/>
       <rect x="800" y="325" width="200" height="52" rx="10" fill="#1a0f2e" stroke="#9c27b0" stroke-width="2.5"/>
       <text x="900" y="346" fill="#d8b4fe" font-size="11" font-weight="800" text-anchor="middle">✓ WIN — Score: 1–1</text>
@@ -489,7 +492,7 @@
       <text x="900" y="569" fill="#d8b4fe" font-size="13" font-weight="800" text-anchor="middle">3–1 final score</text>
       <text x="900" y="583" fill="#9ca3af" font-size="10" text-anchor="middle">Strong finish after R1 loss · ~12-15%</text>
       <text x="570" y="640" fill="#6b7280" font-size="11" text-anchor="middle">Combined probability of 3+ score finish: ~60-65%</text>
-      <text x="570" y="658" fill="#4a90e2" font-size="11" font-weight="700" text-anchor="middle">★ Key game: Round 2 vs Figueroa determines trophy vs prize path</text>
+      <text x="570" y="658" fill="#4a90e2" font-size="11" font-weight="700" text-anchor="middle">★ Key game: Round 2 vs Bueno/Verma determines trophy vs prize path</text>
     </svg>
   </div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;">
@@ -497,19 +500,19 @@
       <div style="font-size:15px;font-weight:800;color:var(--gold);margin-bottom:7px">🏆 Scenario 1 — Trophy Run</div>
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px">R1 WIN → R2 WIN → R3 → R4 WIN</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Probability: ~15-23%</div>
-      <div style="font-size:12px;line-height:1.6;color:var(--text)">Beat Nastro, beat Figueroa (~50/50), draw or better vs top-2 in R3, win R4. Result: <strong style="color:var(--gold)">3.5–0.5 or 4–0</strong>.</div>
+      <div style="font-size:12px;line-height:1.6;color:var(--text)">Beat Tozzie, beat/draw Sha (~34%), win R3 and R4 vs 1-1 or 2-0 group. Result: <strong style="color:var(--gold)">3.5–0.5 or better</strong>.</div>
     </div>
     <div style="background:var(--card);border-radius:12px;padding:14px;border-top:4px solid var(--blue);">
       <div style="font-size:15px;font-weight:800;color:var(--blue);margin-bottom:7px">🥈 Scenario 2 — Prize via Recovery</div>
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px">R1 WIN → R2 LOSS → R3 WIN → R4 WIN</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Probability: ~18-22%</div>
-      <div style="font-size:12px;line-height:1.6;color:var(--text)">Beat Nastro, lose to Figueroa, bounce back with two wins vs 1-1 group. Result: <strong style="color:var(--blue)">3–1</strong>.</div>
+      <div style="font-size:12px;line-height:1.6;color:var(--text)">Beat Tozzie, lose to Sha (~66% chance), bounce back with two wins vs 1-1 group. Result: <strong style="color:var(--blue)">3–1</strong>.</div>
     </div>
     <div style="background:var(--card);border-radius:12px;padding:14px;border-top:4px solid var(--purple);">
       <div style="font-size:15px;font-weight:800;color:var(--purple);margin-bottom:7px">🔄 Scenario 3 — Comeback Path</div>
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px">R1 LOSS → R2 WIN → R3 WIN → R4 WIN</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Probability: ~12-17%</div>
-      <div style="font-size:12px;line-height:1.6;color:var(--text)">Lose R1 to Nastro, beat lower-rated 0-1 player, win R3 and R4 in prize fight. Result: <strong style="color:var(--purple)">3–1</strong>.</div>
+      <div style="font-size:12px;line-height:1.6;color:var(--text)">Lose R1 to Tozzie (upset), beat lower-rated 0-1 player, win R3 and R4 in prize fight. Result: <strong style="color:var(--purple)">3–1</strong>.</div>
     </div>
   </div>
 </div>
@@ -536,8 +539,8 @@
             </label>
           </div>
           <div id="bye-opts" style="display:none;gap:10px;margin-top:4px;flex-wrap:wrap;">
-            <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);cursor:pointer;"><input type="radio" name="bye-type" value="bye" checked> Full Bye (+1 pt)</label>
-            <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#ffb74d;cursor:pointer;"><input type="radio" name="bye-type" value="half-bye"> Half-Point Bye (+½ pt)</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);cursor:pointer;"><input type="radio" name="bye-type" value="bye" checked> Unpaired / No-show (+1 pt)</label>
+            <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:#ffb74d;cursor:pointer;"><input type="radio" name="bye-type" value="half-bye"> Requested Bye (+½ pt)</label>
           </div>
         </div>
         <div id="pairings-list"></div>
@@ -563,30 +566,48 @@
   <div id="progress-content" style="margin-top:16px;"></div>
 </div>
 
+<!-- R5-7 FIELD PREVIEW -->
+<div class="section" id="sec-field">
+  <h2 class="page-title">🏟 R5–7 Field Preview</h2>
+  <p class="page-sub">If Mark scores 3+ points in R1–4 (2-day section), he merges with 3-day &amp; 4-day players for Rounds 5–7. These are the top 20 strongest opponents he could face, sorted by adjusted strength after regional deflation.</p>
+  <div id="field-insights" style="margin:14px 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;"></div>
+  <div style="background:var(--card);border-radius:12px;padding:14px;margin-top:4px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+      <span style="font-size:13px;font-weight:700;color:var(--blue);">TOP 20 OPPONENTS BY ADJUSTED RATING</span>
+      <span style="font-size:11px;color:var(--muted);">Adj = listed regular rating with regional deflation · CA/WA −50 · other −100 · PA/NJ/NY/CT exempt</span>
+    </div>
+    <div id="field-table"></div>
+  </div>
+</div>
+
 </div><!-- /main -->
 <script>
 // ── PLAYER DATA ──────────────────────────────────────────────────────────────
 const players = [
-  {seed:1,  name:'Gerardo Cruz',       st:'CO',entry:1236,muirReg:1236,muirQ:1477,blitz:1175,qEff:1477,qSrc:'Quick',natTier:'A',w24:37.6,w25:46.0,w26:36.1,trendDir:-1,growPyr:-20,adj:1381,trueRank:1,natDetail:'North American Open (annual), Winter Springs Open',flag:'DOMINANT at G/25+5. Quick 1477 is highest in field by 283 pts. The clear tournament favorite.',strategy:'His quick rating (1477) makes him the strongest player at this TC. Play solid defensive setups, aim for draw — even a draw is a great result. Do NOT create tactical complications.'},
-  {seed:2,  name:'Abigayil Zenn',      st:'FL',entry:1174,muirReg:1102,muirQ:1118,blitz:991, qEff:1118,qSrc:'Quick',natTier:'B',w24:56.9,w25:56.2,w26:61.7,trendDir:1, growPyr:50, adj:1122,trueRank:4,natDetail:'KCF All-Girls National, FL State Ch.',flag:'Quick 1118. FIDE rated. Age ~11. Very consistent 57-62% win rate.',strategy:'Solid, consistent player. No weak spots. Use experience and national event composure.'},
-  {seed:3,  name:'Xiaoxi Sha',         st:'CA',entry:1167,muirReg:1197,muirQ:1194,blitz:null, qEff:1194,qSrc:'Quick',natTier:'B',w24:54.2,w25:52.4,w26:54.2,trendDir:0, growPyr:25, adj:1195,trueRank:2,natDetail:'USAT West (team), CalChess Championships',flag:'Quick 1194 ≈ Regular 1197. Underseeded +30 pts. Rock-stable performer.',strategy:'Second strongest player. No obvious weakness. Play fighting chess and look for inaccuracies.'},
-  {seed:4,  name:'Florence Bueno',     st:'NV',entry:1134,muirReg:1134,muirQ:1047,blitz:null, qEff:1047,qSrc:'Quick/21★',natTier:'A',w24:66.7,w25:31.3,w26:null,trendDir:-1,growPyr:-27,adj:1082,trueRank:7,natDetail:'2024 Natl Open: 17th/156. Annual LV events.',flag:'Local NV player. Won 66% in 2024 but crashed to 31% in 2025. Unknown 2026 form.',strategy:'Beatable — form collapsed in 2025. Quick 1047 is manageable. Do not underestimate local home advantage.'},
-  {seed:5,  name:'Satvik Verma',       st:'AZ',entry:1127,muirReg:1091,muirQ:1077,blitz:null, qEff:1077,qSrc:'Quick',natTier:'C',w24:45.2,w25:52.0,w26:66.4,trendDir:1, growPyr:75, adj:1073,trueRank:8,natDetail:'AZ Scholastic State only — no national open experience',flag:'Hot form (66% in 2026) but no national open experience.',strategy:'In form but untested at national opens. Use pressure of national tournament setting.'},
-  {seed:6,  name:'Samrudh Dev',        st:'AZ',entry:1126,muirReg:1126,muirQ:1115,blitz:759,  qEff:1115,qSrc:'Quick',natTier:'A',w24:55.6,w25:48.9,w26:50.0,trendDir:0, growPyr:32, adj:1129,trueRank:3,natDetail:'2024 Natl Open: 25th/156. 2025 Natl Open. Regular participant.',flag:'Quick 1115 — strong at G/25+5. Rank #3 adjusted.',strategy:'Strong at G/25+5 (quick 1115). Adj gap is 69 pts (Dev favored). Fight hard.'},
-  {seed:7,  name:'Aiden H. Cheng',     st:'CA',entry:1093,muirReg:1093,muirQ:1050,blitz:null, qEff:1050,qSrc:'Quick',natTier:'A',w24:59.7,w25:58.7,w26:null,trendDir:1, growPyr:228,adj:1117,trueRank:5,natDetail:'★ 2025 IYC: 4th/125 (TOP 10%). N. American Open, American Open.',flag:'Only confirmed top-10% national finisher. Quick 1050 + Tier A bonus.',strategy:'Experienced national player — only one with top-10% finish in this field. Treat with full respect.'},
-  {seed:8,  name:'Krish Agrawal',      st:'CA',entry:1087,muirReg:1087,muirQ:912, blitz:965,  qEff:912, qSrc:'Quick',natTier:'B',w24:53.3,w25:59.7,w26:72.7,trendDir:1, growPyr:225,adj:1002,trueRank:11,natDetail:'2025 Natl Open: dropped 50 pts. LA Open strong locally.',flag:'72.7% win rate in 2026 but quick 912 is WEAK for G/25+5.',strategy:'Quick 912 is below-average at this TC. Smirnov blitz proxy 1018 >> Agrawal quick 912.'},
-  {seed:9,  name:'Mark Smirnov ★',    st:'PA',entry:1074,muirReg:1074,muirQ:703, blitz:1018, qEff:1018,qSrc:'Blitz★',natTier:'A',w24:73.1,w25:60.5,w26:42.9,trendDir:-1,growPyr:50, adj:1060,trueRank:9,natDetail:'NCC ×3, World Open, Atlantic Open, Atlantic City Open, Natl HS Ch.',flag:'★ Blitz 1018 primary proxy. Lichess Rapid 1500 supporting signal. Adj. 1060, Rank #9.',strategy:'<div style="text-align:center;padding:10px;background:#1e1b4b;border-radius:8px;border:2px solid #7c3aed"><div style="font-size:15px;font-weight:800;color:#ede9fe">★ This is YOU</div><div style="font-size:12px;color:#a78bfa;margin-top:4px">See Round Guide and Scenarios tabs for full strategy.</div></div>'},
-  {seed:10, name:'Sanjan Sendilkumar', st:'UT',entry:1063,muirReg:903, muirQ:930, blitz:null, qEff:930, qSrc:'Quick',natTier:'D',w24:41.9,w25:59.6,w26:57.4,trendDir:1, growPyr:30, adj:879, trueRank:16,natDetail:'UT local scholastic events only',flag:'Overseeded 160 pts (MUIR 903 vs entry 1063). Quick 930. No nationals.',strategy:'Adj 879 vs Smirnov 1060 = 181-pt gap. Solid play should win comfortably.'},
-  {seed:11, name:'Xavier Figueroa',    st:'TX',entry:1062,muirReg:1062,muirQ:1148,blitz:1078, qEff:1148,qSrc:'Quick',natTier:'C',w24:28.6,w25:55.6,w26:38.9,trendDir:-1,growPyr:0,  adj:1084,trueRank:6,natDetail:'2026 HS Nationals, Region VIII — TX school events',flag:'Quick 1148 (2nd highest). G/25+5 is his ideal format.',strategy:'⚠ DANGER in Round 2. Quick 1148 makes him dangerous. Play CLOSED openings (London, Colle).'},
-  {seed:12, name:'Ethan Nastro',       st:'CA',entry:1036,muirReg:1080,muirQ:1022,blitz:982,  qEff:1022,qSrc:'Quick',natTier:'C',w24:68.2,w25:50.0,w26:57.5,trendDir:1, growPyr:100,adj:1025,trueRank:10,natDetail:'CA scholastic only (SuperStates, L.A. Super City)',flag:'R1 OPPONENT. Underseeded +44 pts. Quick 1022 solid.',strategy:'Your Round 1 opponent. Adj 1025 vs Smirnov 1060. Tier A vs Tier C national experience is decisive. Play aggressively.'},
-  {seed:13, name:'Jesse Delacruz',     st:'TX',entry:1009,muirReg:1009,muirQ:1111,blitz:null, qEff:1111,qSrc:'Quick★/13',natTier:'D',w24:null,w25:55.6,w26:25.0,trendDir:-1,growPyr:50, adj:1000,trueRank:12,natDetail:'TX local events only',flag:'Quick 1111 (13-game provisional). 25% in 2026. Interesting wildcard.',strategy:'Quick 1111 is provisional — treat with caution. 2026 form (25%) is terrible. Play solid positional chess.'},
-  {seed:14, name:'Zachary Neugut',     st:'NY',entry:1000,muirReg:1000,muirQ:955, blitz:null, qEff:null, qSrc:'Stale (2007)',natTier:'D',w24:null,w25:null,w26:null,trendDir:0,growPyr:0,adj:null,trueRank:20,natDetail:'NJ scholastic 2002-2007. Inactive 18+ years.',flag:'Complete wildcard — last played ~2007. No usable data.',strategy:'Complete unknown. Do not under-prepare. 18 years of self-study could mean anything.'},
-  {seed:15, name:'Nicholas Boys',      st:'CA',entry:999, muirReg:999, muirQ:792, blitz:null, qEff:792, qSrc:'Quick',natTier:'C',w24:60.0,w25:54.9,w26:63.3,trendDir:1, growPyr:75, adj:865, trueRank:17,natDetail:'2025 IYC: 78th/125. CA scholastic.',flag:'Strong regular player (63%) but quick 792 is a G/25+5 weakness.',strategy:'Quick 792 well below Smirnov proxy 1018. If paired: time pressure tactics.'},
-  {seed:16, name:'Emerson Sullivan',   st:'CA',entry:987, muirReg:1024,muirQ:1021,blitz:1080, qEff:1021,qSrc:'Quick',natTier:'C',w24:50.0,w25:62.3,w26:46.9,trendDir:-1,growPyr:50, adj:982, trueRank:13,natDetail:'CA scholastic only (SuperStates, L.A. City Championship)',flag:'Underseeded +37 pts. Quick 1021 solid. Declining 2026 form.',strategy:'Quick 1021 ≈ Smirnov proxy 1018. Smirnov adj 1060 vs Sullivan 982 = 78-pt edge.'},
-  {seed:17, name:'Jake Tozzie',        st:'CA',entry:919, muirReg:919, muirQ:891, blitz:null, qEff:891, qSrc:'Quick★/24',natTier:'D',w24:null,w25:58.3,w26:null,trendDir:0,growPyr:null,adj:852,trueRank:18,natDetail:'Played BEGINNERS section at 2025 Natl Open.',flag:'Beginners section ≠ national experience. Quick 891 provisional.',strategy:'Easy win expected. Adj 852 vs Smirnov 1060 = 208-pt gap.'},
-  {seed:18, name:'Owen Madaus',        st:'RI',entry:911, muirReg:911, muirQ:904, blitz:null, qEff:null, qSrc:'Unknown (5)',natTier:'D',w24:null,w25:60.0,w26:null,trendDir:0,growPyr:null,adj:811,trueRank:19,natDetail:'Only 5 games total in USCF history.',flag:'5 games total. Every rating is meaningless. Treat as complete unknown.',strategy:'Only 5 USCF games ever — effectively unrated. Be alert but expect to win.'},
-  {seed:19, name:'Kaavya Jha',         st:'AZ',entry:889, muirReg:813, muirQ:744, blitz:683,  qEff:744, qSrc:'Quick',natTier:'C',w24:0.0, w25:44.1,w26:41.1,trendDir:1, growPyr:100,adj:757, trueRank:20,natDetail:'North American Open, 2025 World Open (61st/72).',flag:'Quick 744 + MUIR 813 + below 50% win rate. Lowest adjusted score.',strategy:'Lowest adjusted score in field. Quick 744 is very weak. Easy win expected.'},
-  {seed:20, name:'Surya Burra',        st:'OR',entry:880, muirReg:957, muirQ:945, blitz:null, qEff:945, qSrc:'Quick',natTier:'B',w24:null,w25:33.3,w26:51.3,trendDir:1, growPyr:77, adj:970, trueRank:14,natDetail:'GM Arthur Dake Memorial, OSCF State Ch. FIDE rated.',flag:'Underseeded +77 pts (MUIR 957). FIDE rated. More dangerous than entry (880) suggests.',strategy:'Take seriously. MUIR 957 and Quick 945 respectable. FIDE rated player.'},
+  {seed:1,  name:'Gerardo Cruz',uscfId:12629855,       st:'CO',entry:1236,muirReg:1236,muirQ:1456,blitz:1175,qEff:1456,qSrc:'Quick',natTier:'A',w24:37.6,w25:46.0,w26:31.0,trendDir:-1,growPyr:-20,adj:1368,trueRank:1,natDetail:'North American Open (annual), Winter Springs Open',flag:'DOMINANT at G/25+5. Quick 1456 is highest in field by 262 pts. The clear tournament favorite. Win% dropped to 31% in 2026 (21 games).',strategy:'His quick rating (1456) makes him the strongest player at this TC. Play solid defensive setups, aim for draw — even a draw is a great result. Do NOT create tactical complications.'},
+  {seed:2,  name:'Abigayil Zenn',uscfId:30787205,      st:'FL',entry:1174,muirReg:1174,muirQ:1150,blitz:991, qEff:1150,qSrc:'Quick',natTier:'B',w24:56.9,w25:56.2,w26:61.7,trendDir:1, growPyr:50, adj:1165,trueRank:3,natDetail:'KCF All-Girls National, FL State Ch.',flag:'⬆ MUIR Reg jumped to 1174 (was 1102), Quick 1150 (was 1118). FIDE rated. Very consistent 57-62% win rate.',strategy:'Stronger than initially assessed — MUIR now matches entry (1174). Solid, consistent player. No weak spots. Use experience and national event composure.'},
+  {seed:3,  name:'Xiaoxi Sha',uscfId:31783008,         st:'CA',entry:1167,muirReg:1167,muirQ:1167,blitz:null, qEff:1167,qSrc:'Quick',natTier:'B',w24:54.2,w25:52.4,w26:54.2,trendDir:0, growPyr:25, adj:1172,trueRank:2,natDetail:'USAT West (team), CalChess Championships',flag:'⬇ Both ratings dropped ~30 pts (Reg 1197→1167, Quick 1194→1167). Still strong and consistent 54%.',strategy:'Second strongest player despite rating dip. No obvious weakness. Play fighting chess and look for inaccuracies.'},
+  {seed:4,  name:'Florence Bueno',     uscfId:30440637,st:'NV',entry:1134,muirReg:1134,muirQ:1047,blitz:null, qEff:1047,qSrc:'Quick/21★',natTier:'B',w24:66.7,w25:31.3,w26:null,trendDir:-1,growPyr:-27,adj:1082,trueRank:8,natDetail:'2024 Natl Open: 17th/156. Annual LV events.',flag:'⚠ MEMBERSHIP EXPIRED May 31 2026. May not be eligible to play. No 2026 games on record.',strategy:'⚠ May not appear — membership expired May 31. If present, check TD confirmed eligibility. If she plays: form collapsed in 2025 (31%). Quick 1047 manageable.'},
+  {seed:5,  name:'Satvik Verma',uscfId:32002892,       st:'AZ',entry:1127,muirReg:1127,muirQ:1112,blitz:null, qEff:1112,qSrc:'Quick',natTier:'C',w24:45.2,w25:52.0,w26:66.4,trendDir:1, growPyr:75, adj:1103,trueRank:6,natDetail:'AZ Scholastic State only — no national open experience',flag:'⬆ Both ratings jumped ~35 pts (Reg 1091→1127, Quick 1077→1112). 66% over 70 games in 2026 — hottest form in field.',strategy:'Now adj 1103 — significantly more dangerous than originally assessed. Hot form (66% in 70 games) but no national open experience. Use tournament pressure as your edge.'},
+  {seed:6,  name:'Samrudh Dev',uscfId:17116395,        st:'AZ',entry:1126,muirReg:1126,muirQ:1115,blitz:759,  qEff:1115,qSrc:'Quick',natTier:'A',w24:55.6,w25:48.9,w26:50.0,trendDir:0, growPyr:32, adj:1129,trueRank:3,natDetail:'2024 Natl Open: 25th/156. 2025 Natl Open. Regular participant.',flag:'Quick 1115 — strong at G/25+5. Rank #3 adjusted.',strategy:'Strong at G/25+5 (quick 1115). Adj gap is 69 pts (Dev favored). Fight hard.'},
+  {seed:7,  name:'Aiden H. Cheng',uscfId:30281393,     st:'CA',entry:1093,muirReg:1093,muirQ:1050,blitz:null, qEff:1050,qSrc:'Quick',natTier:'A',w24:59.7,w25:58.7,w26:null,trendDir:1, growPyr:228,adj:1117,trueRank:5,natDetail:'★ 2025 IYC: 4th/125 (TOP 10%). N. American Open, American Open.',flag:'Only confirmed top-10% national finisher. Quick 1050 + Tier A bonus.',strategy:'Experienced national player — only one with top-10% finish in this field. Treat with full respect.'},
+  {seed:8,  name:'Krish Agrawal',uscfId:17154567,      st:'CA',entry:1087,muirReg:1087,muirQ:912, blitz:965,  qEff:912, qSrc:'Quick',natTier:'B',w24:53.3,w25:59.7,w26:72.7,trendDir:1, growPyr:225,adj:1002,trueRank:11,natDetail:'2025 Natl Open: dropped 50 pts. LA Open strong locally.',flag:'72.7% win rate in 2026 but quick 912 is WEAK for G/25+5.',strategy:'Quick 912 is below-average at this TC. Smirnov blitz proxy 1018 >> Agrawal quick 912.'},
+  {seed:9,  name:'Mark Smirnov ★',uscfId:30587704,    st:'PA',entry:1074,muirReg:1074,muirQ:703, blitz:1018, qEff:1018,qSrc:'Blitz★',natTier:'A',w24:73.1,w25:60.5,w26:42.9,trendDir:-1,growPyr:50, adj:1060,trueRank:10,natDetail:'NCC ×3, World Open, Atlantic Open, Atlantic City Open, Natl HS Ch.',flag:'★ Blitz 1018 primary proxy. Lichess Rapid 1500 supporting signal. Adj. 1060, Rank #10.',strategy:'<div style="text-align:center;padding:10px;background:#1e1b4b;border-radius:8px;border:2px solid #7c3aed"><div style="font-size:15px;font-weight:800;color:#ede9fe">★ This is YOU</div><div style="font-size:12px;color:#a78bfa;margin-top:4px">See Round Guide and Scenarios tabs for full strategy.</div></div>'},
+  {seed:10, name:'Atharv Arun',uscfId:32252289,        st:'AZ',entry:1068,muirReg:1068,muirQ:1056,blitz:917,  qEff:1056,qSrc:'Quick',natTier:'B',w24:null,w25:54.2,w26:59.8,trendDir:1, growPyr:50, adj:1066,trueRank:9, natDetail:'2026 AZ Scholastic State Ch. North American Open. FIDE rated (39981207).',flag:'NEW 2-day player. FIDE rated. Quick 1056. 59.8% in 2026 (46 games). Entry 1068 ≈ Smirnov 1074. Adj 1066 slightly ABOVE Mark. R1 vs Madaus (seed 10 vs seed 22).',strategy:'Adj 1066 just above Smirnov (1060). Quick 1056 vs Smirnov proxy 1018 — Atharv edge at G/25+5. FIDE rated, AZ State champ, North American Open experience. If paired later: treat as near-equal, prepare solid opening, no shortcuts.'},
+  {seed:11, name:'Sanjan Sendilkumar',uscfId:31493149, st:'UT',entry:1063,muirReg:1063,muirQ:1077,blitz:null, qEff:1077,qSrc:'Quick',natTier:'D',w24:41.9,w25:59.6,w26:56.8,trendDir:1, growPyr:30, adj:1021,trueRank:11,natDetail:'UT local scholastic events only',flag:'⬆⬆ MASSIVE rating jump — MUIR Reg 903→1063, Quick 930→1077. R1 vs Jha (seed 11 vs seed 23).',strategy:'⚠ NO LONGER AN EASY WIN. Adj jumped from 879 to 1021 — now just 39 pts below Smirnov. Quick 1077 is solid at G/25+5. Treat as a near-equal. Do not over-press; steady positional chess required.'},
+  {seed:12, name:'Xavier Figueroa',uscfId:16531715,    st:'TX',entry:1062,muirReg:1062,muirQ:1148,blitz:1078, qEff:1148,qSrc:'Quick',natTier:'C',w24:28.6,w25:55.6,w26:38.9,trendDir:-1,growPyr:0,  adj:1084,trueRank:6,natDetail:'2026 HS Nationals, Region VIII — TX school events',flag:'Quick 1148 (2nd highest). G/25+5 is his ideal format. R1 vs Burra (seed 12 vs seed 24) — favorable. If paired later: dangerous.',strategy:'Not Mark\'s R1/R2 opponent. R1 vs Burra (seed 12 vs seed 24) — favorable. If met in R3/R4: ⚠ Quick 1148 is 2nd highest in field — play CLOSED openings (London, Colle). 2026 form weak (38.9%).'},
+  {seed:13, name:'Isaac Barriere',uscfId:33069906,     st:'CA',entry:1048,muirReg:1048,muirQ:1045,blitz:null, qEff:1045,qSrc:'Quick★/8',natTier:'D',w24:null,w25:null,w26:37.5,trendDir:0, growPyr:0,  adj:950, trueRank:16,natDetail:'Victorville Chess Classic, Strategic Saturday Swiss (local CA only).',flag:'NEW player. Only 8 USCF games total (reg & quick both provisional /8). 37.5% win rate. Rating highly unreliable. R1 vs Cruz (seed 1 vs seed 13).',strategy:'Highly provisional (8 games only). 1048 entry is unreliable — true strength completely unknown. 37.5% win rate suggests actual level may be below 1000. Treat cautiously; play your standard game.'},
+  {seed:14, name:'Parker Sachs',uscfId:12979297,       st:'NV',entry:1039,muirReg:1039,muirQ:1038,blitz:null, qEff:1038,qSrc:'Quick',natTier:'C',w24:null,w25:73.3,w26:null,trendDir:1, growPyr:75, adj:1015,trueRank:12,natDetail:'2025 National Open. 2006 National K-12 Grade Ch. Returned after ~18 years inactive.',flag:'Comeback player — returned 2025 after ~18 years inactive. 73.3% in 15 games. Played 2025 National Open. ⚠ Membership expires 06/30/2026 — verify eligibility. R1 vs Zenn (seed 2 vs seed 14).',strategy:'Solid comeback (73.3% in 15 games, 2025). National open experience. Quick 1038 matches entry. Adj ~1015 — manageable if paired. No 2026 data yet. ⚠ Membership expires June 30 — confirm TD cleared him.'},
+  {seed:15, name:'Ethan Nastro',uscfId:31394554,       st:'CA',entry:1036,muirReg:1036,muirQ:976, blitz:982,  qEff:976, qSrc:'Quick',natTier:'D',w24:68.2,w25:50.0,w26:57.5,trendDir:1, growPyr:100,adj:985, trueRank:13,natDetail:'CA scholastic only (SuperStates, L.A. Super City)',flag:'⬇ Both ratings dropped (Reg 1080→1036, Quick 1022→976). Adj 985. R1 vs Sha (seed 3 vs seed 15).',strategy:'Not Mark\'s R1 opponent (Swiss: seed 9 vs seed 21 = Tozzie). Nastro may appear in later rounds. Adj 985 — manageable. Quick 976 below Smirnov proxy 1018. Time pressure favors Smirnov.'},
+  {seed:16, name:'Jimmy Manzo',      uscfId:31690861,     st:'CA',entry:1013,muirReg:1013,muirQ:1012,blitz:940,  qEff:1012,qSrc:'Quick',natTier:'C',w24:38.2,w25:44.8,w26:41.7,trendDir:0, growPyr:25, adj:999, trueRank:15,natDetail:'2025 Natl Open U1250: 3.5/7 (1048→1033, −15). Clovis Chess Club regular.',flag:'Entry 1013. Regular 1013, Quick 1012 (established). Blitz 940/22 provisional. 41.7% in 2026 (6 games — very limited). R1 vs Bueno (seed 4 vs seed 16).',strategy:'Adj ~999, Tier C. Regular 1013 ≈ Quick 1012 — solid established player. 2025 National Open experience. Limited 2026 data (6 games). Play for win — Smirnov adj 1060 vs Manzo ~999 = +61 pts edge.'},
+  {seed:17, name:'Jesse Delacruz',uscfId:32484050,     st:'TX',entry:1009,muirReg:1009,muirQ:1111,blitz:null, qEff:1111,qSrc:'Quick★/13',natTier:'D',w24:null,w25:55.6,w26:25.0,trendDir:-1,growPyr:50, adj:1000,trueRank:12,natDetail:'TX local events only',flag:'Quick 1111 (13-game provisional). 25% in 2026. Interesting wildcard. R1 vs Verma (seed 5 vs seed 17).',strategy:'Quick 1111 is provisional — treat with caution. 2026 form (25%) is terrible. Play solid positional chess.'},
+  {seed:18, name:'Zachary Neugut',uscfId:12833801,     st:'NY',entry:1000,muirReg:1000,muirQ:955, blitz:null, qEff:null, qSrc:'Stale (2007)',natTier:'D',w24:null,w25:null,w26:null,trendDir:0,growPyr:0,adj:null,trueRank:20,natDetail:'NJ scholastic 2002-2007. Inactive 18+ years.',flag:'Complete wildcard — last played ~2007. No usable data. R1 vs Dev (seed 6 vs seed 18).',strategy:'Complete unknown. Do not under-prepare. 18 years of self-study could mean anything.'},
+  {seed:19, name:'Nicholas Boys',uscfId:31692836,      st:'CA',entry:999, muirReg:999, muirQ:792, blitz:null, qEff:792, qSrc:'Quick',natTier:'C',w24:60.0,w25:54.9,w26:63.3,trendDir:1, growPyr:75, adj:865, trueRank:17,natDetail:'2025 IYC: 78th/125. CA scholastic.',flag:'Strong regular player (63%) but quick 792 is a G/25+5 weakness. R1 vs Cheng (seed 7 vs seed 19).',strategy:'Quick 792 well below Smirnov proxy 1018. If paired: time pressure tactics.'},
+  {seed:20, name:'Emerson Sullivan',uscfId:32082058,   st:'CA',entry:987, muirReg:987, muirQ:944, blitz:1080, qEff:944, qSrc:'Quick',natTier:'D',w24:50.0,w25:62.3,w26:46.9,trendDir:-1,growPyr:50, adj:946, trueRank:14,natDetail:'CA scholastic only (SuperStates, L.A. City Championship)',flag:'⬇ Both ratings dropped (Reg 1024→987, Quick 1021→944). 46.9% in 2026 — declining form. R1 vs Agrawal (seed 8 vs seed 20).',strategy:'Quick dropped to 944 — now below Smirnov proxy 1018. Smirnov adj 1060 vs Sullivan 946 = 114-pt edge (was 78). Time pressure clearly favors Smirnov.'},
+  {seed:21, name:'Jake Tozzie',uscfId:32317236,        st:'CA',entry:919, muirReg:919, muirQ:891, blitz:null, qEff:891, qSrc:'Quick★/24',natTier:'D',w24:null,w25:58.3,w26:null,trendDir:0,growPyr:null,adj:852,trueRank:18,natDetail:'Played BEGINNERS section at 2025 Natl Open.',flag:'★ R1 OPPONENT (seed 9 vs seed 21). Quick 891 provisional (24 games). Adj ~802 (CA -50) — Smirnov favored by 258 pts. ~78% win probability.',strategy:'Your Round 1 opponent (Swiss: 24-player even field, seed 9 vs seed 21 = Tozzie). Adj ~802 vs Smirnov 1060 = +258 pts (CA deflation) — ~78% win. Played BEGINNERS section at 2025 National Open — national experience is misleading. Quick 891 is a 24-game provisional — not reliable at G/25+5. Play your prepared opening; full point expected.'},
+  {seed:22, name:'Owen Madaus',uscfId:32458050,        st:'RI',entry:911, muirReg:911, muirQ:904, blitz:null, qEff:null, qSrc:'Unknown (5)',natTier:'D',w24:null,w25:60.0,w26:null,trendDir:0,growPyr:null,adj:811,trueRank:19,natDetail:'Only 5 games total in USCF history.',flag:'Only 5 USCF games total. Adj 811 — essentially unrated. R1 vs Atharv (seed 10 vs seed 22).',strategy:'Not Mark\'s R1 opponent (now seed 22 — paired vs Atharv seed 10 in R1). Only 5 USCF games ever. If met in later rounds: quick 904 (5-game sample) not meaningful; play normally and convert.'},
+  {seed:23, name:'Kaavya Jha',uscfId:32209453,         st:'AZ',entry:889, muirReg:889, muirQ:845, blitz:683,  qEff:845, qSrc:'Quick',natTier:'C',w24:0.0, w25:44.1,w26:41.1,trendDir:1, growPyr:100,adj:848, trueRank:18,natDetail:'North American Open, 2025 World Open (61st/72).',flag:'⬆ Both ratings jumped (Reg 813→889, Quick 744→845). R1 vs Sendilkumar (seed 11 vs seed 23). If Jha upsets: could appear in R2.',strategy:'Not Mark\'s R1 opponent (now seed 23 — paired vs Sendilkumar in R1). Adj 848 — manageable if met in later rounds. Quick 845 weak at G/25+5. National open experience (World Open) is notable.'},
+  {seed:24, name:'Surya Burra',uscfId:32363747,        st:'OR',entry:880, muirReg:880, muirQ:862, blitz:null, qEff:862, qSrc:'Quick',natTier:'B',w24:null,w25:33.3,w26:51.0,trendDir:1, growPyr:77, adj:877, trueRank:15,natDetail:'GM Arthur Dake Memorial, OSCF State Ch. FIDE rated.',flag:'⬇ Both ratings dropped (Reg 957→880, Quick 945→862). R1 vs Figueroa (seed 12 vs seed 24) — tough draw. Adj ~877 vs Figueroa adj ~1084.',strategy:'24-player even field — no bye for Burra. R1 vs Figueroa (adj ~1084) — likely 0-1. FIDE rated, 201 games in 2026, 51%. If Mark faces Burra in R2 (0-1 pool): adj 877 vs 1060 = +183 — manageable. Burra has national experience (FIDE, OSCF). Quick 862 is a G/25+5 weakness.'},
 ];
 
 // ── TRACKER STATE ─────────────────────────────────────────────────────────────
@@ -740,7 +761,7 @@ function generateSwissPairings(){
   // Sort pool: score desc, then adj desc
   let pool=[...players].sort((a,b)=>{
     const ds=scores[b.seed]-scores[a.seed];
-    return ds!==0?ds:(b.adj||0)-(a.adj||0);
+    return ds!==0?ds:b.entry-a.entry; // USCF standard: tiebreak by entry rating
   });
 
   const result=[];
@@ -915,7 +936,11 @@ function getPrediction(wSeed, bSeed){
   let danger='';
   if(wSeed===9||bSeed===9){
     const opp = wSeed===9 ? bp : wp;
-    if(opp.seed===11) danger=' ⚠'; // Figueroa
+    if(opp.seed===12) danger=' ⚠'; // Figueroa — Quick 1148
+    else if(opp.seed===5) danger=' ⚠'; // Verma — hot form (66%)
+    else if(opp.seed===11) danger=' ⚠'; // Sendilkumar — adj.1021, near-equal
+    else if(opp.seed===10) danger=' ⚠'; // Atharv — adj 1066, above Mark
+    else if(opp.seed===13) danger=' ⚠'; // Barriere — highly provisional, unknown
     else if(opp.adj>=1150) danger=' ⚠';
   }
   // Provisional/stale rating warning
@@ -1460,6 +1485,224 @@ function renderProgress(){
   el.innerHTML=html;
 }
 
+
+// ── COMPUTED ADJ + STRATEGY TIER ────────────────────────────────────────────
+function computeAdj(p){
+  function qwt(src){
+    if(!src||src.includes('Stale')||src.includes('Unknown')||src.includes('Blitz')) return 0;
+    const m=src.match(/\/(\d+)/);
+    if(!m) return 0.80;
+    const g=parseInt(m[1]);
+    return g>=25?0.65:g>=20?0.50:g>=15?0.35:g>=10?0.20:0.10;
+  }
+  function newDisc(src){
+    const m=src&&src.match(/Unknown\s*\((\d+)\)/);
+    if(!m) return 1.0;
+    return Math.min(1.0,parseInt(m[1])/20);
+  }
+  let sv=0,sw=0;
+  sv+=p.muirReg*0.50; sw+=0.50;
+  const qw=qwt(p.qSrc);
+  if(qw>0&&p.muirQ){sv+=p.muirQ*qw;sw+=qw;}
+  if(p.blitz){sv+=p.blitz*0.30;sw+=0.30;}
+  let base=sv/sw;
+  const d=newDisc(p.qSrc);
+  if(d<1) base=base*d+800*(1-d);
+  base+=p.trendDir*8;
+  return Math.round(base);
+}
+function stratTier(adj){
+  if(adj===null||adj===undefined) return 'D';
+  if(adj>=1100) return 'A';  // tough — draw is fine
+  if(adj>=1040) return 'B';  // competitive — play for win
+  if(adj>=940)  return 'C';  // favorable — go for win
+  return 'D';                // must win
+}
+// Apply computed adj, regional deflation, and strategy tier to all players
+// Regional deflation: PA/NJ/NY/CT exempt | CA/WA: -50 | all other states: -100
+const exemptSt=['PA','NJ','NY','CT'];
+const cawa=['CA','WA'];
+players.forEach(p=>{
+  p.adj=computeAdj(p);
+  if(p.adj!==null && !exemptSt.includes(p.st)){
+    p.adj -= cawa.includes(p.st) ? 50 : 100;
+  }
+  p.natTier=stratTier(p.adj);
+});
+// Re-rank by new adj
+[...players].sort((a,b)=>(b.adj||0)-(a.adj||0)).forEach((p,i)=>p.trueRank=i+1);
+// Update Mark's displayed adj stat
+document.addEventListener('DOMContentLoaded',()=>{ const el=document.getElementById('mark-adj-display'); if(el){ const m=players.find(p=>p.seed===9); el.textContent=m?m.adj:'—'; } setTimeout(()=>{ meetProbs=runTournamentSim(2000); renderRanking(); },50); });
+
+// ── SWISS TOURNAMENT SIMULATION ──────────────────────────────────────────────
+let meetProbs = null;
+
+function simGame(a, b){
+  const gap=(a.adj||900)-(b.adj||900);
+  const E=1/(1+Math.pow(10,-gap/400));
+  const D=0.12*4*E*(1-E);
+  const pW=E-D/2;
+  const r=Math.random();
+  if(r<pW) return {sa:1,sb:0};
+  if(r<pW+D) return {sa:0.5,sb:0.5};
+  return {sa:0,sb:1};
+}
+
+function getR1Pairings(){
+  const sorted=[...players].sort((a,b)=>b.entry-a.entry);
+  if(sorted.length%2===1){
+    // odd field: lowest-entry player gets bye
+    const bye=sorted[sorted.length-1];
+    const active=sorted.slice(0,-1);
+    const half=active.length/2;
+    const pairs=[];
+    for(let i=0;i<half;i++) pairs.push([active[i],active[half+i]]);
+    return {pairs,bye};
+  } else {
+    // even field: all paired, no bye
+    const half=sorted.length/2;
+    const pairs=[];
+    for(let i=0;i<half;i++) pairs.push([sorted[i],sorted[half+i]]);
+    return {pairs,bye:null};
+  }
+}
+
+function swissPair(scores, byeGiven, history){
+  // history = Set of "minSeed-maxSeed" strings
+  const grpMap={};
+  players.forEach(p=>{ const s=scores[p.seed]; if(!grpMap[s])grpMap[s]=[]; grpMap[s].push(p); });
+  const scoreKeys=Object.keys(grpMap).map(Number).sort((a,b)=>b-a);
+  const pairs=[]; const byes=[]; let carry=null;
+  for(const sk of scoreKeys){
+    let grp=[...grpMap[sk]];
+    if(carry){grp.unshift(carry);carry=null;}
+    grp.sort((a,b)=>(b.adj||0)-(a.adj||0));
+    if(grp.length%2===1){
+      let placed=false;
+      for(let i=grp.length-1;i>=0;i--){
+        if(!byeGiven[grp[i].seed]){byes.push(grp[i]);grp.splice(i,1);placed=true;break;}
+      }
+      if(!placed) carry=grp.pop();
+    }
+    const half=grp.length/2;
+    const usedBot=new Set();
+    for(let i=0;i<half;i++){
+      const top=grp[i];
+      let mi=-1;
+      // prefer clean match (no rematch)
+      for(let j=half;j<grp.length;j++){
+        if(usedBot.has(j)) continue;
+        const k=Math.min(top.seed,grp[j].seed)+'-'+Math.max(top.seed,grp[j].seed);
+        if(!history.has(k)){mi=j;break;}
+      }
+      // fallback: allow rematch
+      if(mi===-1){for(let j=half;j<grp.length;j++){if(!usedBot.has(j)){mi=j;break;}}}
+      if(mi>=0){
+        pairs.push([top,grp[mi]]);
+        usedBot.add(mi);
+        history.add(Math.min(top.seed,grp[mi].seed)+'-'+Math.max(top.seed,grp[mi].seed));
+      }
+    }
+  }
+  if(carry&&!byeGiven[carry.seed]) byes.push(carry);
+  return {pairs,byes};
+}
+
+function runTournamentSim(N){
+  N=N||2000;
+  const cnt={};
+  for(let r=1;r<=4;r++){cnt[r]={};players.forEach(p=>cnt[r][p.seed]=0);}
+  const r1ref=getR1Pairings();
+
+  for(let sim=0;sim<N;sim++){
+    const sc={};const bg={};const hist=new Set();
+    players.forEach(p=>{sc[p.seed]=0;bg[p.seed]=false;});
+
+    // Round 1 — fixed pairings
+    if(r1ref.bye){ sc[r1ref.bye.seed]+=1; bg[r1ref.bye.seed]=true; hist.add(r1ref.bye.seed+'-bye'); }
+    r1ref.pairs.forEach(([a,b])=>{
+      hist.add(Math.min(a.seed,b.seed)+'-'+Math.max(a.seed,b.seed));
+      if(a.seed===9) cnt[1][b.seed]++;
+      if(b.seed===9) cnt[1][a.seed]++;
+      const o=simGame(a,b);
+      sc[a.seed]+=o.sa; sc[b.seed]+=o.sb;
+    });
+
+    // Rounds 2-4 — simulated pairings with rematch avoidance
+    for(let round=2;round<=4;round++){
+      const {pairs,byes}=swissPair(sc,bg,hist);
+      byes.forEach(p=>{sc[p.seed]+=1;bg[p.seed]=true;});
+      pairs.forEach(([a,b])=>{
+        if(a.seed===9) cnt[round][b.seed]++;
+        if(b.seed===9) cnt[round][a.seed]++;
+        const o=simGame(a,b);
+        sc[a.seed]+=o.sa; sc[b.seed]+=o.sb;
+      });
+    }
+  }
+
+  const probs={};
+  for(let r=1;r<=4;r++){
+    probs[r]={};
+    players.forEach(p=>probs[r][p.seed]=Math.round(cnt[r][p.seed]/N*100));
+  }
+  return probs;
+}
+
+function meetProbColor(pct){
+  if(pct>=50) return 'var(--gold)';
+  if(pct>=25) return '#4ade80';
+  if(pct>=10) return '#60a5fa';
+  if(pct>0)   return '#6b7280';
+  return '#374151';
+}
+
+function renderMeetProbs(p, probs){
+  if(!probs||p.seed===9) return '';
+  const rounds=[1,2,3,4];
+  const cells=rounds.map(r=>{
+    const pct=probs[r][p.seed]||0;
+    const col=meetProbColor(pct);
+    return '<span style="font-size:9px;font-weight:700;color:'+col+'">R'+r+' '+pct+'%</span>';
+  }).join('<span style="color:#374151;margin:0 2px">·</span>');
+  return '<div style="margin-top:3px;line-height:1.6">'+cells+'</div>';
+}
+
+
+// ── WIN/DRAW/LOSS PROBABILITY vs Mark ────────────────────────────────────────
+function smirProb(opp){
+  const mark=players.find(p=>p.seed===9);
+  if(opp.seed===9||!opp.adj||!mark.adj) return null;
+  const gap=mark.adj-opp.adj;
+  const E=1/(1+Math.pow(10,-gap/400));       // Mark expected score
+  const BASE_DRAW=0.12;                       // ~12% base draw rate (scholastic)
+  const pDraw=BASE_DRAW*4*E*(1-E);
+  const pWin=Math.max(0,E-pDraw/2);
+  const pLoss=Math.max(0,(1-E)-pDraw/2);
+  return{
+    win:Math.round(pWin*100),
+    draw:Math.round(pDraw*100),
+    loss:Math.round(pLoss*100),
+    gap:gap
+  };
+}
+function probHTML(opp,large){
+  const pr=smirProb(opp);
+  if(!pr) return '';
+  const fs=large?'13px':'11px';
+  const pd=large?'3px 10px':'2px 7px';
+  const winC=pr.win>=65?'#16a34a':pr.win>=45?'#ca8a04':'#b91c1c';
+  const lossC=pr.loss>=65?'#b91c1c':pr.loss>=45?'#ca8a04':'#555';
+  const outcome=pr.win>=65?'FAVORED':pr.loss>=65?'UNDERDOG':'CONTESTED';
+  const outC=pr.win>=65?'#4ade80':pr.loss>=65?'#f87171':'#fbbf24';
+  return `<div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin:5px 0">
+    <span style="font-size:${fs};font-weight:800;padding:${pd};background:#14532d22;color:#4ade80;border:1px solid #166534;border-radius:4px">W ${pr.win}%</span>
+    <span style="font-size:${fs};font-weight:700;padding:${pd};background:#1f293722;color:#94a3b8;border:1px solid #334155;border-radius:4px">D ${pr.draw}%</span>
+    <span style="font-size:${fs};font-weight:800;padding:${pd};background:#7f1d1d22;color:#f87171;border:1px solid #7f1d1d;border-radius:4px">L ${pr.loss}%</span>
+    <span style="font-size:10px;font-weight:800;color:${outC};margin-left:2px">${outcome}</span>
+  </div>`;
+}
+
 // ── GUIDE / OPPONENTS (preserved from original) ───────────────────────────────
 function renderPlayerCards(){
   const grid=document.getElementById('cards-grid');
@@ -1473,15 +1716,20 @@ function renderPlayerCards(){
       ${isSmir?`<div style="background:linear-gradient(90deg,#4c1d95,#6d28d9);padding:3px 10px;border-radius:5px;font-size:11px;font-weight:800;color:#ede9fe;display:inline-block;margin-bottom:7px">★ YOU — MARK SMIRNOV</div>`:''}
       <div class="rank-badge ${isSmir?'rank-top':rankClass(p.trueRank)}">${isSmir?'★':p.trueRank}</div>
       <div class="card-header" style="margin-left:30px">
-        <div><div class="card-name">${esc(p.name)}</div><div class="card-state">${p.st} · Seed #${p.seed} · Entry ${p.entry}</div></div>
+        <div>
+          <div class="card-name">${esc(p.name)}</div>
+          <div class="card-state">${p.st} · Seed #${p.seed} · Entry ${p.entry}</div>
+          <div style="font-size:9px;margin-top:2px"><a href="https://ratings.uschess.org/player/${p.uscfId}" target="_blank" onclick="event.stopPropagation()" style="color:#4a90e2;text-decoration:none">USCF ${p.uscfId}</a></div>
+        </div>
         <div class="adj-badge ${adjClass(p.adj)}">${adjD}</div>
       </div>
       <div class="card-ratings">
-        <span class="rating-pill rp-reg">Reg ${p.muirReg}</span>
-        <span class="rating-pill rp-eff" style="color:${qColor}">⚡ Q-eff ${p.qEff||'N/A'}</span>
-        ${isSmir?`<span class="rating-pill" style="background:#2d1f40;color:#d8b4fe;border:1px solid #7c3aed">Lichess 1500</span>`:''}
+        <span class="rating-pill rp-reg">Regular ${p.muirReg}</span>
+        <span class="rating-pill" style="color:#93c5fd;background:rgba(147,197,253,.1);border:1px solid #1e3a5f;border-radius:5px;padding:2px 6px;font-size:11px">Quick ${p.muirQ||'N/A'}</span>
         ${p.blitz?`<span class="rating-pill rp-blitz">Blitz ${p.blitz}</span>`:''}
-        <span class="tier-badge tier-${p.natTier}">Tier ${p.natTier}</span>
+
+        ${isSmir?`<span class="rating-pill" style="background:#2d1f40;color:#d8b4fe;border:1px solid #7c3aed">Lichess 1500</span>`:''}
+        <span class="tier-badge tier-${p.natTier}">${({A:'A · Draw OK',B:'B · Play for Win',C:'C · Go for Win',D:'D · Must Win'})[p.natTier]||p.natTier}</span>
       </div>
       <div class="win-history" style="margin:5px 0 3px">
         <div class="wh-title">Win % by Year</div>
@@ -1494,7 +1742,7 @@ function renderPlayerCards(){
           </div>`).join('')}
         </div>
       </div>
-      <div class="card-flag">${p.flag}</div>
+      ${!isSmir?`<div style="margin:4px 0 2px"><div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:2px">vs Mark:</div>${probHTML(p,false)}</div>`:''}      <div class="card-flag">${p.flag}</div>
     </div>`;
   }).join('');
 }
@@ -1508,16 +1756,20 @@ function openModal(seed){
   m.innerHTML=`
     <div class="modal-header">
       <div><div style="font-size:20px;font-weight:800">${esc(p.name)} <span style="font-size:13px;color:var(--muted)">#${p.seed} · ${p.st}</span></div>
-      <div style="font-size:12px;color:var(--muted);margin-top:3px">Entry ${p.entry} · MUIR ${p.muirReg} · G/25+5 Rank #${p.trueRank}</div></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">Entry ${p.entry} · Adj. Rank #${p.trueRank} · <a href="https://ratings.uschess.org/player/${p.uscfId}" target="_blank" style="color:#4a90e2;text-decoration:none">USCF ${p.uscfId}</a></div></div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-grid">
-      <div class="modal-stat"><label>Adjusted Score (G/25+5)</label><value style="color:${adjColor}">${adjD}</value></div>
-      <div class="modal-stat"><label>Quick Eff. Rating</label><value style="color:var(--gold)">${p.qEff||'N/A'} <span style="font-size:11px;color:var(--muted)">(${p.qSrc})</span></value></div>
-      <div class="modal-stat"><label>MUIR Regular</label><value>${p.muirReg}</value></div>
-      <div class="modal-stat"><label>Blitz Rating</label><value style="color:var(--purple)">${p.blitz||'None ⚠'}</value></div>
-      <div class="modal-stat"><label>National Tier</label><value><span class="tier-badge tier-${p.natTier}" style="font-size:15px">Tier ${p.natTier}</span></value></div>
-      <div class="modal-stat"><label>Growth / Year</label><value style="color:${p.growPyr>=100?'var(--green)':p.growPyr>=0?'var(--blue)':'var(--red)'}">${p.growPyr>=0?'+':''}${p.growPyr||'N/A'}/yr</value></div>
+      <div class="modal-stat"><label>Adjusted</label><value style="color:${adjColor}">${adjD}</value></div>
+
+      <div class="modal-stat"><label>Regular (USCF Live)</label><value>${p.muirReg}</value></div>
+      <div class="modal-stat"><label>Quick (USCF Live)</label><value style="color:#93c5fd">${p.muirQ||'N/A'}</value></div>
+      <div class="modal-stat"><label>Blitz (USCF Live)</label><value style="color:#c4b5fd">${p.blitz||'N/A'}</value></div>
+      <div class="modal-stat"><label>Strategy Tier</label><value><span class="tier-badge tier-${p.natTier}" style="font-size:15px">${({A:'A · Draw OK',B:'B · Play for Win',C:'C · Go for Win',D:'D · Must Win'})[p.natTier]||p.natTier}</span><div style="font-size:10px;color:var(--muted);margin-top:3px">${{A:'Draw OK vs Mark',B:'Mark plays for win',C:'Mark goes for win',D:'Mark must win'}[p.natTier]||''}</div></value></div>
+      ${p.seed!==9&&p.adj?`<div class="modal-stat" style="grid-column:1/-1">
+        <label>vs Mark — Probability</label>
+        <value>${probHTML(p,true)}</value>
+      </div>`:''}
     </div>
     <div style="margin-top:12px;background:var(--card);border-radius:8px;padding:10px;">
       <div style="font-size:10px;color:var(--muted);margin-bottom:4px">NATIONAL EVENTS</div>
@@ -1545,23 +1797,27 @@ function closeModal(e){ if(!e||e.target===document.getElementById('modal')) docu
 function renderRanking(){
   const table=document.getElementById('ranking-table');
   const sorted=[...players].sort((a,b)=>{ if(a.adj===null)return 1;if(b.adj===null)return-1;return b.adj-a.adj; });
-  table.innerHTML=`<div style="display:grid;grid-template-columns:44px 1fr 70px 70px 90px 70px 70px 70px;font-size:11px;font-weight:700;color:var(--muted);padding:9px 14px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px">
-    <div>Rank</div><div>Player</div><div>Entry</div><div>MUIR</div><div>Quick Eff.</div><div>Tier</div><div>Growth</div><div>Adj</div>
+  table.innerHTML=`<div style="display:grid;grid-template-columns:44px 1fr 70px 68px 68px 68px 60px 80px;font-size:11px;font-weight:700;color:var(--muted);padding:9px 14px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.4px">
+    <div>Rank</div><div>Player</div><div>Entry</div><div>Regular</div><div>Quick</div><div>Blitz</div><div>Strategy</div><div>Adjusted</div>
   </div>
   ${sorted.map((p,i)=>{
     const isSmir=p.seed===9;
     const adjD=p.adj===null?'?':p.adj;
     const ac=p.adj===null?'var(--muted)':p.adj>=1300?'var(--gold)':p.adj>=1150?'#a5d6a7':p.adj>=1050?'var(--blue)':p.adj>=950?'var(--orange)':'var(--red)';
-    const grD=p.growPyr===null?'N/A':(p.growPyr>=0?'+':'')+p.growPyr;
-    const grC=p.growPyr===null?'var(--muted)':p.growPyr>=100?'var(--green)':p.growPyr>=0?'var(--blue)':'var(--red)';
-    return`<div style="display:grid;grid-template-columns:44px 1fr 70px 70px 90px 70px 70px 70px;padding:9px 14px;border-bottom:1px solid var(--border);background:${isSmir?'rgba(124,77,255,.1)':'transparent'};align-items:center;cursor:pointer" onclick="openModal(${p.seed})" onmouseover="this.style.background='rgba(74,144,226,.07)'" onmouseout="this.style.background='${isSmir?'rgba(124,77,255,.1)':'transparent'}'">
+    const uscfUrl=`https://ratings.uschess.org/player/${p.uscfId}`;
+    return`<div style="display:grid;grid-template-columns:44px 1fr 70px 68px 68px 68px 60px 80px;padding:9px 14px;border-bottom:1px solid var(--border);background:${isSmir?'rgba(124,77,255,.1)':'transparent'};align-items:center;cursor:pointer" onclick="openModal(${p.seed})" onmouseover="this.style.background='rgba(74,144,226,.07)'" onmouseout="this.style.background='${isSmir?'rgba(124,77,255,.1)':'transparent'}'">
       <div><span class="${rankClass(p.trueRank)} rank-badge" style="position:static;display:inline-flex">${i+1}</span></div>
-      <div style="font-weight:${isSmir?'800':'600'};color:${isSmir?'#b39ddb':'var(--text)'}">${isSmir?'★ ':''}${esc(p.name)}<span style="font-size:10px;color:var(--muted);margin-left:5px">${p.st}·#${p.seed}</span></div>
+      <div style="font-weight:${isSmir?'800':'600'};color:${isSmir?'#b39ddb':'var(--text)'}">
+        ${isSmir?'★ ':''}${esc(p.name)}<span style="font-size:10px;color:var(--muted);margin-left:5px">${p.st}·#${p.seed}</span>
+        <div style="font-size:9px;color:#4a90e2;margin-top:1px"><a href="${uscfUrl}" target="_blank" onclick="event.stopPropagation()" style="color:#4a90e2;text-decoration:none">USCF ${p.uscfId}</a></div>
+        ${!isSmir?probHTML(p,false):''}
+        ${meetProbs?renderMeetProbs(p,meetProbs):''}
+      </div>
       <div style="color:var(--muted)">${p.entry}</div>
       <div>${p.muirReg}</div>
-      <div style="color:var(--gold);font-weight:700">${p.qEff||'—'} <span style="font-size:9px;color:var(--muted)">${p.qSrc}</span></div>
-      <div><span class="tier-badge tier-${p.natTier}">Tier ${p.natTier}</span></div>
-      <div style="color:${grC};font-weight:600">${grD}</div>
+      <div style="color:#93c5fd">${p.muirQ||'—'}</div>
+      <div style="color:#c4b5fd">${p.blitz||'—'}</div>
+      <div><span class="tier-badge tier-${p.natTier}">${({A:'A · Draw OK',B:'B · Play for Win',C:'C · Go for Win',D:'D · Must Win'})[p.natTier]||p.natTier}</span></div>
       <div style="font-size:17px;font-weight:800;color:${ac}">${adjD}</div>
     </div>`;
   }).join('')}`;
@@ -1572,9 +1828,9 @@ function showRound(r,btn){ curRoundGuide=r; document.querySelectorAll('.round-ta
 function setPath(p,btn){ curPath=p; document.querySelectorAll('.path-btn').forEach(b=>{b.classList.remove('active-win','active-lose');}); btn.classList.add(p==='win'?'active-win':'active-lose'); renderRoundDetail(); }
 
 const roundData={
-  1:{title:'Round 1 — vs Ethan Nastro (Seed #12)',score:'0–0',opponent:players[11],prediction:'Smirnov FAVORED',predTag:'pred-win',adjGap:'+35 (Smirnov)',stats:[{val:'1025',lbl:'Nastro Adj.'},{val:'1085',lbl:'Smirnov Adj.'},{val:'+35',lbl:'Adj. Edge'}],strategies:['Nastro is underseeded by 44 pts (MUIR 1080 vs entry 1036) — treat as a 1080-level player','His quick 1022 ≈ your blitz proxy 1018 — the clock is nearly even; national experience is the real edge','Play aggressively from move 1. A quick draw here kills tournament chances. Full point is the mission','He has never played a national open (only CA scholastic events). Use the atmosphere to your advantage','After winning, expect Figueroa (adj.1084, quick 1148) in Round 2 — a tough G/25+5 opponent']},
-  2:{score:'1–0 or 0–1',paths:{win:{opponent:players[10],type:'tough',title:'Round 2 (if 1–0) — vs Xavier Figueroa (Seed #11)',prediction:'Figueroa slight favorite',predTag:'pred-tough',adjGap:'-24 (Figueroa)',stats:[{val:'1084',lbl:'Figueroa Adj.'},{val:'1085',lbl:'Smirnov Adj.'},{val:'-24',lbl:'Adj. Gap'}],strategies:['⚠ Figueroa quick 1148 makes G/25+5 his best format — this is NOT an easy win','Play CLOSED openings: London System, Colle, or King\'s Indian Attack. Avoid sharp Sicilians','Never enter tactical complications — Figueroa thrives with fast-game tactics','Use your national experience (NCC ×3, World Open) to stay calm as clock ticks down','Win probability ~42-48%. Fight hard — a draw here keeps you at 1.5 and in contention']},lose:{opponent:{name:'Lower-rated 0–1 player',adj:879,muirQ:930,flag:'Likely Sendilkumar (adj.879), Jha (adj.757), Boys (adj.865), or Burra (adj.970)'},type:'win',title:'Round 2 (if 0–1) — vs lower-rated 0–1 player',prediction:'Smirnov strongly favored',predTag:'pred-win',adjGap:'+90 to +303',stats:[{val:'757–879',lbl:'Opponent Range'},{val:'1085',lbl:'Smirnov Adj.'},{val:'MUST WIN',lbl:'Requirement'}],strategies:['Must win to stay in prize contention — 1–1 is the minimum after R2','Likely opponent: Sendilkumar (879), Boys (865), Jha (757), or Burra (970)','You outrate all of them by 90-300+ adjusted points. Play your best opening and convert','Do not over-press and create unnecessary complications. Solid play wins this','After winning: you face a strong 1–1 opponent in R3 (Cheng, Bueno, Zenn range)']}}},
-  3:{score:'2–0, 1.5–0.5, or 1–1',paths:{win:{title:'Round 3 (if 2–0) — Top-tier opponent',opponents:[{name:'Cruz (adj.1381)',type:'hard',pred:'Draw is great result',gap:-321,strat:'Adj. gap -321. Quick 1477. Solid defense, aim for draw.'},{name:'Sha (adj.1195)',type:'hard',pred:'Fight for win/draw',gap:-135,strat:'Adj. gap -135. Play fighting chess. Push for win.'},{name:'Dev (adj.1129)',type:'tough',pred:'Smirnov slight underdog',gap:-69,strat:'Adj. gap -69. Dev quick 1115 vs Smirnov eff 1075. Close — PLAY FOR WIN.'}],strategies:['At 2–0 you are in trophy contention. You WILL face a top-3 player','vs Cruz (adj.1381): His quick 1477 is dominant. Solid defense; draw = excellent result','vs Sha (adj.1195): Fight for win. No glaring weakness but she can be pressed','vs Dev (adj.1129): Play for win. Adj gap is only 69 pts. Both Tier A nationals.','Going into R3 at 2–0 puts you in position for prize — protect that']},lose:{title:'Round 3 (if 1–1) — Mid-field battle',strat:'Must WIN to reach 2–1. Likely: Cheng (1117), Bueno (1082), Zenn (1122), Agrawal (1002). Smirnov adj.1060 is in the thick of this group.',strategies:['You must WIN to reach 2–1 and have prize contention in R4','Likely opponents: Cheng (adj.1117), Figueroa (1084), Zenn (1122), Agrawal (1002)','Your Tier A national experience stands out in this group — most are Tier B/C','Win this game and you fight for a prize in R4 regardless of R1/R2 path']}}},
+  1:{title:'Round 1 — vs Jake Tozzie (Seed #21)',score:'0–0',opponent:players[20],prediction:'Smirnov STRONGLY FAVORED',predTag:'pred-win',adjGap:'+258 (Smirnov)',stats:[{val:players[20].adj,lbl:'Tozzie Adj.'},{val:players[8].adj,lbl:'Smirnov Adj.'},{val:'+'+Math.max(0,players[8].adj-players[20].adj),lbl:'Adj. Edge'}],strategies:['Swiss: 24 players, even field — no bye. All 24 paired: seed 9 (Mark) vs seed 21 (Tozzie, entry 919)','Tozzie adj ~802 vs Smirnov adj 1060 = +258 pts — ~78% win probability. Full point expected.','⚠ Tozzie played BEGINNERS section at 2025 Natl Open — that experience label is misleading. Quick 891 is a 24-game provisional.','Play your best prepared opening. Full point required — a draw here would be a disaster','After winning, expect Agrawal (adj ~952) in R2 — regional deflation moves Smirnov to rank 5/12 in 1-0 pool']},
+  2:{score:'1–0 or 0–1',paths:{win:{opponent:players[7],type:'win',title:'Round 2 (if 1–0) — vs Krish Agrawal (Seed #8)',prediction:'Smirnov favored — good chance',predTag:'pred-win',adjGap:'+108 (Smirnov)',stats:[{val:players[7].adj,lbl:'Agrawal Adj.'},{val:players[8].adj,lbl:'Smirnov Adj.'},{val:players[8].adj-players[7].adj,lbl:'Adj. Edge'}],strategies:['Regional deflation moves Mark to rank 5 of 12 in the 1-0 pool → faces Agrawal (rank 11) in R2','Agrawal adj ~952 vs Smirnov 1060 = +108 pts — ~65% win for Smirnov. Strong favorite.','⚠ Agrawal quick 912 is well below Smirnov proxy 1018 — time pressure is Smirnov advantage.','Agrawal 72.7% in 2026 regular chess, but G/25+5 is not his format. Play sharply.','Win this and you are 2-0 entering R3 with real trophy contention.']},lose:{opponent:{name:'Lower-rated 0–1 player',adj:900,muirQ:850,flag:'Regional deflation makes Mark rank #1 in 0-1 pool (adj 1060). Likely R2 opponent: Delacruz (~900), Sullivan (~896), or similar. Neugut (NY, ~1000) is wild card if he loses to Dev.'},type:'win',title:'Round 2 (if 0–1) — vs lower-rated 0–1 player',prediction:'Smirnov STRONGLY favored',predTag:'pred-win',adjGap:'+160 to +260',stats:[{val:'~900',lbl:'Expected Opp. Adj'},{val:players[8].adj,lbl:'Smirnov Adj.'},{val:'MUST WIN',lbl:'Requirement'}],strategies:['Regional deflation makes Smirnov rank #1 in the 0-1 pool — guaranteed favorable R2 opponent','Must win to stay in prize contention — 1–1 is the minimum after R2','Likely 0-1 opponents: Delacruz (~900), Sullivan (~896), Manzo (~949), Nastro (~935)','⚠ Neugut (NY, adj ~1000, no deflation) is wild card if he upsets Dev in R1 — 18yr inactive','Even in the loss path, Smirnov has a +160 to +260 pt edge over likely opponents']}}},
+  3:{score:'2–0, 1.5–0.5, or 1–1',paths:{win:{title:'Round 3 (if 2–0) — Top-tier opponent',opponents:[{name:'Cruz (adj ~1268)',type:'hard',pred:'Draw is great result',gap:-208,strat:'Adj. gap -208 (deflated). Quick 1456. Solid defense, aim for draw.'},{name:'Sha (adj ~1122)',type:'hard',pred:'Fight for win/draw',gap:-62,strat:'Adj. gap -62 (deflated). Play fighting chess. Push aggressively for win.'},{name:'Dev (adj ~1029)',type:'win',pred:'Smirnov slight favorite',gap:31,strat:'Adj. gap +31 (Smirnov favored after deflation). Dev quick 1115 still dangerous — play for win.'}],strategies:['At 2–0 you are in trophy contention. You WILL face a top-3 player','vs Cruz (adj ~1268 after deflation): His quick 1456 still dominant. Solid defense; draw = excellent result','vs Sha (adj ~1122 after CA deflation): Fight for win. More beatable at this adjusted level.','vs Dev (adj ~1029 after AZ deflation): Smirnov now FAVORED by 31 pts. Push for the win!','Going into R3 at 2–0 puts you in position for prize — protect that']},lose:{title:'Round 3 (if 1–1) — Mid-field battle',strat:'Must WIN to reach 2–1. Likely: Cheng (adj.1117), Verma (adj.1103), Figueroa (adj.1084), Sendilkumar (adj.1021). Smirnov adj.1060 is in the thick of this group.',strategies:['You must WIN to reach 2–1 and have prize contention in R4','Likely opponents: Cheng (adj.1117), Verma (adj.1103), Figueroa (adj.1084), Sendilkumar (adj.1021)','⚠ Sendilkumar is now adj.1021 — no longer a free win. Verma is hottest form in field (66%, 70 games)','Your Tier A national experience stands out in this group — use it. Win this game for a prize fight in R4']}}},
   4:{title:'Round 4 — Final Round',score:'3–0, 2.5–0.5, 2–1, or 1–2',prediction:'Always play for WIN',predTag:'pred-win',strategies:['NEVER agree to a quick draw in Round 4 regardless of score or opponent','3–1 = likely prize eligible · 3.5–0.5 = strong prize · 4–0 = section win (if Cruz drops)','At G/25+5 with blitz proxy 1018: you play fast-chess well. The 5-sec increment rewards precision','Your national experience (NCC, World Open) is MOST valuable in the final round pressure','Target: 3–1 minimum. Stretch: 3.5–0.5. Dream: 4–0 (requires Cruz/Sha to stumble)'],scenarios:[{score:'3–0',opp:'Cruz or Sha',pred:'Hard — fight for draw/win',col:'var(--red)'},{score:'2.5–0.5',opp:'Another ~2.5 scorer',pred:'Play for WIN',col:'var(--orange)'},{score:'2–1',opp:'Another 2–1 scorer',pred:'Must WIN for prize',col:'var(--blue)'},{score:'1–2',opp:'Another 1–2 scorer',pred:'WIN to salvage 2–2',col:'var(--muted)'}]}
 };
 
@@ -1600,7 +1856,7 @@ function renderRoundDetail(){
       </div>
       <div class="matchup-box ${typeClass}">
         <div style="font-size:15px;font-weight:800;margin-bottom:7px">${d.title}</div>
-        ${d.opponent.adj?`<div class="matchup-header"><div class="vs-text">YOU vs</div><div><div class="opp-name">${d.opponent.name}</div><div class="opp-detail">Q-eff ${d.opponent.qEff||d.opponent.muirQ} · Adj. ${d.opponent.adj}</div></div><div style="margin-left:auto"><span class="prediction-tag ${d.predTag}">${d.prediction}</span></div></div><div class="matchup-stats">${d.stats.map(s=>`<div class="stat-box"><div class="stat-val">${s.val}</div><div class="stat-lbl">${s.lbl}</div></div>`).join('')}</div>`:''}
+        ${d.opponent.adj?`<div class="matchup-header"><div class="vs-text">YOU vs</div><div><div class="opp-name">${d.opponent.name}</div><div class="opp-detail">Adj. ${d.opponent.adj}</div></div><div style="margin-left:auto"><span class="prediction-tag ${d.predTag}">${d.prediction}</span></div></div><div class="matchup-stats">${d.stats.map(s=>`<div class="stat-box"><div class="stat-val">${s.val}</div><div class="stat-lbl">${s.lbl}</div></div>`).join('')}</div>`:''}
         ${d.strat?`<div style="font-size:12px;color:var(--text);margin:7px 0;padding:9px;background:var(--card);border-radius:7px">${d.strat}</div>`:''}
         <div class="strategy-box"><div class="strategy-title">🎯 Strategy</div><ul class="strategy-points">${d.strategies.map(s=>`<li>${s}</li>`).join('')}</ul></div>
       </div>`;
@@ -1636,15 +1892,15 @@ function renderSummary(){
       <div class="ranking-row" onclick="openModal(${p.seed})" style="cursor:pointer">
         <div class="${rankClass(i+1)} rr-rank">${i+1}</div>
         <div class="rr-name" style="color:${p.seed===9?'#b39ddb':'var(--text)'}">${p.seed===9?'★ ':''}<strong>${esc(p.name)}</strong> <span style="font-size:10px;color:var(--muted)">Seed #${p.seed}</span></div>
-        <div class="rr-quick" style="color:var(--gold)">Q-eff ${p.qEff||'—'}</div>
+        
         <div class="rr-adj" style="color:${p.adj>=1150?'var(--gold)':p.adj>=1050?'var(--green)':'var(--blue)'}">${p.adj}</div>
       </div>`).join('')}
     </div>
     <div class="summary-card">
       <div class="sc-title">🏆 Tournament Prediction</div>
-      <div class="key-insight"><strong>Winner: Gerardo Cruz</strong> (adj.1381, Quick 1477). Dominant by 283 pts over 2nd-highest quick rating.</div>
-      <div class="key-insight green"><strong>Contenders:</strong> Sha (adj.1195), Dev (adj.1129), Zenn (adj.1122), Cheng (adj.1117)</div>
-      <div class="key-insight orange"><strong>Smirnov target:</strong> 3–1 finish, prize contention. Need to win R1 (Nastro) and R2 (Figueroa — tough).</div>
+      <div class="key-insight"><strong>Winner: Gerardo Cruz</strong> (adj.1368, Quick 1456). Dominant by 262 pts over 2nd-highest quick rating.</div>
+      <div class="key-insight green"><strong>Contenders:</strong> Sha (adj.1172), Dev (adj.1129), Zenn (adj.1165), Cheng (adj.1117)</div>
+      <div class="key-insight orange"><strong>Smirnov target:</strong> 3–1 finish, prize contention. Win R1 (Tozzie — expected ~77%), then fight Sha in R2 (~34% — tough but winnable).</div>
     </div>
     <div class="summary-card">
       <div class="sc-title">🔑 Smirnov's Key Advantages</div>
@@ -1654,8 +1910,8 @@ function renderSummary(){
     </div>
     <div class="summary-card">
       <div class="sc-title">🎯 Smirnov's 4-Round Path</div>
-      <div class="key-insight purple"><strong>R1 vs Nastro:</strong> Smirnov FAVORED. Tier A vs Tier C nationals decisive. Play aggressively.</div>
-      <div class="key-insight orange"><strong>R2 vs Figueroa:</strong> DANGER — Quick 1148. Play closed openings. Win probability ~42-48%.</div>
+      <div class="key-insight purple"><strong>R1 vs Tozzie (seed 21):</strong> Smirnov STRONGLY favored (+258 adj after CA deflation, ~78%). Played BEGINNERS section at Natl Open. Full point expected.</div>
+      <div class="key-insight orange"><strong>R2 vs Sha (seed 3):</strong> Sha favored (adj -112, ~34% for Mark). Sha's ratings dropped 30 pts — more beatable than before. Quick 1167 still strong; play solid not tactical.</div>
       <div class="key-insight" style="border-left-color:var(--blue)"><strong>R3 at 2-0:</strong> Cruz/Sha/Dev. Draw vs Cruz is excellent. Win vs Dev achievable.</div>
       <div class="key-insight green"><strong>Target:</strong> 3–1 is realistic and likely prize-eligible. Stretch: 3.5+.</div>
     </div>`;
@@ -1663,9 +1919,9 @@ function renderSummary(){
 
 function renderRatingImpact(){
   const data=[
-    {n:'Gerardo Cruz',reg:1236,q:1477},{n:'Xavier Figueroa',reg:1062,q:1148},{n:'Jesse Delacruz',reg:1009,q:1111},
-    {n:'Samrudh Dev',reg:1126,q:1115},{n:'Abigayil Zenn',reg:1102,q:1118},{n:'Xiaoxi Sha',reg:1197,q:1194},
-    {n:'Emerson Sullivan',reg:1024,q:1021},{n:'Ethan Nastro',reg:1080,q:1022},{n:'Florence Bueno',reg:1134,q:1047},
+    {n:'Gerardo Cruz',reg:1236,q:1456},{n:'Xavier Figueroa',reg:1062,q:1148},{n:'Jesse Delacruz',reg:1009,q:1111},
+    {n:'Samrudh Dev',reg:1126,q:1115},{n:'Abigayil Zenn',reg:1174,q:1150},{n:'Xiaoxi Sha',reg:1167,q:1167},
+    {n:'Emerson Sullivan',reg:987,q:944},{n:'Ethan Nastro',reg:1036,q:976},{n:'Florence Bueno',reg:1134,q:1047},
     {n:'Krish Agrawal',reg:1087,q:912},{n:'Nicholas Boys',reg:999,q:792},{n:'Mark Smirnov ★',reg:1074,q:703,lichess:true},
   ].sort((a,b)=>(b.q-b.reg)-(a.q-a.reg));
   const el=document.getElementById('rating-impact-table');
@@ -1688,7 +1944,126 @@ function renderRatingImpact(){
 function filterCards(type,btn){ document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('#cards-grid .player-card').forEach(card=>{ const adj=parseInt(card.dataset.adj)||0,noQ=card.dataset.noQuick==='1'; if(type==='all')card.style.display=''; else if(type==='danger')card.style.display=adj>=1050?'':'none'; else if(type==='beatable')card.style.display=adj<1050?'':'none'; else if(type==='noQuick')card.style.display=noQ?'':'none'; }); }
 function searchCards(q){ q=q.toLowerCase(); document.querySelectorAll('#cards-grid .player-card').forEach(card=>{ card.style.display=card.dataset.name.includes(q)?'':'none'; }); }
 
-function showSection(id,btn){ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active')); document.getElementById('sec-'+id).classList.add('active'); btn.classList.add('active'); if(id==='tracker'){renderTracker();renderStandings();} if(id==='progress') renderProgress(); }
+function showSection(id,btn){ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active')); document.getElementById('sec-'+id).classList.add('active'); btn.classList.add('active'); if(id==='tracker'){renderTracker();renderStandings();} if(id==='progress') renderProgress(); if(id==='field') renderField(); }
+
+// ── R5-7 FIELD PREVIEW ────────────────────────────────────────────────────────
+function renderField(){
+  const markAdj = 1060;
+  // Data sourced from MUIR (ratings.uschess.org). Adj = full formula: reg(0.5)+quick(qW)+blitz(0.3) / weights + trend*8 - regional deflation
+  // qW: 0=none/stale, 0.10/0.20/0.35/0.50/0.65 by established game count. CA/WA -50. Other -100. PA/NJ/NY/CT exempt.
+  const fp = [
+    {rank:1, name:'Samuel Chiang',     st:'CA', sched:'3-day', reg:1207, quick:1236, qW:0.65, blitz:null,  trend:+1, adj:1181, natOpen:{sec:'U1500',pts:'2.0/7',pre:1294,post:1255}, flag:'⬇ Played UP in U1500 at 2025 Natl Open — scored 2.0/7 (1294→1255, −39). Current reg 1207 reflects that result. 2026: 65% in 10g ↑ — showing recovery.'},
+    {rank:2, name:'Kenneth Preston',   st:'CA', sched:'4-day', reg:1214, quick:null,  qW:0,    blitz:null,  trend: 0, adj:1164, natOpen:{sec:'U1250',pts:'5.5/7',pre:1170,post:1214}, flag:'Strong 2025 Natl Open U1250 result: 5.5/7, +44 pts. Regular-only profile. Membership expired Jan 2026 — last event was that tournament.'},
+    {rank:3, name:'Garret Zartler',    st:'CA', sched:'4-day', reg:1183, quick:1263, qW:0.65, blitz:1106,  trend:-1, adj:1145, natOpen:{sec:'U1250',pts:'4.0/7',pre:1248,post:1183}, flag:'⬇ Lost 65 pts at 2025 Natl Open U1250 (4.0/7, 1248→1183). Strong quick (1263) + blitz (1106) suggest this was a bad event. Membership expired, 0 games in 2026.'},
+    {rank:4, name:'Richard Wang',      st:'CA', sched:'3-day', reg:1240, quick:1141, qW:0.65, blitz:null,  trend: 0, adj:1134, natOpen:null, flag:'Active scholastic player. Listed 1240 but quick 1141 pulls adj down. 2026: 50% stable. Did not attend 2025 Natl Open.'},
+    {rank:5, name:'Leo Saloranta',     st:'WA', sched:'3-day', reg:1193, quick:1184, qW:0.65, blitz:null,  trend:-1, adj:1130, natOpen:null, flag:'Quick ≈ regular. 2026 form declining: 37.5% in 12g vs 50% in 2025. Did not attend 2025 Natl Open.'},
+    {rank:6, name:'J.M. McIntosh',     st:'UT', sched:'3-day', reg:1238, quick:null,  qW:0,    blitz:null,  trend:-1, adj:1130, natOpen:null, flag:'⚠ Quick 1345 STALE — last played 2010. 2025 comeback: 1W-5L. Did not attend 2025 Natl Open.'},
+    {rank:7, name:'Andy Ortega',       st:'CA', sched:'4-day', reg:1227, quick:1174, qW:0.65, blitz:1000,  trend:+1, adj:1114, natOpen:null, flag:'Improving rapidly: 61.5% in 2026 vs 40% in 2025. Blitz provisional (1000/13). Did not attend 2025 Natl Open.'},
+    {rank:8, name:'James O. Green Sr', st:'AR', sched:'3-day', reg:1218, quick:null,  qW:0,    blitz:null,  trend:-1, adj:1110, natOpen:null, flag:'⚠ NO GAMES SINCE 2010. Reg 1218 is 15 years old. Extreme staleness — wildcard. No 2025 Natl Open record found.'},
+    {rank:9, name:'Jessie Garrard',    st:'—',  sched:'3-day', reg:1226, quick:1201, qW:0.35, blitz:1196,  trend:-1, adj:1103, natOpen:{sec:'U1250',pts:'4.0/7',pre:null,post:null}, flag:'Both quick/blitz provisional (~1200). No state on file. Attended 2025 Natl Open U1250, scored 4.0/7. 2026 form slightly declining.'},
+    {rank:10,name:'Lee Israel',        st:'AZ', sched:'4-day', reg:1222, quick:1210, qW:0.65, blitz:1079,  trend: 0, adj:1087, natOpen:{sec:'U1250',pts:'5.0/7',pre:1254,post:1231}, flag:'Solid 2025 Natl Open U1250: 5.0/7. Primarily online player (168g in 2026). OTB-specific strength harder to gauge.'},
+    {rank:11,name:'M. Skorobohatov',   st:'NV', sched:'4-day', reg:1244, quick:1111, qW:0.65, blitz:null,  trend: 0, adj:1069, natOpen:null, flag:'Highest listed reg (1244) but quick only 1111. Consistent 73%+ win rate OTB. Did not attend 2025 Natl Open.'},
+    {rank:12,name:'Kevin Zemko',       st:'NM', sched:'4-day', reg:1211, quick:1182, qW:0.65, blitz:1012,  trend: 0, adj:1057, natOpen:{sec:'U1250',pts:'4.0/7',pre:1133,post:1115}, flag:'Attended 2025 Natl Open U1250, scored 4.0/7 (−18 pts). Very active local player. 100+ wins in all 3 systems.'},
+    {rank:13,name:'Kurt Von Hartleben',st:'NV', sched:'4-day', reg:1244, quick:1082, qW:0.65, blitz:null,  trend: 0, adj:1052, natOpen:null, flag:'100+ reg, 50+ quick wins. Quick (1082) well below listed 1244. No 2026 games yet. Did not attend 2025 Natl Open.'},
+    {rank:14,name:'Miles Chen',        st:'CA', sched:'4-day', reg:1210, quick:1143, qW:0.65, blitz:844,   trend:-1, adj:1046, natOpen:null, flag:'2026 declining: 35.7% in 7g. Blitz provisional (844/20). Did not attend 2025 Natl Open.'},
+    {rank:15,name:'Gonzalo Santiago',  st:'CA', sched:'3-day', reg:1186, quick: 972, qW:0.50, blitz:null,  trend: 0, adj:1029, natOpen:{sec:'U1250',pts:'4.0/7',pre:1001,post:1034}, flag:'2025 Natl Open U1250: 4.0/7, gained +33 pts. Quick only 972/21 (provisional) — significantly below regular.'},
+    {rank:16,name:'Elijah Levin',      st:'NV', sched:'3-day', reg:1222, quick:1057, qW:0.65, blitz:1117,  trend: 0, adj:1026, natOpen:{sec:'U1250',pts:'4.5/7',pre:1227,post:1200}, flag:'2025 Natl Open U1250: 4.5/7 (−27 pts). Strong 2025 overall (72g, 58%). Only 1 game in 2026 — current form unknown.'},
+    {rank:17,name:'Dingding Chen',     st:'CA', sched:'3-day', reg:1161, quick:1107, qW:0.65, blitz:846,   trend: 0, adj:1022, natOpen:null, flag:'Established in all 3 systems. Active scholastic player. 2026 slightly improved. Did not attend 2025 Natl Open.'},
+    {rank:18,name:'Flora Li',          st:'CA', sched:'3-day', reg:1162, quick:1138, qW:0.65, blitz:607,   trend: 0, adj: 986, natOpen:{sec:'U1250',pts:'4.0/7',pre:1072,post:1035}, flag:'⚠ Blitz 607/20 provisional drags adj down. Q(1138) & reg(1162) suggest stronger. 2025 Natl Open U1250: 4.0/7 (−37 pts).'},
+    {rank:19,name:'Henryk Bletsos',    st:'CA', sched:'3-day', reg:1217, quick:1094, qW:0.65, blitz:610,   trend:-1, adj: 978, natOpen:{sec:'U1250',pts:'4.5/7',pre:1186,post:1206}, flag:'⚠ Blitz 610/24 prov + severe 2026 slump (39% vs 59% in 2025). Paradox: 2025 Natl Open U1250 was his BEST result — 4.5/7, +20 pts.'},
+    {rank:20,name:'Nimay Ranjit',      st:'OR', sched:'4-day', reg:1208, quick:1113, qW:0.65, blitz:572,   trend: 0, adj: 934, natOpen:null, flag:'⚠ Blitz 572/22 provisional pulls adj down sharply. Solid OTB: 84g in 2026 at 45%. Did not attend 2025 Natl Open.'},
+  ];
+
+  fp.forEach(p => {
+    p.winPct = Math.round(100 / (1 + Math.pow(10, (p.adj - markAdj) / 400)));
+    p.tier = p.adj >= 1100 ? 'A' : p.adj >= 1040 ? 'B' : p.adj >= 940 ? 'C' : 'D';
+  });
+
+  const avgWin = Math.round(fp.reduce((s,p) => s + p.winPct, 0) / fp.length);
+  const favored  = fp.filter(p => p.winPct > 50).length;
+  const natOpenCount = fp.filter(p => p.natOpen).length;
+  const natOpenU1250 = fp.filter(p => p.natOpen && p.natOpen.sec==='U1250').length;
+
+  const insightsEl = document.getElementById('field-insights');
+  if(insightsEl) insightsEl.innerHTML = `
+    <div class="key-insight orange">📊 Full adj formula applied (reg+quick+blitz+trend). Average Mark win% <strong>${avgWin}%</strong> against this field.</div>
+    <div class="key-insight red">🎯 Toughest: <strong>${fp[0].name} (${fp[0].st}, adj ${fp[0].adj})</strong> — ${fp[0].winPct}% win for Mark. Played UP in U1500 at 2025 Natl Open.</div>
+    <div class="key-insight green">✅ Mark is favored in <strong>${favored} of 20</strong> matchups. <strong>${natOpenU1250} players</strong> competed in U1250 at the 2025 Natl Open — battle-tested.</div>
+    <div class="key-insight purple">⚠ 3 players (Bletsos, Flora Li, Ranjit) dragged down by very low provisional blitz — likely stronger than adj shows.</div>
+  `;
+
+  const tableEl = document.getElementById('field-table');
+  if(!tableEl) return;
+  tableEl.innerHTML = `
+    <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:660px;">
+      <thead>
+        <tr style="border-bottom:2px solid var(--border);">
+          <th style="text-align:left;padding:8px 6px;color:var(--muted);font-weight:700;">#</th>
+          <th style="text-align:left;padding:8px 6px;color:var(--muted);font-weight:700;">Name</th>
+          <th style="text-align:center;padding:8px 6px;color:var(--muted);font-weight:700;">ST</th>
+          <th style="text-align:center;padding:8px 6px;color:var(--muted);font-weight:700;">Sched</th>
+          <th style="text-align:right;padding:8px 6px;color:var(--muted);font-weight:700;">Reg</th>
+          <th style="text-align:right;padding:8px 6px;color:var(--muted);font-weight:700;">Quick</th>
+          <th style="text-align:right;padding:8px 6px;color:var(--muted);font-weight:700;">Blitz</th>
+          <th style="text-align:right;padding:8px 6px;color:var(--muted);font-weight:700;">Adj</th>
+          <th style="text-align:right;padding:8px 6px;color:var(--muted);font-weight:700;">Win%</th>
+          <th style="text-align:center;padding:8px 6px;color:var(--muted);font-weight:700;">Tier</th>
+          <th style="text-align:center;padding:8px 6px;color:var(--muted);font-weight:700;">2025 NatOpen</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${fp.map(p => {
+          const rankCls = p.rank<=3 ? 'rank-'+p.rank : p.rank<=10 ? 'rank-top' : 'rank-mid';
+          const winColor = p.winPct>50 ? 'var(--green)' : p.winPct>=42 ? 'var(--orange)' : 'var(--red)';
+          const schedColor = p.sched==='4-day' ? '#9c27b0' : '#00bcd4';
+          const trendIcon = p.trend>0 ? '▲' : p.trend<0 ? '▼' : '';
+          const trendColor = p.trend>0 ? 'var(--green)' : p.trend<0 ? 'var(--red)' : '';
+          const qStr = p.quick ? p.quick : '<span style="color:var(--muted)">—</span>';
+          const bStr = p.blitz ? p.blitz : '<span style="color:var(--muted)">—</span>';
+          return `
+            <tr style="border-bottom:1px solid var(--border);transition:background .15s;" onmouseover="this.style.background='rgba(74,144,226,.08)'" onmouseout="this.style.background=''">
+              <td style="padding:8px 6px;">
+                <div class="rank-badge ${rankCls}" style="display:inline-flex;width:24px;height:24px;border-radius:50%;align-items:center;justify-content:center;font-size:10px;font-weight:800;">${p.rank}</div>
+              </td>
+              <td style="padding:8px 6px;">
+                <div style="font-weight:600;">${p.name} ${trendIcon?`<span style="font-size:9px;color:${trendColor}">${trendIcon}</span>`:''}</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3;">${p.flag}</div>
+              </td>
+              <td style="padding:8px 6px;text-align:center;color:var(--muted);vertical-align:top;">${p.st}</td>
+              <td style="padding:8px 6px;text-align:center;vertical-align:top;"><span style="font-size:10px;padding:2px 6px;border-radius:4px;background:${schedColor}22;color:${schedColor};font-weight:700;">${p.sched}</span></td>
+              <td style="padding:8px 6px;text-align:right;color:var(--muted);vertical-align:top;">${p.reg}</td>
+              <td style="padding:8px 6px;text-align:right;color:var(--teal);vertical-align:top;">${qStr}</td>
+              <td style="padding:8px 6px;text-align:right;color:var(--purple);vertical-align:top;">${bStr}</td>
+              <td style="padding:8px 6px;text-align:right;font-weight:800;color:var(--gold);vertical-align:top;">${p.adj}</td>
+              <td style="padding:8px 6px;text-align:right;vertical-align:top;">
+                <span style="font-weight:800;color:${winColor};">${p.winPct}%</span>
+                <div style="margin-top:4px;height:4px;background:var(--border);border-radius:2px;width:50px;">
+                  <div style="height:4px;background:${winColor};border-radius:2px;width:${Math.min(p.winPct,100)}%;"></div>
+                </div>
+              </td>
+              <td style="padding:8px 6px;text-align:center;vertical-align:top;"><span class="tier-badge tier-${p.tier}">${p.tier}</span></td>
+              <td style="padding:8px 6px;text-align:center;vertical-align:top;font-size:11px;">${(() => {
+                if(!p.natOpen) return '<span style="color:var(--muted)">—</span>';
+                const no = p.natOpen;
+                const diff = (no.pre && no.post) ? (no.post - no.pre) : null;
+                const diffStr = diff !== null ? `<br><span style="font-size:10px;color:${diff>=0?'var(--green)':'var(--red)'};">${diff>=0?'+':''}${diff}</span>` : '';
+                const secColor = no.sec==='U1500' ? 'var(--orange)' : 'var(--teal)';
+                return `<span style="color:${secColor};font-weight:700;">${no.sec}</span><br><span style="color:var(--text);">${no.pts}</span>${diffStr}`;
+              })()}</td>
+            </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+    </div>
+    <div style="margin-top:12px;padding:10px 12px;background:var(--panel);border-radius:8px;font-size:11px;color:var(--muted);line-height:1.7;">
+      <strong style="color:var(--text);">Methodology:</strong>
+      Adj = reg(0.5) + quick(qW) + blitz(0.3) weighted blend + trend×8, then regional deflation (CA/WA −50, other −100, PA/NJ/NY/CT exempt).
+      Quick weight (qW) by game count: ≥25→0.65, ≥20→0.50, ≥15→0.35, ≥10→0.20; 0 if stale/absent.
+      Mark adj 1060. Win% = Elo formula. ▲/▼ = 2026 form trend vs 2025. Data sourced from MUIR (ratings.uschess.org).
+    </div>
+  `;
+}
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 loadT();
