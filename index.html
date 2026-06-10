@@ -592,22 +592,23 @@ const players = [
   {seed:6,  name:'Samrudh Dev',uscfId:17116395,        st:'AZ',entry:1126,muirReg:1126,muirQ:1115,blitz:759,  qEff:1115,qSrc:'Quick',natTier:'A',w24:55.6,w25:48.9,w26:50.0,trendDir:0, growPyr:32, adj:1129,trueRank:3,natDetail:'2024 Natl Open: 25th/156. 2025 Natl Open. Regular participant.',flag:'Quick 1115 — strong at G/25+5. Rank #3 adjusted.',strategy:'Strong at G/25+5 (quick 1115). Adj gap is 69 pts (Dev favored). Fight hard.'},
   {seed:7,  name:'Aiden H. Cheng',uscfId:30281393,     st:'CA',entry:1093,muirReg:1093,muirQ:1050,blitz:null, qEff:1050,qSrc:'Quick',natTier:'A',w24:59.7,w25:58.7,w26:null,trendDir:1, growPyr:228,adj:1117,trueRank:5,natDetail:'★ 2025 IYC: 4th/125 (TOP 10%). N. American Open, American Open.',flag:'Only confirmed top-10% national finisher. Quick 1050 + Tier A bonus.',strategy:'Experienced national player — only one with top-10% finish in this field. Treat with full respect.'},
   {seed:8,  name:'Krish Agrawal',uscfId:17154567,      st:'CA',entry:1087,muirReg:1087,muirQ:912, blitz:965,  qEff:912, qSrc:'Quick',natTier:'B',w24:53.3,w25:59.7,w26:72.7,trendDir:1, growPyr:225,adj:1002,trueRank:11,natDetail:'2025 Natl Open: dropped 50 pts. LA Open strong locally.',flag:'72.7% win rate in 2026 but quick 912 is WEAK for G/25+5.',strategy:'Quick 912 is below-average at this TC. Smirnov blitz proxy 1018 >> Agrawal quick 912.'},
-  {seed:9,  name:'Mark Smirnov ★',uscfId:30587704,    st:'PA',entry:1074,muirReg:1074,muirQ:703, blitz:1018, qEff:1018,qSrc:'Blitz★',natTier:'A',w24:73.1,w25:60.5,w26:42.9,trendDir:-1,growPyr:50, adj:1060,trueRank:10,natDetail:'NCC ×3, World Open, Atlantic Open, Atlantic City Open, Natl HS Ch.',flag:'★ Blitz 1018 primary proxy. Lichess Rapid 1500 supporting signal. Adj. 1060, Rank #10.',strategy:'<div style="text-align:center;padding:10px;background:#1e1b4b;border-radius:8px;border:2px solid #7c3aed"><div style="font-size:15px;font-weight:800;color:#ede9fe">★ This is YOU</div><div style="font-size:12px;color:#a78bfa;margin-top:4px">See Round Guide and Scenarios tabs for full strategy.</div></div>'},
-  {seed:10, name:'Atharv Arun',uscfId:32252289,        st:'AZ',entry:1068,muirReg:1068,muirQ:1056,blitz:917,  qEff:1056,qSrc:'Quick',natTier:'B',w24:null,w25:54.2,w26:59.8,trendDir:1, growPyr:50, adj:1066,trueRank:9, natDetail:'2026 AZ Scholastic State Ch. North American Open. FIDE rated (39981207).',flag:'NEW 2-day player. FIDE rated. Quick 1056. 59.8% in 2026 (46 games). Entry 1068 ≈ Smirnov 1074. Adj 1066 slightly ABOVE Mark. R1 vs Madaus (seed 10 vs seed 22).',strategy:'Adj 1066 just above Smirnov (1060). Quick 1056 vs Smirnov proxy 1018 — Atharv edge at G/25+5. FIDE rated, AZ State champ, North American Open experience. If paired later: treat as near-equal, prepare solid opening, no shortcuts.'},
-  {seed:11, name:'Sanjan Sendilkumar',uscfId:31493149, st:'UT',entry:1063,muirReg:1063,muirQ:1077,blitz:null, qEff:1077,qSrc:'Quick',natTier:'D',w24:41.9,w25:59.6,w26:56.8,trendDir:1, growPyr:30, adj:1021,trueRank:11,natDetail:'UT local scholastic events only',flag:'⬆⬆ MASSIVE rating jump — MUIR Reg 903→1063, Quick 930→1077. R1 vs Jha (seed 11 vs seed 23).',strategy:'⚠ NO LONGER AN EASY WIN. Adj jumped from 879 to 1021 — now just 39 pts below Smirnov. Quick 1077 is solid at G/25+5. Treat as a near-equal. Do not over-press; steady positional chess required.'},
-  {seed:12, name:'Xavier Figueroa',uscfId:16531715,    st:'TX',entry:1062,muirReg:1062,muirQ:1148,blitz:1078, qEff:1148,qSrc:'Quick',natTier:'C',w24:28.6,w25:55.6,w26:38.9,trendDir:-1,growPyr:0,  adj:1084,trueRank:6,natDetail:'2026 HS Nationals, Region VIII — TX school events',flag:'Quick 1148 (2nd highest). G/25+5 is his ideal format. R1 vs Burra (seed 12 vs seed 24) — favorable. If paired later: dangerous.',strategy:'Not Mark\'s R1/R2 opponent. R1 vs Burra (seed 12 vs seed 24) — favorable. If met in R3/R4: ⚠ Quick 1148 is 2nd highest in field — play CLOSED openings (London, Colle). 2026 form weak (38.9%).'},
-  {seed:13, name:'Isaac Barriere',uscfId:33069906,     st:'CA',entry:1048,muirReg:1048,muirQ:1045,blitz:null, qEff:1045,qSrc:'Quick★/8',natTier:'D',w24:null,w25:null,w26:37.5,trendDir:0, growPyr:0,  adj:950, trueRank:16,natDetail:'Victorville Chess Classic, Strategic Saturday Swiss (local CA only).',flag:'NEW player. Only 8 USCF games total (reg & quick both provisional /8). 37.5% win rate. Rating highly unreliable. R1 vs Cruz (seed 1 vs seed 13).',strategy:'Highly provisional (8 games only). 1048 entry is unreliable — true strength completely unknown. 37.5% win rate suggests actual level may be below 1000. Treat cautiously; play your standard game.'},
-  {seed:14, name:'Parker Sachs',uscfId:12979297,       st:'NV',entry:1039,muirReg:1039,muirQ:1038,blitz:null, qEff:1038,qSrc:'Quick',natTier:'C',w24:null,w25:73.3,w26:null,trendDir:1, growPyr:75, adj:1015,trueRank:12,natDetail:'2025 National Open. 2006 National K-12 Grade Ch. Returned after ~18 years inactive.',flag:'Comeback player — returned 2025 after ~18 years inactive. 73.3% in 15 games. Played 2025 National Open. ⚠ Membership expires 06/30/2026 — verify eligibility. R1 vs Zenn (seed 2 vs seed 14).',strategy:'Solid comeback (73.3% in 15 games, 2025). National open experience. Quick 1038 matches entry. Adj ~1015 — manageable if paired. No 2026 data yet. ⚠ Membership expires June 30 — confirm TD cleared him.'},
-  {seed:15, name:'Ethan Nastro',uscfId:31394554,       st:'CA',entry:1036,muirReg:1036,muirQ:976, blitz:982,  qEff:976, qSrc:'Quick',natTier:'D',w24:68.2,w25:50.0,w26:57.5,trendDir:1, growPyr:100,adj:985, trueRank:13,natDetail:'CA scholastic only (SuperStates, L.A. Super City)',flag:'⬇ Both ratings dropped (Reg 1080→1036, Quick 1022→976). Adj 985. R1 vs Sha (seed 3 vs seed 15).',strategy:'Not Mark\'s R1 opponent (Swiss: seed 9 vs seed 21 = Tozzie). Nastro may appear in later rounds. Adj 985 — manageable. Quick 976 below Smirnov proxy 1018. Time pressure favors Smirnov.'},
-  {seed:16, name:'Jimmy Manzo',      uscfId:31690861,     st:'CA',entry:1013,muirReg:1013,muirQ:1012,blitz:940,  qEff:1012,qSrc:'Quick',natTier:'C',w24:38.2,w25:44.8,w26:41.7,trendDir:0, growPyr:25, adj:999, trueRank:15,natDetail:'2025 Natl Open U1250: 3.5/7 (1048→1033, −15). Clovis Chess Club regular.',flag:'Entry 1013. Regular 1013, Quick 1012 (established). Blitz 940/22 provisional. 41.7% in 2026 (6 games — very limited). R1 vs Bueno (seed 4 vs seed 16).',strategy:'Adj ~999, Tier C. Regular 1013 ≈ Quick 1012 — solid established player. 2025 National Open experience. Limited 2026 data (6 games). Play for win — Smirnov adj 1060 vs Manzo ~999 = +61 pts edge.'},
-  {seed:17, name:'Jesse Delacruz',uscfId:32484050,     st:'TX',entry:1009,muirReg:1009,muirQ:1111,blitz:null, qEff:1111,qSrc:'Quick★/13',natTier:'D',w24:null,w25:55.6,w26:25.0,trendDir:-1,growPyr:50, adj:1000,trueRank:12,natDetail:'TX local events only',flag:'Quick 1111 (13-game provisional). 25% in 2026. Interesting wildcard. R1 vs Verma (seed 5 vs seed 17).',strategy:'Quick 1111 is provisional — treat with caution. 2026 form (25%) is terrible. Play solid positional chess.'},
-  {seed:18, name:'Zachary Neugut',uscfId:12833801,     st:'NY',entry:1000,muirReg:1000,muirQ:955, blitz:null, qEff:null, qSrc:'Stale (2007)',natTier:'D',w24:null,w25:null,w26:null,trendDir:0,growPyr:0,adj:null,trueRank:20,natDetail:'NJ scholastic 2002-2007. Inactive 18+ years.',flag:'Complete wildcard — last played ~2007. No usable data. R1 vs Dev (seed 6 vs seed 18).',strategy:'Complete unknown. Do not under-prepare. 18 years of self-study could mean anything.'},
-  {seed:19, name:'Nicholas Boys',uscfId:31692836,      st:'CA',entry:999, muirReg:999, muirQ:792, blitz:null, qEff:792, qSrc:'Quick',natTier:'C',w24:60.0,w25:54.9,w26:63.3,trendDir:1, growPyr:75, adj:865, trueRank:17,natDetail:'2025 IYC: 78th/125. CA scholastic.',flag:'Strong regular player (63%) but quick 792 is a G/25+5 weakness. R1 vs Cheng (seed 7 vs seed 19).',strategy:'Quick 792 well below Smirnov proxy 1018. If paired: time pressure tactics.'},
-  {seed:20, name:'Emerson Sullivan',uscfId:32082058,   st:'CA',entry:987, muirReg:987, muirQ:944, blitz:1080, qEff:944, qSrc:'Quick',natTier:'D',w24:50.0,w25:62.3,w26:46.9,trendDir:-1,growPyr:50, adj:946, trueRank:14,natDetail:'CA scholastic only (SuperStates, L.A. City Championship)',flag:'⬇ Both ratings dropped (Reg 1024→987, Quick 1021→944). 46.9% in 2026 — declining form. R1 vs Agrawal (seed 8 vs seed 20).',strategy:'Quick dropped to 944 — now below Smirnov proxy 1018. Smirnov adj 1060 vs Sullivan 946 = 114-pt edge (was 78). Time pressure clearly favors Smirnov.'},
-  {seed:21, name:'Jake Tozzie',uscfId:32317236,        st:'CA',entry:919, muirReg:919, muirQ:891, blitz:null, qEff:891, qSrc:'Quick★/24',natTier:'D',w24:null,w25:58.3,w26:null,trendDir:0,growPyr:null,adj:852,trueRank:18,natDetail:'Played BEGINNERS section at 2025 Natl Open.',flag:'★ R1 OPPONENT (seed 9 vs seed 21). Quick 891 provisional (24 games). Adj ~802 (CA -50) — Smirnov favored by 258 pts. ~78% win probability.',strategy:'Your Round 1 opponent (Swiss: 24-player even field, seed 9 vs seed 21 = Tozzie). Adj ~802 vs Smirnov 1060 = +258 pts (CA deflation) — ~78% win. Played BEGINNERS section at 2025 National Open — national experience is misleading. Quick 891 is a 24-game provisional — not reliable at G/25+5. Play your prepared opening; full point expected.'},
-  {seed:22, name:'Owen Madaus',uscfId:32458050,        st:'RI',entry:911, muirReg:911, muirQ:904, blitz:null, qEff:null, qSrc:'Unknown (5)',natTier:'D',w24:null,w25:60.0,w26:null,trendDir:0,growPyr:null,adj:811,trueRank:19,natDetail:'Only 5 games total in USCF history.',flag:'Only 5 USCF games total. Adj 811 — essentially unrated. R1 vs Atharv (seed 10 vs seed 22).',strategy:'Not Mark\'s R1 opponent (now seed 22 — paired vs Atharv seed 10 in R1). Only 5 USCF games ever. If met in later rounds: quick 904 (5-game sample) not meaningful; play normally and convert.'},
-  {seed:23, name:'Kaavya Jha',uscfId:32209453,         st:'AZ',entry:889, muirReg:889, muirQ:845, blitz:683,  qEff:845, qSrc:'Quick',natTier:'C',w24:0.0, w25:44.1,w26:41.1,trendDir:1, growPyr:100,adj:848, trueRank:18,natDetail:'North American Open, 2025 World Open (61st/72).',flag:'⬆ Both ratings jumped (Reg 813→889, Quick 744→845). R1 vs Sendilkumar (seed 11 vs seed 23). If Jha upsets: could appear in R2.',strategy:'Not Mark\'s R1 opponent (now seed 23 — paired vs Sendilkumar in R1). Adj 848 — manageable if met in later rounds. Quick 845 weak at G/25+5. National open experience (World Open) is notable.'},
-  {seed:24, name:'Surya Burra',uscfId:32363747,        st:'OR',entry:880, muirReg:880, muirQ:862, blitz:null, qEff:862, qSrc:'Quick',natTier:'B',w24:null,w25:33.3,w26:51.0,trendDir:1, growPyr:77, adj:877, trueRank:15,natDetail:'GM Arthur Dake Memorial, OSCF State Ch. FIDE rated.',flag:'⬇ Both ratings dropped (Reg 957→880, Quick 945→862). R1 vs Figueroa (seed 12 vs seed 24) — tough draw. Adj ~877 vs Figueroa adj ~1084.',strategy:'24-player even field — no bye for Burra. R1 vs Figueroa (adj ~1084) — likely 0-1. FIDE rated, 201 games in 2026, 51%. If Mark faces Burra in R2 (0-1 pool): adj 877 vs 1060 = +183 — manageable. Burra has national experience (FIDE, OSCF). Quick 862 is a G/25+5 weakness.'},
+  {seed:9,  name:'Oliver Grierson',uscfId:31769939,    st:'UT',entry:1083,muirReg:1083,muirQ:1063,blitz:null, qEff:1063,qSrc:'Quick',natTier:'C',w24:37.8,w25:32.4,w26:46.4,trendDir:1, growPyr:75, adj:979,trueRank:14,natDetail:'35th Annual North American Open, National K-12 Grade Ch. (UT).',flag:'NEW player added late. Regular 1083, Quick 1063 (established). Strong improvement: 32% in 2025 → 46% in 2026 (28 games). R1 vs Sullivan (seed 9 vs seed 21).',strategy:'Adj ~979 (UT −100 deflation), Tier C — go for win. Quick 1063 solid at G/25+5. Improving player with national event experience. Smirnov adj 1060 vs Grierson adj ~979 = +81 pts edge if paired.'},
+  {seed:10,  name:'Mark Smirnov ★',uscfId:30587704,    st:'PA',entry:1074,muirReg:1074,muirQ:703, blitz:1018, qEff:1018,qSrc:'Blitz★',natTier:'A',w24:73.1,w25:60.5,w26:42.9,trendDir:-1,growPyr:50, adj:1060,trueRank:10,natDetail:'NCC ×3, World Open, Atlantic Open, Atlantic City Open, Natl HS Ch.',flag:'★ Blitz 1018 primary proxy. Lichess Rapid 1500 supporting signal. Adj. 1060, Rank #10.',strategy:'<div style="text-align:center;padding:10px;background:#1e1b4b;border-radius:8px;border:2px solid #7c3aed"><div style="font-size:15px;font-weight:800;color:#ede9fe">★ This is YOU</div><div style="font-size:12px;color:#a78bfa;margin-top:4px">See Round Guide and Scenarios tabs for full strategy.</div></div>'},
+  {seed:11, name:'Atharv Arun',uscfId:32252289,        st:'AZ',entry:1068,muirReg:1068,muirQ:1056,blitz:917,  qEff:1056,qSrc:'Quick',natTier:'B',w24:null,w25:54.2,w26:59.8,trendDir:1, growPyr:50, adj:1066,trueRank:9, natDetail:'2026 AZ Scholastic State Ch. North American Open. FIDE rated (39981207).',flag:'NEW 2-day player. FIDE rated. Quick 1056. 59.8% in 2026 (46 games). Entry 1068 ≈ Smirnov 1074. Adj 1066 slightly ABOVE Mark. R1 vs Madaus (seed 11 vs seed 23).',strategy:'Adj 1066 just above Smirnov (1060). Quick 1056 vs Smirnov proxy 1018 — Atharv edge at G/25+5. FIDE rated, AZ State champ, North American Open experience. If paired later: treat as near-equal, prepare solid opening, no shortcuts.'},
+  {seed:12, name:'Sanjan Sendilkumar',uscfId:31493149, st:'UT',entry:1063,muirReg:1063,muirQ:1077,blitz:null, qEff:1077,qSrc:'Quick',natTier:'D',w24:41.9,w25:59.6,w26:56.8,trendDir:1, growPyr:30, adj:1021,trueRank:11,natDetail:'UT local scholastic events only',flag:'⬆⬆ MASSIVE rating jump — MUIR Reg 903→1063, Quick 930→1077. R1 vs Jha (seed 12 vs seed 24).',strategy:'⚠ NO LONGER AN EASY WIN. Adj jumped from 879 to 1021 — now just 39 pts below Smirnov. Quick 1077 is solid at G/25+5. Treat as a near-equal. Do not over-press; steady positional chess required.'},
+  {seed:13, name:'Xavier Figueroa',uscfId:16531715,    st:'TX',entry:1062,muirReg:1062,muirQ:1148,blitz:1078, qEff:1148,qSrc:'Quick',natTier:'C',w24:28.6,w25:55.6,w26:38.9,trendDir:-1,growPyr:0,  adj:1084,trueRank:6,natDetail:'2026 HS Nationals, Region VIII — TX school events',flag:'Quick 1148 (2nd highest). G/25+5 is his ideal format. R1 vs Cruz (seed 1 vs seed 13) — tough! If paired later: dangerous.',strategy:'Not Mark\'s R1/R2 opponent. R1 vs Cruz (seed 1 vs seed 13) If met in R3/R4: ⚠ Quick 1148 is 2nd highest in field — play CLOSED openings (London, Colle). 2026 form weak (38.9%).'},
+  {seed:14, name:'Isaac Barriere',uscfId:33069906,     st:'CA',entry:1048,muirReg:1048,muirQ:1045,blitz:null, qEff:1045,qSrc:'Quick★/8',natTier:'D',w24:null,w25:null,w26:37.5,trendDir:0, growPyr:0,  adj:950, trueRank:16,natDetail:'Victorville Chess Classic, Strategic Saturday Swiss (local CA only).',flag:'NEW player. Only 8 USCF games total (reg & quick both provisional /8). 37.5% win rate. Rating highly unreliable. R1 vs Zenn (seed 2 vs seed 14).',strategy:'Highly provisional (8 games only). 1048 entry is unreliable — true strength completely unknown. 37.5% win rate suggests actual level may be below 1000. Treat cautiously; play your standard game.'},
+  {seed:15, name:'Parker Sachs',uscfId:12979297,       st:'NV',entry:1039,muirReg:1039,muirQ:1038,blitz:null, qEff:1038,qSrc:'Quick',natTier:'C',w24:null,w25:73.3,w26:null,trendDir:1, growPyr:75, adj:1015,trueRank:12,natDetail:'2025 National Open. 2006 National K-12 Grade Ch. Returned after ~18 years inactive.',flag:'Comeback player — returned 2025 after ~18 years inactive. 73.3% in 15 games. Played 2025 National Open. ⚠ Membership expires 06/30/2026 — verify eligibility. R1 vs Sha (seed 3 vs seed 15).',strategy:'Solid comeback (73.3% in 15 games, 2025). National open experience. Quick 1038 matches entry. Adj ~1015 — manageable if paired. No 2026 data yet. ⚠ Membership expires June 30 — confirm TD cleared him.'},
+  {seed:16, name:'Ethan Nastro',uscfId:31394554,       st:'CA',entry:1036,muirReg:1036,muirQ:976, blitz:982,  qEff:976, qSrc:'Quick',natTier:'D',w24:68.2,w25:50.0,w26:57.5,trendDir:1, growPyr:100,adj:985, trueRank:13,natDetail:'CA scholastic only (SuperStates, L.A. Super City)',flag:'⬇ Both ratings dropped (Reg 1080→1036, Quick 1022→976). Adj 985. R1 vs Bueno (seed 4 vs seed 16).',strategy:'Not Mark\'s R1 opponent (Swiss: seed 10 vs seed 22 = Tozzie). Nastro may appear in later rounds. Adj 985 — manageable. Quick 976 below Smirnov proxy 1018. Time pressure favors Smirnov.'},
+  {seed:17, name:'Jimmy Manzo',      uscfId:31690861,     st:'CA',entry:1013,muirReg:1013,muirQ:1012,blitz:940,  qEff:1012,qSrc:'Quick',natTier:'C',w24:38.2,w25:44.8,w26:41.7,trendDir:0, growPyr:25, adj:999, trueRank:15,natDetail:'2025 Natl Open U1250: 3.5/7 (1048→1033, −15). Clovis Chess Club regular.',flag:'Entry 1013. Regular 1013, Quick 1012 (established). Blitz 940/22 provisional. 41.7% in 2026 (6 games — very limited). R1 vs Verma (seed 5 vs seed 17).',strategy:'Adj ~999, Tier C. Regular 1013 ≈ Quick 1012 — solid established player. 2025 National Open experience. Limited 2026 data (6 games). Play for win — Smirnov adj 1060 vs Manzo ~999 = +61 pts edge.'},
+  {seed:18, name:'Jesse Delacruz',uscfId:32484050,     st:'TX',entry:1009,muirReg:1009,muirQ:1111,blitz:null, qEff:1111,qSrc:'Quick★/13',natTier:'D',w24:null,w25:55.6,w26:25.0,trendDir:-1,growPyr:50, adj:1000,trueRank:12,natDetail:'TX local events only',flag:'Quick 1111 (13-game provisional). 25% in 2026. Interesting wildcard. R1 vs Dev (seed 6 vs seed 18).',strategy:'Quick 1111 is provisional — treat with caution. 2026 form (25%) is terrible. Play solid positional chess.'},
+  {seed:19, name:'Zachary Neugut',uscfId:12833801,     st:'NY',entry:1000,muirReg:1000,muirQ:955, blitz:null, qEff:null, qSrc:'Stale (2007)',natTier:'D',w24:null,w25:null,w26:null,trendDir:0,growPyr:0,adj:null,trueRank:20,natDetail:'NJ scholastic 2002-2007. Inactive 18+ years.',flag:'Complete wildcard — last played ~2007. No usable data. R1 vs Cheng (seed 7 vs seed 19).',strategy:'Complete unknown. Do not under-prepare. 18 years of self-study could mean anything.'},
+  {seed:20, name:'Nicholas Boys',uscfId:31692836,      st:'CA',entry:999, muirReg:999, muirQ:792, blitz:null, qEff:792, qSrc:'Quick',natTier:'C',w24:60.0,w25:54.9,w26:63.3,trendDir:1, growPyr:75, adj:865, trueRank:17,natDetail:'2025 IYC: 78th/125. CA scholastic.',flag:'Strong regular player (63%) but quick 792 is a G/25+5 weakness. R1 vs Cheng (seed 8 vs seed 20).',strategy:'Quick 792 well below Smirnov proxy 1018. If paired: time pressure tactics.'},
+  {seed:21, name:'Emerson Sullivan',uscfId:32082058,   st:'CA',entry:987, muirReg:987, muirQ:944, blitz:1080, qEff:944, qSrc:'Quick',natTier:'D',w24:50.0,w25:62.3,w26:46.9,trendDir:-1,growPyr:50, adj:946, trueRank:14,natDetail:'CA scholastic only (SuperStates, L.A. City Championship)',flag:'⬇ Both ratings dropped (Reg 1024→987, Quick 1021→944). 46.9% in 2026 — declining form. R1 vs Grierson (seed 9 vs seed 21).',strategy:'Quick dropped to 944 — now below Smirnov proxy 1018. Smirnov adj 1060 vs Sullivan 946 = 114-pt edge (was 78). Time pressure clearly favors Smirnov.'},
+  {seed:22, name:'Jake Tozzie',uscfId:32317236,        st:'CA',entry:919, muirReg:919, muirQ:891, blitz:null, qEff:891, qSrc:'Quick★/24',natTier:'D',w24:null,w25:58.3,w26:null,trendDir:0,growPyr:null,adj:852,trueRank:18,natDetail:'Played BEGINNERS section at 2025 Natl Open.',flag:'★ R1 OPPONENT (seed 10 vs seed 22). Quick 891 provisional (24 games). Adj ~802 (CA -50) — Smirnov favored by 258 pts. ~78% win probability.',strategy:'Your Round 1 opponent (Swiss: 25 players, seed 25 gets bye. Seed 10 (Mark) vs seed 22 (Tozzie)). Adj ~802 vs Smirnov 1060 = +258 pts (CA deflation) — ~78% win. Played BEGINNERS section at 2025 National Open — national experience is misleading. Quick 891 is a 24-game provisional — not reliable at G/25+5. Play your prepared opening; full point expected.'},
+  {seed:23, name:'Owen Madaus',uscfId:32458050,        st:'RI',entry:911, muirReg:911, muirQ:904, blitz:null, qEff:null, qSrc:'Unknown (5)',natTier:'D',w24:null,w25:60.0,w26:null,trendDir:0,growPyr:null,adj:811,trueRank:19,natDetail:'Only 5 games total in USCF history.',flag:'Only 5 USCF games total. Adj 811 — essentially unrated. R1 vs Arun (seed 11 vs seed 23).',strategy:'Not Mark\'s R1 opponent (now seed 23 — paired vs Arun seed 11 in R1). Only 5 USCF games ever. If met in later rounds: quick 904 (5-game sample) not meaningful; play normally and convert.'},
+  {seed:24, name:'Kaavya Jha',uscfId:32209453,         st:'AZ',entry:889, muirReg:889, muirQ:845, blitz:683,  qEff:845, qSrc:'Quick',natTier:'C',w24:0.0, w25:44.1,w26:41.1,trendDir:1, growPyr:100,adj:848, trueRank:18,natDetail:'North American Open, 2025 World Open (61st/72).',flag:'⬆ Both ratings jumped (Reg 813→889, Quick 744→845). R1 vs Sendilkumar (seed 12 vs seed 24). If Jha upsets: could appear in R2.',strategy:'Not Mark\'s R1 opponent (now seed 24 — paired vs Sendilkumar in R1). Adj 848 — manageable if met in later rounds. Quick 845 weak at G/25+5. National open experience (World Open) is notable.'},
+  {seed:25, name:'Surya Burra',uscfId:32363747,        st:'OR',entry:880, muirReg:880, muirQ:862, blitz:null, qEff:862, qSrc:'Quick',natTier:'B',w24:null,w25:33.3,w26:51.0,trendDir:1, growPyr:77, adj:877, trueRank:15,natDetail:'GM Arthur Dake Memorial, OSCF State Ch. FIDE rated.',flag:'⬇ Both ratings dropped (Reg 957→880, Quick 945→862). ★ Gets R1 BYE as seed 25 — starts tournament at 1-0!',strategy:'25-player field — Burra (seed 25) gets R1 BYE (full point). FIDE rated, 201 games in 2026, 51%. If Mark faces Burra in R2 (0-1 pool): adj 877 vs 1060 = +183 — manageable. Burra has national experience (FIDE, OSCF). Quick 862 is a G/25+5 weakness.'},
 ];
 
 // ── TRACKER STATE ─────────────────────────────────────────────────────────────
@@ -936,11 +937,12 @@ function getPrediction(wSeed, bSeed){
   let danger='';
   if(wSeed===9||bSeed===9){
     const opp = wSeed===9 ? bp : wp;
-    if(opp.seed===12) danger=' ⚠'; // Figueroa — Quick 1148
+    if(opp.seed===13) danger=' ⚠'; // Figueroa — Quick 1148
     else if(opp.seed===5) danger=' ⚠'; // Verma — hot form (66%)
-    else if(opp.seed===11) danger=' ⚠'; // Sendilkumar — adj.1021, near-equal
-    else if(opp.seed===10) danger=' ⚠'; // Atharv — adj 1066, above Mark
-    else if(opp.seed===13) danger=' ⚠'; // Barriere — highly provisional, unknown
+    else if(opp.seed===12) danger=' ⚠'; // Sendilkumar — adj.1021, near-equal
+    else if(opp.seed===11) danger=' ⚠'; // Atharv — adj 1066, above Mark
+    else if(opp.seed===9)  danger=' ⚠'; // Grierson — adj ~979, improving
+    else if(opp.seed===14) danger=' ⚠'; // Barriere — highly provisional, unknown
     else if(opp.adj>=1150) danger=' ⚠';
   }
   // Provisional/stale rating warning
@@ -1194,7 +1196,7 @@ function renderStandings(){
       const hist = getHistory(p.seed);
       const w=hist.filter(x=>x==='W').length, d=hist.filter(x=>x==='D').length, l=hist.filter(x=>x==='L').length;
       const pct = (sc/maxSc*100).toFixed(0);
-      const isSmir = p.seed===9;
+      const isSmir = p.seed===10;
       return `<tr class="${isSmir?'smir-row':''}">
         <td>${i<3?['🥇','🥈','🥉'][i]:i+1}</td>
         <td><strong style="color:${isSmir?'#b39ddb':'var(--text)'}">${isSmir?'★ ':''}${esc(p.name)}</strong><br><span style="color:var(--muted);font-size:0.72rem;">⭐${p.adj||'?'}</span></td>
@@ -1248,7 +1250,7 @@ function renderProgress(){
   const palette=['#7c4dff','#f5a623','#4caf50','#4a90e2','#ef5350','#00bcd4','#ff9800','#ab47bc','#e91e63','#26a69a','#ec407a','#42a5f5','#66bb6a','#ffa726','#ef5350','#26c6da','#d4e157','#ff7043','#8d6e63','#78909c'];
 
   // ── HERO STATS ROW ────────────────────────────────────────────────────────
-  const smirRank = sorted.findIndex(p=>p.seed===9)+1;
+  const smirRank = sorted.findIndex(p=>p.seed===10)+1;
   const leader = sorted[0];
   const smirScore = scores[9];
   const maxScore = scores[sorted[0].seed];
@@ -1302,7 +1304,7 @@ function renderProgress(){
   // Player lines — draw background players first, then Smirnov on top
   let bgLines='', smirLine='', smirDots='', endLabels='';
   sorted.forEach((p,rank)=>{
-    const isSmir=p.seed===9;
+    const isSmir=p.seed===10;
     const col=isSmir?'#7c4dff':palette[(rank+1)%palette.length];
     const vals=history[p.seed];
     const cur=scores[p.seed];
@@ -1389,7 +1391,7 @@ function renderProgress(){
   let bumpLines='', bumpSmirLine='', bumpSmirDots='', bumpEndLabels='';
   // Draw everyone at once (background then smirnov)
   sorted.forEach((p,si)=>{
-    const isSmir=p.seed===9;
+    const isSmir=p.seed===10;
     const col=isSmir?'#7c4dff':palette[(si+1)%palette.length];
     const ranks=rankHistory[p.seed];
     let d='';
@@ -1432,7 +1434,7 @@ function renderProgress(){
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;">`;
 
   sorted.forEach((p,rank)=>{
-    const isSmir=p.seed===9;
+    const isSmir=p.seed===10;
     const col=isSmir?'#7c4dff':palette[(rank+1)%palette.length];
     const sc=scores[p.seed];
     const hist=getHistory(p.seed);
@@ -1468,12 +1470,12 @@ function renderProgress(){
     <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:14px;">Score Distribution</div>
     ${allScores.map(s=>{
       const ps=scoreCounts[s];
-      const hasSmir=ps.some(p=>p.seed===9);
+      const hasSmir=ps.some(p=>p.seed===10);
       return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
         <div style="width:34px;text-align:right;font-size:1rem;font-weight:800;color:${hasSmir?'var(--smir)':'var(--gold)'}">${s}</div>
         <div style="flex:1;display:flex;gap:4px;align-items:center;flex-wrap:wrap;">
           ${ps.map(p=>{
-            const isSmir=p.seed===9;
+            const isSmir=p.seed===10;
             return `<div style="padding:3px 8px;border-radius:5px;font-size:10px;font-weight:700;background:${isSmir?'var(--smir)':'var(--card)'};border:1px solid ${isSmir?'#b39ddb':'var(--border)'};color:${isSmir?'#fff':'var(--text)'};">${isSmir?'★ ':''}${esc(p.name.split(' ')[0])}</div>`;
           }).join('')}
         </div>
@@ -1532,7 +1534,7 @@ players.forEach(p=>{
 // Re-rank by new adj
 [...players].sort((a,b)=>(b.adj||0)-(a.adj||0)).forEach((p,i)=>p.trueRank=i+1);
 // Update Mark's displayed adj stat
-document.addEventListener('DOMContentLoaded',()=>{ const el=document.getElementById('mark-adj-display'); if(el){ const m=players.find(p=>p.seed===9); el.textContent=m?m.adj:'—'; } setTimeout(()=>{ meetProbs=runTournamentSim(2000); renderRanking(); },50); });
+document.addEventListener('DOMContentLoaded',()=>{ const el=document.getElementById('mark-adj-display'); if(el){ const m=players.find(p=>p.seed===10); el.textContent=m?m.adj:'—'; } setTimeout(()=>{ meetProbs=runTournamentSim(2000); renderRanking(); },50); });
 
 // ── SWISS TOURNAMENT SIMULATION ──────────────────────────────────────────────
 let meetProbs = null;
@@ -1622,8 +1624,8 @@ function runTournamentSim(N){
     if(r1ref.bye){ sc[r1ref.bye.seed]+=1; bg[r1ref.bye.seed]=true; hist.add(r1ref.bye.seed+'-bye'); }
     r1ref.pairs.forEach(([a,b])=>{
       hist.add(Math.min(a.seed,b.seed)+'-'+Math.max(a.seed,b.seed));
-      if(a.seed===9) cnt[1][b.seed]++;
-      if(b.seed===9) cnt[1][a.seed]++;
+      if(a.seed===10) cnt[1][b.seed]++;
+      if(b.seed===10) cnt[1][a.seed]++;
       const o=simGame(a,b);
       sc[a.seed]+=o.sa; sc[b.seed]+=o.sb;
     });
@@ -1633,8 +1635,8 @@ function runTournamentSim(N){
       const {pairs,byes}=swissPair(sc,bg,hist);
       byes.forEach(p=>{sc[p.seed]+=1;bg[p.seed]=true;});
       pairs.forEach(([a,b])=>{
-        if(a.seed===9) cnt[round][b.seed]++;
-        if(b.seed===9) cnt[round][a.seed]++;
+        if(a.seed===10) cnt[round][b.seed]++;
+        if(b.seed===10) cnt[round][a.seed]++;
         const o=simGame(a,b);
         sc[a.seed]+=o.sa; sc[b.seed]+=o.sb;
       });
@@ -1658,7 +1660,7 @@ function meetProbColor(pct){
 }
 
 function renderMeetProbs(p, probs){
-  if(!probs||p.seed===9) return '';
+  if(!probs||p.seed===10) return '';
   const rounds=[1,2,3,4];
   const cells=rounds.map(r=>{
     const pct=probs[r][p.seed]||0;
@@ -1671,8 +1673,8 @@ function renderMeetProbs(p, probs){
 
 // ── WIN/DRAW/LOSS PROBABILITY vs Mark ────────────────────────────────────────
 function smirProb(opp){
-  const mark=players.find(p=>p.seed===9);
-  if(opp.seed===9||!opp.adj||!mark.adj) return null;
+  const mark=players.find(p=>p.seed===10);
+  if(opp.seed===10||!opp.adj||!mark.adj) return null;
   const gap=mark.adj-opp.adj;
   const E=1/(1+Math.pow(10,-gap/400));       // Mark expected score
   const BASE_DRAW=0.12;                       // ~12% base draw rate (scholastic)
@@ -1706,9 +1708,9 @@ function probHTML(opp,large){
 // ── GUIDE / OPPONENTS (preserved from original) ───────────────────────────────
 function renderPlayerCards(){
   const grid=document.getElementById('cards-grid');
-  const sorted=[...players].sort((a,b)=>{ if(a.seed===9)return-1;if(b.seed===9)return 1;return a.trueRank-b.trueRank; });
+  const sorted=[...players].sort((a,b)=>{ if(a.seed===10)return-1;if(b.seed===10)return 1;return a.trueRank-b.trueRank; });
   grid.innerHTML=sorted.map(p=>{
-    const isSmir=p.seed===9;
+    const isSmir=p.seed===10;
     const adjD=p.adj===null?'???':p.adj;
     const qColor=p.qSrc.includes('Stale')||p.qSrc.includes('Unknown')?'var(--red)':p.qSrc.includes('Blitz')?'var(--purple)':'var(--green)';
     const maxW=Math.max(p.w24||0,p.w25||0,p.w26||0,1);
@@ -1801,7 +1803,7 @@ function renderRanking(){
     <div>Rank</div><div>Player</div><div>Entry</div><div>Regular</div><div>Quick</div><div>Blitz</div><div>Strategy</div><div>Adjusted</div>
   </div>
   ${sorted.map((p,i)=>{
-    const isSmir=p.seed===9;
+    const isSmir=p.seed===10;
     const adjD=p.adj===null?'?':p.adj;
     const ac=p.adj===null?'var(--muted)':p.adj>=1300?'var(--gold)':p.adj>=1150?'#a5d6a7':p.adj>=1050?'var(--blue)':p.adj>=950?'var(--orange)':'var(--red)';
     const uscfUrl=`https://ratings.uschess.org/player/${p.uscfId}`;
@@ -1828,8 +1830,8 @@ function showRound(r,btn){ curRoundGuide=r; document.querySelectorAll('.round-ta
 function setPath(p,btn){ curPath=p; document.querySelectorAll('.path-btn').forEach(b=>{b.classList.remove('active-win','active-lose');}); btn.classList.add(p==='win'?'active-win':'active-lose'); renderRoundDetail(); }
 
 const roundData={
-  1:{title:'Round 1 — vs Jake Tozzie (Seed #21)',score:'0–0',opponent:players[20],prediction:'Smirnov STRONGLY FAVORED',predTag:'pred-win',adjGap:'+258 (Smirnov)',stats:[{val:players[20].adj,lbl:'Tozzie Adj.'},{val:players[8].adj,lbl:'Smirnov Adj.'},{val:'+'+Math.max(0,players[8].adj-players[20].adj),lbl:'Adj. Edge'}],strategies:['Swiss: 24 players, even field — no bye. All 24 paired: seed 9 (Mark) vs seed 21 (Tozzie, entry 919)','Tozzie adj ~802 vs Smirnov adj 1060 = +258 pts — ~78% win probability. Full point expected.','⚠ Tozzie played BEGINNERS section at 2025 Natl Open — that experience label is misleading. Quick 891 is a 24-game provisional.','Play your best prepared opening. Full point required — a draw here would be a disaster','After winning, expect Agrawal (adj ~952) in R2 — regional deflation moves Smirnov to rank 5/12 in 1-0 pool']},
-  2:{score:'1–0 or 0–1',paths:{win:{opponent:players[7],type:'win',title:'Round 2 (if 1–0) — vs Krish Agrawal (Seed #8)',prediction:'Smirnov favored — good chance',predTag:'pred-win',adjGap:'+108 (Smirnov)',stats:[{val:players[7].adj,lbl:'Agrawal Adj.'},{val:players[8].adj,lbl:'Smirnov Adj.'},{val:players[8].adj-players[7].adj,lbl:'Adj. Edge'}],strategies:['Regional deflation moves Mark to rank 5 of 12 in the 1-0 pool → faces Agrawal (rank 11) in R2','Agrawal adj ~952 vs Smirnov 1060 = +108 pts — ~65% win for Smirnov. Strong favorite.','⚠ Agrawal quick 912 is well below Smirnov proxy 1018 — time pressure is Smirnov advantage.','Agrawal 72.7% in 2026 regular chess, but G/25+5 is not his format. Play sharply.','Win this and you are 2-0 entering R3 with real trophy contention.']},lose:{opponent:{name:'Lower-rated 0–1 player',adj:900,muirQ:850,flag:'Regional deflation makes Mark rank #1 in 0-1 pool (adj 1060). Likely R2 opponent: Delacruz (~900), Sullivan (~896), or similar. Neugut (NY, ~1000) is wild card if he loses to Dev.'},type:'win',title:'Round 2 (if 0–1) — vs lower-rated 0–1 player',prediction:'Smirnov STRONGLY favored',predTag:'pred-win',adjGap:'+160 to +260',stats:[{val:'~900',lbl:'Expected Opp. Adj'},{val:players[8].adj,lbl:'Smirnov Adj.'},{val:'MUST WIN',lbl:'Requirement'}],strategies:['Regional deflation makes Smirnov rank #1 in the 0-1 pool — guaranteed favorable R2 opponent','Must win to stay in prize contention — 1–1 is the minimum after R2','Likely 0-1 opponents: Delacruz (~900), Sullivan (~896), Manzo (~949), Nastro (~935)','⚠ Neugut (NY, adj ~1000, no deflation) is wild card if he upsets Dev in R1 — 18yr inactive','Even in the loss path, Smirnov has a +160 to +260 pt edge over likely opponents']}}},
+  1:{title:'Round 1 — vs Jake Tozzie (Seed #22)',score:'0–0',opponent:players[21],prediction:'Smirnov STRONGLY FAVORED',predTag:'pred-win',adjGap:'+258 (Smirnov)',stats:[{val:players[21].adj,lbl:'Tozzie Adj.'},{val:players[9].adj,lbl:'Smirnov Adj.'},{val:'+'+Math.max(0,players[9].adj-players[21].adj),lbl:'Adj. Edge'}],strategies:['Swiss: 25 players, odd field — seed 25 (Burra) gets bye. Seeds 1-12 vs 13-24: seed 10 (Mark) vs seed 22 (Tozzie, entry 919)','Tozzie adj ~802 vs Smirnov adj 1060 = +258 pts — ~78% win probability. Full point expected.','⚠ Tozzie played BEGINNERS section at 2025 Natl Open — that experience label is misleading. Quick 891 is a 24-game provisional.','Play your best prepared opening. Full point required — a draw here would be a disaster','After winning, expect Agrawal (adj ~952) in R2 — regional deflation moves Smirnov to rank 5/12 in 1-0 pool']},
+  2:{score:'1–0 or 0–1',paths:{win:{opponent:players[7],type:'win',title:'Round 2 (if 1–0) — vs Krish Agrawal (Seed #8)',prediction:'Smirnov favored — good chance',predTag:'pred-win',adjGap:'+108 (Smirnov)',stats:[{val:players[7].adj,lbl:'Agrawal Adj.'},{val:players[9].adj,lbl:'Smirnov Adj.'},{val:players[9].adj-players[7].adj,lbl:'Adj. Edge'}],strategies:['Regional deflation moves Mark to rank 5 of 12 in the 1-0 pool → faces Agrawal (rank 11) in R2','Agrawal adj ~952 vs Smirnov 1060 = +108 pts — ~65% win for Smirnov. Strong favorite.','⚠ Agrawal quick 912 is well below Smirnov proxy 1018 — time pressure is Smirnov advantage.','Agrawal 72.7% in 2026 regular chess, but G/25+5 is not his format. Play sharply.','Win this and you are 2-0 entering R3 with real trophy contention.']},lose:{opponent:{name:'Lower-rated 0–1 player',adj:900,muirQ:850,flag:'Regional deflation makes Mark rank #1 in 0-1 pool (adj 1060). Likely R2 opponent: Delacruz (~900), Sullivan (~896), or similar. Neugut (NY, ~1000) is wild card if he loses to Dev.'},type:'win',title:'Round 2 (if 0–1) — vs lower-rated 0–1 player',prediction:'Smirnov STRONGLY favored',predTag:'pred-win',adjGap:'+160 to +260',stats:[{val:'~900',lbl:'Expected Opp. Adj'},{val:players[9].adj,lbl:'Smirnov Adj.'},{val:'MUST WIN',lbl:'Requirement'}],strategies:['Regional deflation makes Smirnov rank #1 in the 0-1 pool — guaranteed favorable R2 opponent','Must win to stay in prize contention — 1–1 is the minimum after R2','Likely 0-1 opponents: Delacruz (~900), Sullivan (~896), Manzo (~949), Nastro (~935)','⚠ Neugut (NY, adj ~1000, no deflation) is wild card if he upsets Dev in R1 — 18yr inactive','Even in the loss path, Smirnov has a +160 to +260 pt edge over likely opponents']}}},
   3:{score:'2–0, 1.5–0.5, or 1–1',paths:{win:{title:'Round 3 (if 2–0) — Top-tier opponent',opponents:[{name:'Cruz (adj ~1268)',type:'hard',pred:'Draw is great result',gap:-208,strat:'Adj. gap -208 (deflated). Quick 1456. Solid defense, aim for draw.'},{name:'Sha (adj ~1122)',type:'hard',pred:'Fight for win/draw',gap:-62,strat:'Adj. gap -62 (deflated). Play fighting chess. Push aggressively for win.'},{name:'Dev (adj ~1029)',type:'win',pred:'Smirnov slight favorite',gap:31,strat:'Adj. gap +31 (Smirnov favored after deflation). Dev quick 1115 still dangerous — play for win.'}],strategies:['At 2–0 you are in trophy contention. You WILL face a top-3 player','vs Cruz (adj ~1268 after deflation): His quick 1456 still dominant. Solid defense; draw = excellent result','vs Sha (adj ~1122 after CA deflation): Fight for win. More beatable at this adjusted level.','vs Dev (adj ~1029 after AZ deflation): Smirnov now FAVORED by 31 pts. Push for the win!','Going into R3 at 2–0 puts you in position for prize — protect that']},lose:{title:'Round 3 (if 1–1) — Mid-field battle',strat:'Must WIN to reach 2–1. Likely: Cheng (adj.1117), Verma (adj.1103), Figueroa (adj.1084), Sendilkumar (adj.1021). Smirnov adj.1060 is in the thick of this group.',strategies:['You must WIN to reach 2–1 and have prize contention in R4','Likely opponents: Cheng (adj.1117), Verma (adj.1103), Figueroa (adj.1084), Sendilkumar (adj.1021)','⚠ Sendilkumar is now adj.1021 — no longer a free win. Verma is hottest form in field (66%, 70 games)','Your Tier A national experience stands out in this group — use it. Win this game for a prize fight in R4']}}},
   4:{title:'Round 4 — Final Round',score:'3–0, 2.5–0.5, 2–1, or 1–2',prediction:'Always play for WIN',predTag:'pred-win',strategies:['NEVER agree to a quick draw in Round 4 regardless of score or opponent','3–1 = likely prize eligible · 3.5–0.5 = strong prize · 4–0 = section win (if Cruz drops)','At G/25+5 with blitz proxy 1018: you play fast-chess well. The 5-sec increment rewards precision','Your national experience (NCC, World Open) is MOST valuable in the final round pressure','Target: 3–1 minimum. Stretch: 3.5–0.5. Dream: 4–0 (requires Cruz/Sha to stumble)'],scenarios:[{score:'3–0',opp:'Cruz or Sha',pred:'Hard — fight for draw/win',col:'var(--red)'},{score:'2.5–0.5',opp:'Another ~2.5 scorer',pred:'Play for WIN',col:'var(--orange)'},{score:'2–1',opp:'Another 2–1 scorer',pred:'Must WIN for prize',col:'var(--blue)'},{score:'1–2',opp:'Another 1–2 scorer',pred:'WIN to salvage 2–2',col:'var(--muted)'}]}
 };
@@ -1891,7 +1893,7 @@ function renderSummary(){
       ${[...players].sort((a,b)=>{if(a.adj===null)return 1;if(b.adj===null)return-1;return b.adj-a.adj;}).slice(0,10).map((p,i)=>`
       <div class="ranking-row" onclick="openModal(${p.seed})" style="cursor:pointer">
         <div class="${rankClass(i+1)} rr-rank">${i+1}</div>
-        <div class="rr-name" style="color:${p.seed===9?'#b39ddb':'var(--text)'}">${p.seed===9?'★ ':''}<strong>${esc(p.name)}</strong> <span style="font-size:10px;color:var(--muted)">Seed #${p.seed}</span></div>
+        <div class="rr-name" style="color:${p.seed===10?'#b39ddb':'var(--text)'}">${p.seed===10?'★ ':''}<strong>${esc(p.name)}</strong> <span style="font-size:10px;color:var(--muted)">Seed #${p.seed}</span></div>
         
         <div class="rr-adj" style="color:${p.adj>=1150?'var(--gold)':p.adj>=1050?'var(--green)':'var(--blue)'}">${p.adj}</div>
       </div>`).join('')}
